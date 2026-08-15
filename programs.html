@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from icy-bread-7c23.hardikbiradar.workers.dev/programs by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Aug 2026 16:05:48 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programs & Curriculum | Smart Kids Preschool Kharghar</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #1E3A8A;
+            --accent-yellow: #FFC837;
+            --accent-green: #4EBA6F;
+            --accent-coral: #FF6B6B;
+            --accent-purple: #8B5CF6;
+            --bg-light: #F8FAFC;
+            --text-dark: #0F172A;
+            --text-muted: #475569;
+            --white: #FFFFFF;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4, .logo, .btn-cta, .tab-btn {
+            font-family: 'Fredoka', cursive;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- Header Navigation --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            color: var(--accent-coral);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-yellow);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-blue);
+        }
+
+        .btn-cta {
+            background: linear-gradient(135deg, var(--accent-yellow), #F59E0B);
+            color: var(--primary-blue);
+            padding: 0.75rem 1.6rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Page Banner --- */
+        .page-banner {
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+        }
+
+        .page-banner h1 {
+            font-size: 3rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .page-banner p {
+            font-size: 1.2rem;
+            max-width: 650px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* --- Section Titles --- */
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+        }
+
+        .section-subtitle {
+            color: var(--accent-coral);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            line-height: 1.2;
+        }
+
+        /* --- Scroll Animation --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Age Eligibility Calculator Widget --- */
+        .calc-section {
+            max-width: 900px;
+            margin: -2rem auto 4rem auto;
+            position: relative;
+            z-index: 10;
+            padding: 0 1.5rem;
+        }
+
+        .calc-card {
+            background: var(--white);
+            padding: 2rem 2.5rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            border: 3px solid var(--accent-yellow);
+        }
+
+        .calc-card h3 {
+            color: var(--primary-blue);
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .calc-form {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .calc-select {
+            padding: 0.8rem 1.2rem;
+            border: 2px solid #CBD5E1;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .btn-check {
+            background: var(--accent-coral);
+            color: var(--white);
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-check:hover {
+            background: #EF4444;
+            transform: translateY(-2px);
+        }
+
+        .calc-result {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--accent-green);
+            display: none;
+            padding: 0.8rem;
+            background: #ECFDF5;
+            border-radius: 12px;
+        }
+
+        /* --- Programs Interactive Tabs Section --- */
+        .programs-tab-section {
+            max-width: 1250px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .tab-btn {
+            background: var(--white);
+            color: var(--text-dark);
+            border: 2px solid #E2E8F0;
+            padding: 0.9rem 1.8rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue);
+            box-shadow: 0 6px 18px rgba(30, 58, 138, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: var(--shadow-lg);
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .program-detail h2 {
+            font-size: 2.2rem;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .program-age-badge {
+            display: inline-block;
+            background: var(--accent-yellow);
+            color: var(--primary-blue);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .program-detail p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .outcomes-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .outcomes-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .outcomes-list li::before {
+            content: '🌟';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Program Feature Box */
+        .program-meta-box {
+            background: #F1F5F9;
+            padding: 2rem;
+            border-radius: 20px;
+            border-left: 6px solid var(--accent-green);
+        }
+
+        .meta-item {
+            margin-bottom: 1.2rem;
+        }
+
+        .meta-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .meta-item strong {
+            display: block;
+            color: var(--primary-blue);
+            font-size: 1.05rem;
+        }
+
+        .meta-item span {
+            color: var(--text-muted);
+        }
+
+        /* --- Curriculum Pillars Section --- */
+        .pillars-section {
+            background: #EFF6FF;
+            padding: 5rem 2rem;
+        }
+
+        .pillars-container {
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+
+        .pillar-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .pillar-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pillar-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .pillar-card h3 {
+            color: var(--primary-blue);
+            font-size: 1.3rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .pillar-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- Daily Schedule Timeline --- */
+        .schedule-section {
+            padding: 5rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline {
+            position: relative;
+            margin-top: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: #CBD5E1;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 30px;
+            position: relative;
+            margin-bottom: 2.5rem;
+            width: 50%;
+        }
+
+        .timeline-item:nth-child(even) {
+            align-self: flex-end;
+            justify-content: flex-start;
+            padding-left: 30px;
+            padding-right: 0;
+            margin-left: 50%;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-coral);
+            border-radius: 50%;
+            position: absolute;
+            right: -10px;
+            top: 15px;
+            border: 4px solid var(--white);
+            box-shadow: 0 0 0 3px var(--accent-coral);
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -10px;
+        }
+
+        .timeline-content {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            width: 100%;
+        }
+
+        .timeline-time {
+            font-weight: 800;
+            color: var(--accent-coral);
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        .timeline-content h4 {
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .timeline-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #0F172A;
+            color: var(--white);
+            padding: 4rem 2rem 2rem 2rem;
+        }
+
+        .footer-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h4 {
+            font-size: 1.3rem;
+            color: var(--accent-yellow);
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-col p, .footer-col li {
+            color: #94A3B8;
+            font-size: 0.95rem;
+            margin-bottom: 0.6rem;
+            list-style: none;
+        }
+
+        .footer-col a {
+            color: #94A3B8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #64748B;
+            font-size: 0.9rem;
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.5);
+            z-index: 999;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 992px) {
+            .tab-content.active {
+                grid-template-columns: 1fr;
+            }
+            .timeline::before { left: 20px; }
+            .timeline-item { width: 100%; padding-left: 50px; padding-right: 0; }
+            .timeline-item:nth-child(even) { margin-left: 0; padding-left: 50px; }
+            .timeline-dot { left: 10px !important; }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: var(--white);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-lg);
+                padding: 2rem 0;
+                gap: 0;
+            }
+            .nav-menu li { padding: 0.5rem 0; }
+            .nav-menu.active { left: 0; }
+            .page-banner { padding: 3rem 1.2rem; border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; }
+            .page-banner h1 { font-size: 2rem; }
+            .page-banner p { font-size: 1rem; }
+            .section-title { font-size: 1.8rem; }
+            .tab-buttons { flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+            .tab-btn { font-size: 0.9rem; padding: 0.5rem 1rem; }
+            .tab-content { padding: 2rem 1.2rem; }
+            .btn-submit { width: 100%; }
+            section { padding: 3rem 1.2rem; }
+            .footer-container { grid-template-columns: 1fr; gap: 2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 1.4rem; }
+            .nav-container { padding: 0.8rem 1.2rem; }
+            .page-banner h1 { font-size: 1.7rem; }
+            .tab-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo"><img src="logo.png" alt="Smart Kids Preschool" style="height:54px; width:auto; display:block;"></a>
+            
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="programs.html" class="nav-link active">Programs</a></li>
+                <li><a href="admissions.html" class="nav-link">Admissions</a></li>
+                <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="admissions.html" class="btn-cta">Enquire Now</a></li>
+            </ul>
+
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Banner -->
+    <section class="page-banner">
+        <h1>Programs & Curriculum</h1>
+        <p>Holistic, play-based learning designed to foster curiosity, independence, and foundational academic readiness.</p>
+    </section>
+
+    <!-- Age Eligibility Calculator Widget -->
+    <section class="calc-section">
+        <div class="calc-card">
+            <h3>Find the Right Program for Your Child</h3>
+            <p style="color: var(--text-muted);">Select your child's age to instantly see the eligible group for the upcoming academic session.</p>
+            
+            <div class="calc-form">
+                <select class="calc-select" id="ageSelect">
+                    <option value="">Select Child's Age</option>
+                    <option value="1.5">1.5 - 2 Years</option>
+                    <option value="2.5">2.5 - 3 Years</option>
+                    <option value="3.5">3.5 - 4 Years</option>
+                    <option value="4.5">4.5 - 5.5 Years</option>
+                </select>
+                <button class="btn-check" onclick="calculateProgram()">Check Eligibility</button>
+            </div>
+            <div class="calc-result" id="calcResult"></div>
+        </div>
+    </section>
+
+    <!-- Interactive Program Tabs Section -->
+    <section class="programs-tab-section">
+        <div class="section-header reveal">
+            <span class="section-subtitle">Grade Levels</span>
+            <h2 class="section-title">Explore Our Core Programs</h2>
+        </div>
+
+        <div class="tab-buttons reveal">
+            <button class="tab-btn active" onclick="switchTab(event, 'playgroup')">Playgroup</button>
+            <button class="tab-btn" onclick="switchTab(event, 'nursery')">Nursery</button>
+            <button class="tab-btn" onclick="switchTab(event, 'jkg')">Junior KG</button>
+            <button class="tab-btn" onclick="switchTab(event, 'skg')">Senior KG</button>
+            <button class="tab-btn" onclick="switchTab(event, 'daycare')">Daycare</button>
+        </div>
+
+        <!-- Playgroup Tab -->
+        <div class="tab-content active" id="playgroup">
+            <div class="program-detail">
+                <h2>Playgroup Program</h2>
+                <span class="program-age-badge">Age Group: 1.5 – 2.5 Years</span>
+                <p>Our Playgroup curriculum provides a smooth transition from home to school. We focus on sensory exploration, social bonding, building confidence, and basic emotional security.</p>
+                
+                <ul class="outcomes-list">
+                    <li>Sensory-rich activities (clay, water play, finger painting)</li>
+                    <li>Basic vocabulary building & rhyme recitation</li>
+                    <li>Gross motor skill development through outdoor play</li>
+                    <li>Encouraging independent eating and self-care habits</li>
+                </ul>
+
+                <a href="admissions.html" class="btn-cta">Apply for Playgroup</a>
+            </div>
+
+            <div class="program-meta-box">
+                <div class="meta-item">
+                    <strong>Batch Timings</strong>
+                    <span>Morning: 9:00 AM – 11:30 AM</span>
+                </div>
+                <div class="meta-item">
+                    <strong>Teacher to Student Ratio</strong>
+                    <span>1 Teacher : 8 Students (+ Attendant)</span>
+                </div>
+                <div class="meta-item">
+                    <strong>Key Focus Areas</strong>
+                    <span>Socialization, Sensory Play, Speech Readiness</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nursery Tab -->
+        <div class="tab-content" id="nursery">
+            <div class="program-detail">
+                <h2>Nursery Program</h2>
+                <span class="program-age-badge">Age Group: 2.5 – 3.5 Years</span>
+                <p>Nursery introduces structured routine learning while keeping curiosity at the forefront. Children explore colors, shapes, early letter recognition, and cooperative group games.</p>
+                
+                <ul class="outcomes-list">
+                    <li>Introduction to phonics sounds and pre-writing tracing</li>
+                    <li>Numerical recognition (1 to 10) & spatial awareness</li>
+                    <li>Creative art, music movement, and storytelling</li>
+                    <li>Building concentration and listening skills</li>
+                </ul>
+
+                <a href="admissions.html" class="btn-cta">Apply for Nursery</a>
+            </div>
+
+            <div class="program-meta-box">
+                <div class="meta-item">
+                    <strong>Batch Timings</strong>
+                    <span>Morning: 8:30 AM – 11:30 AM</span>
+                </div>
+                <div class="meta-item">
+                    <strong>Teacher to Student Ratio</strong>
+                    <span>1 Teacher : 10 Students</span>
+                </div>
+                <div class="meta-item">
+                    <strong>Key Focus Areas</strong>
+                    <span>Phonics Sounds, Pattern Writing, Creative Expression</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Junior KG Tab -->
+        <div class="tab-content" id="jkg">
+            <div class="program-detail">
+                <h2>Junior KG Program</h2>
+                <span class="program-age-badge">Age Group: 3.5 – 4.5 Years</span>
+                <p>Junior KG bridges foundational play with academic readiness. Children begin two-letter blending, structured handwriting, basic addition concepts, and environmental science.</p>
+                
+                <ul class="outcomes-list">
+                    <li>CVC word blending & sight word recognition</li>
+                    <li>Number concepts, counting (1-50), and basic shapes</li>
+                    <li>Environmental awareness (Plants, Animals, Helpers)</li>
+                    <li>Group projects & public speaking activities</li>
+                </ul>
+
+                <a href="admissions.html" class="btn-cta">Apply for Junior KG</a>
+            </div>
+
+            <div class="program-meta-box">
+                <div class="meta-item">
+                    <strong>Batch Timings</strong>
+                    <span>Morning: 8:30 AM – 12:00 PM</span>
+                </div>
+                <div class="meta-item">
+                    <strong>Teacher to Student Ratio</strong>
+                    <span>1 Teacher : 12 Students</span>
+                </div>
+                <div class="meta-item">
+                    <strong>Key Focus Areas</strong>
+                    <span>Reading Fluency, Numerical Writing, Science Concepts</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Senior KG Tab -->
+        <div class="tab-content" id="skg">
+            <div class="program-detail">
+                <h2>Senior KG Program</h2>
+                <span class="program-age-badge">Age Group: 4.5 – 5.5 Years</span>
+                <p>Our Senior KG program ensures your child enters primary school with total confidence, advanced reading capabilities, problem-solving skills, and independent thinking.</p>
+                
+                <ul class="outcomes-list">
+                    <li>Sentence reading, comprehension & creative writing</li>
+                    <li>Addition, subtraction & logical sequence puzzles</li>
+                    <li>General knowledge & global awareness topics</li>
+                    <li>Primary school transition prep & mock routines</li>
+                </ul>
+
+                <a href="admissions.html" class="btn-cta">Apply for Senior KG</a>
+            </div>
+
+            <div class="program-meta-box">
+                <div class="meta-item">
+                    <strong>Batch Timings</strong>
+                    <span>Morning: 8:30 AM – 12:30 PM</span>
+                </div>
+                <div class="meta-item">
+                    <strong>Teacher to Student Ratio</strong>
+                    <span>1 Teacher : 12 Students</span>
+                </div>
+                <div class="meta-item">
+                    <strong>Key Focus Areas</strong>
+                    <span>Primary School Prep, Logical Math, Sentence Reading</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daycare Tab -->
+        <div class="tab-content" id="daycare">
+            <div class="program-detail">
+                <h2>Daycare & After-School Care</h2>
+                <span class="program-age-badge">Age Group: 2.0 – 8.0 Years</span>
+                <p>A safe, comfortable, and supervised after-school haven for children of working parents. Features nutritious meal routines, nap areas, homework support, and free play.</p>
+                
+                <ul class="outcomes-list">
+                    <li>Hygienic, air-conditioned rest/nap quarters</li>
+                    <li>Homework guidance and reading support</li>
+                    <li>Supervised indoor play and activity corners</li>
+                    <li>Flexible hourly or monthly enrollment options</li>
+                </ul>
+
+                <a href="admissions.html" class="btn-cta">Enquire for Daycare</a>
+            </div>
+
+            <div class="program-meta-box">
+                <div class="meta-item">
+                    <strong>Timings</strong>
+                    <span>Flexible: 12:30 PM – 7:00 PM</span>
+                </div>
+                <div class="meta-item">
+                    <strong>Facilities Included</strong>
+                    <span>CCTV Access, Nap Area, Meals Heating, Art Station</span>
+                </div>
+                <div class="meta-item">
+                    <strong>Key Focus Areas</strong>
+                    <span>Safety, Homework Support, Structured Leisure</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curriculum Pillars Section -->
+    <section class="pillars-section">
+        <div class="pillars-container">
+            <div class="section-header reveal">
+                <span class="section-subtitle">Our Method</span>
+                <h2 class="section-title">5 Pillars of Our Curriculum</h2>
+            </div>
+
+            <div class="pillars-grid">
+                <div class="pillar-card reveal">
+                    <div class="pillar-icon">🗣️</div>
+                    <h3>Phonics & Literacy</h3>
+                    <p>Building strong phonetic sound associations, listening comprehension, and early reading joy.</p>
+                </div>
+
+                <div class="pillar-card reveal">
+                    <div class="pillar-icon">🔢</div>
+                    <h3>Practical Math</h3>
+                    <p>Learning numbers through hands-on counting blocks, sorting games, and spatial awareness activities.</p>
+                </div>
+
+                <div class="pillar-card reveal">
+                    <div class="pillar-icon">🎨</div>
+                    <h3>Creative Arts</h3>
+                    <p>Fostering imagination through drama, music, rhythm instruments, and fine art exploration.</p>
+                </div>
+
+                <div class="pillar-card reveal">
+                    <div class="pillar-icon">🧩</div>
+                    <h3>Motor Skills</h3>
+                    <p>Developing fine motor muscles for pencil grip alongside gross motor balance through obstacle courses.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Daily Schedule Timeline -->
+    <section class="schedule-section">
+        <div class="section-header reveal">
+            <span class="section-subtitle">A Day at Smart Kids</span>
+            <h2 class="section-title">Our Typical Daily Routine</h2>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-time">08:30 AM - 09:00 AM</span>
+                    <h4>Welcome & Warm-up Assembly</h4>
+                    <p>Morning greetings, national anthem, light stretching, and setting the day's positive intention.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-time">09:00 AM - 10:00 AM</span>
+                    <h4>Core Literacy & Phonics Circle</h4>
+                    <p>Interactive letter sound learning, flashcards, storytelling, and structured writing practice.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-time">10:00 AM - 10:30 AM</span>
+                    <h4>Healthy Snack & Manners Break</h4>
+                    <p>Promoting hand hygiene, table etiquette, sharing habits, and independent eating.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-time">10:30 AM - 11:30 AM</span>
+                    <h4>Sensory & STEM Activity Time</h4>
+                    <p>Hands-on math games, science experiments, art corners, and building block challenges.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="timeline-time">11:30 AM - 12:30 PM</span>
+                    <h4>Outdoor Play & Story Wrap-Up</h4>
+                    <p>Physical games, balance beams, reflection on the day's learning, and departure preparation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <a href="#" class="logo" style="color: var(--white); margin-bottom: 1rem;">Smart Kids <span>Preschool</span></a>
+                <p>Nurturing young minds with care, creative play, and early learning foundations in Kharghar.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="programs.html">Programs</a></li>
+                    <li><a href="admissions.html">Admissions</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>School Hours</h4>
+                <p><strong>Mon - Fri:</strong> 8:30 AM - 12:30 PM</p>
+                <p><strong>Evening Session:</strong> 5:00 PM - 7:00 PM</p>
+                <p><strong>Sat - Sun:</strong> Closed</p>
+            </div>
+            <div class="footer-col">
+                <h4>Visit Campus</h4>
+                <p>Shop-5/6, Sai World Empire, Mhada Colony, Sector 36, Kharghar, Navi Mumbai, Maharashtra 410210.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Smart Kids Preschool. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/919987335751?text=Hi,%20I%20want%20to%20inquire%20about%20programs%20at%20Smart%20Kids%20Preschool" class="whatsapp-float" target="_blank">
+        💬
+    </a>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Tab Switching Function
+        function switchTab(event, tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-btn');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Program Eligibility Calculator Logic
+        function calculateProgram() {
+            const ageVal = parseFloat(document.getElementById('ageSelect').value);
+            const resultDiv = document.getElementById('calcResult');
+
+            if (!ageVal) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.color = '#EF4444';
+                resultDiv.style.background = '#FEF2F2';
+                resultDiv.innerHTML = "Please select an age group first.";
+                return;
+            }
+
+            resultDiv.style.display = 'block';
+            resultDiv.style.color = '#059669';
+            resultDiv.style.background = '#ECFDF5';
+
+            if (ageVal < 2.5) {
+                resultDiv.innerHTML = "🎉 Your child is eligible for the <strong>Playgroup Program</strong>!";
+            } else if (ageVal < 3.5) {
+                resultDiv.innerHTML = "🎉 Your child is eligible for the <strong>Nursery Program</strong>!";
+            } else if (ageVal < 4.5) {
+                resultDiv.innerHTML = "🎉 Your child is eligible for the <strong>Junior KG Program</strong>!";
+            } else {
+                resultDiv.innerHTML = "🎉 Your child is eligible for the <strong>Senior KG Program</strong>!";
+            }
+        }
+
+        // Scroll Reveal Observer
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        reveals.forEach(reveal => observer.observe(reveal));
+    </script>
+</body>
+
+<!-- Mirrored from icy-bread-7c23.hardikbiradar.workers.dev/programs by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Aug 2026 16:05:49 GMT -->
+</html>

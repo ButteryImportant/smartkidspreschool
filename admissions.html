@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from icy-bread-7c23.hardikbiradar.workers.dev/admissions by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Aug 2026 16:05:49 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admissions & Fee Process | Smart Kids Preschool Kharghar</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #1E3A8A;
+            --accent-yellow: #FFC837;
+            --accent-green: #4EBA6F;
+            --accent-coral: #FF6B6B;
+            --accent-purple: #8B5CF6;
+            --bg-light: #F8FAFC;
+            --text-dark: #0F172A;
+            --text-muted: #475569;
+            --white: #FFFFFF;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4, .logo, .btn-cta, .step-number {
+            font-family: 'Fredoka', cursive;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- Header Navigation --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            color: var(--accent-coral);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-yellow);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-blue);
+        }
+
+        .btn-cta {
+            background: linear-gradient(135deg, var(--accent-yellow), #F59E0B);
+            color: var(--primary-blue);
+            padding: 0.75rem 1.6rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Page Banner --- */
+        .page-banner {
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+        }
+
+        .page-banner h1 {
+            font-size: 3rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .page-banner p {
+            font-size: 1.2rem;
+            max-width: 650px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* --- Section Titles --- */
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+        }
+
+        .section-subtitle {
+            color: var(--accent-coral);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            line-height: 1.2;
+        }
+
+        /* --- Scroll Animation --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- 3-Step Process Section --- */
+        .process-section {
+            max-width: 1250px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            position: relative;
+        }
+
+        .process-card {
+            background: var(--white);
+            padding: 2.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            border-top: 6px solid var(--accent-yellow);
+        }
+
+        .process-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-blue);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1.2rem auto;
+            box-shadow: 0 4px 10px rgba(30, 58, 138, 0.3);
+        }
+
+        .process-card h3 {
+            color: var(--primary-blue);
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .process-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* --- Admission & Tour Form Section --- */
+        .form-section {
+            background: #EFF6FF;
+            padding: 5rem 2rem;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 3rem 2.5rem;
+            border-radius: 28px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary-blue);
+        }
+
+        .btn-submit {
+            grid-column: span 2;
+            background: linear-gradient(135deg, var(--accent-green), #059669);
+            color: var(--white);
+            padding: 1.1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+        }
+
+        /* --- Checklist & FAQ Accordions --- */
+        .docs-section {
+            padding: 5rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .accordion-item {
+            background: var(--white);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-header {
+            padding: 1.2rem 1.5rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-header::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--accent-coral);
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-item.open .accordion-header::after {
+            transform: rotate(45deg);
+        }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 1.5rem;
+            color: var(--text-muted);
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .accordion-item.open .accordion-body {
+            max-height: 250px;
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+
+        .accordion-body ul {
+            list-style: none;
+        }
+
+        .accordion-body li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 0.5rem;
+        }
+
+        .accordion-body li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #0F172A;
+            color: var(--white);
+            padding: 4rem 2rem 2rem 2rem;
+        }
+
+        .footer-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h4 {
+            font-size: 1.3rem;
+            color: var(--accent-yellow);
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-col p, .footer-col li {
+            color: #94A3B8;
+            font-size: 0.95rem;
+            margin-bottom: 0.6rem;
+            list-style: none;
+        }
+
+        .footer-col a {
+            color: #94A3B8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #64748B;
+            font-size: 0.9rem;
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.5);
+            z-index: 999;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 992px) {
+            .steps-grid { grid-template-columns: repeat(2, 1fr); }
+            .docs-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: var(--white);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-lg);
+                padding: 2rem 0;
+                gap: 0;
+            }
+            .nav-menu li { padding: 0.5rem 0; }
+            .nav-menu.active { left: 0; }
+            .page-banner { padding: 3rem 1.2rem; border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; }
+            .page-banner h1 { font-size: 2rem; }
+            .page-banner p { font-size: 1rem; }
+            .section-title { font-size: 1.8rem; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width, .btn-submit { grid-column: span 1; }
+            .btn-submit { width: 100%; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .docs-grid { grid-template-columns: 1fr; }
+            section { padding: 3rem 1.2rem; }
+            .footer-container { grid-template-columns: 1fr; gap: 2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 1.4rem; }
+            .nav-container { padding: 0.8rem 1.2rem; }
+            .page-banner h1 { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo"><img src="logo.png" alt="Smart Kids Preschool" style="height:54px; width:auto; display:block;"></a>
+            
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="programs.html" class="nav-link">Programs</a></li>
+                <li><a href="admissions.html" class="nav-link active">Admissions</a></li>
+                <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="#form" class="btn-cta">Enquire Now</a></li>
+            </ul>
+
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Banner -->
+    <section class="page-banner">
+        <h1>Admissions & Campus Tour</h1>
+        <p>Join the Smart Kids family in Sector 36, Kharghar. Simple steps to reserve your child's seat for the upcoming session.</p>
+    </section>
+
+    <!-- 3-Step Process Section -->
+    <section class="process-section">
+        <div class="section-header reveal">
+            <span class="section-subtitle">Easy Registration</span>
+            <h2 class="section-title">3 Simple Steps to Enrollment</h2>
+        </div>
+
+        <div class="process-grid">
+            <div class="process-card reveal">
+                <div class="step-number">1</div>
+                <h3>Submit Online Inquiry</h3>
+                <p>Fill out our short online form below to share your child's basic details and preferred program timing.</p>
+            </div>
+
+            <div class="process-card reveal" style="border-top-color: var(--accent-coral);">
+                <div class="step-number" style="background: var(--accent-coral);">2</div>
+                <h3>Campus Tour & Interaction</h3>
+                <p>Visit our campus at Sai World Empire, inspect our child-safe setup, and meet our lead educators.</p>
+            </div>
+
+            <div class="process-card reveal" style="border-top-color: var(--accent-green);">
+                <div class="step-number" style="background: var(--accent-green);">3</div>
+                <h3>Document Submission</h3>
+                <p>Submit required documents, complete seat confirmation payment, and welcome your child to school!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Admission & Tour Request Form -->
+    <section class="form-section" id="form">
+        <div class="form-container reveal">
+            <div class="section-header" style="margin-bottom: 2rem;">
+                <span class="section-subtitle">Get Started</span>
+                <h2 class="section-title">Admission & Tour Application</h2>
+            </div>
+
+            <form id="fullAdmissionForm" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY">
+                <input type="hidden" name="subject" value="New Admission Application – Smart Kids Preschool">
+                <input type="hidden" name="from_name" value="Smart Kids Preschool Website">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="parentName">Parent / Guardian Name *</label>
+                        <input type="text" id="parentName" name="Parent Name" placeholder="e.g. Ramesh Patil" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Mobile Phone Number *</label>
+                        <input type="tel" id="phone" name="Phone Number" pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="Email" placeholder="e.g. parent@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="childName">Child's Full Name *</label>
+                        <input type="text" id="childName" name="Child Name" placeholder="Child's full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dob">Child's Date of Birth *</label>
+                        <input type="date" id="dob" name="Date of Birth" required onchange="autoSuggestProgram()">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="programSelect">Desired Program *</label>
+                        <select id="programSelect" name="Program" required>
+                            <option value="">Select Program</option>
+                            <option value="Playgroup">Playgroup (1.5 - 2.5 yrs)</option>
+                            <option value="Nursery">Nursery (2.5 - 3.5 yrs)</option>
+                            <option value="Junior KG">Junior KG (3.5 - 4.5 yrs)</option>
+                            <option value="Senior KG">Senior KG (4.5 - 5.5 yrs)</option>
+                            <option value="Daycare">Daycare / After School</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="tourDate">Preferred Campus Visit Date</label>
+                        <input type="date" id="tourDate" name="Preferred Visit Date">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="notes">Additional Queries or Special Notes</label>
+                        <textarea id="notes" name="Notes" rows="3" placeholder="Any specific requirements or questions?"></textarea>
+                    </div>
+
+                    <div id="admissionFormMsg" style="display:none; grid-column:1/-1; margin-top:0.5rem; padding:1rem; border-radius:10px; font-weight:700; text-align:center;"></div>
+                    <button type="submit" class="btn-submit" id="admissionSubmitBtn">Submit Admission Inquiry</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Document Checklist & FAQ Accordion -->
+    <section class="docs-section">
+        <div class="section-header reveal">
+            <span class="section-subtitle">Requirements & FAQs</span>
+            <h2 class="section-title">Important Admission Details</h2>
+        </div>
+
+        <div class="accordion-item reveal">
+            <div class="accordion-header">📄 Required Documents Checklist</div>
+            <div class="accordion-body">
+                <ul>
+                    <li>Copy of Child's Birth Certificate</li>
+                    <li>4 Passport-size photographs of the Child</li>
+                    <li>2 Passport-size photographs of Parent/Guardian</li>
+                    <li>Copy of Child's Immunization / Vaccination Card</li>
+                    <li>Proof of Residence in Kharghar / Navi Mumbai (Aadhaar/Utility Bill)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion-item reveal">
+            <div class="accordion-header">💳 Fee Structure & Payment FAQs</div>
+            <div class="accordion-body">
+                <p>Our fee structure is transparent with no hidden costs. Fee components include tuition, learning kit materials, annual event access, and activity charges. Instalment plans are available upon request during campus visits.</p>
+            </div>
+        </div>
+
+        <div class="accordion-item reveal">
+            <div class="accordion-header">⏰ What are the visiting hours for parents?</div>
+            <div class="accordion-body">
+                <p>Parents can visit our campus for guided tours Monday through Friday between 11:30 AM – 12:30 PM (morning) and 5:00 PM – 6:30 PM (evening).</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <a href="#" class="logo" style="color: var(--white); margin-bottom: 1rem;">Smart Kids <span>Preschool</span></a>
+                <p>Nurturing young minds with care, creative play, and early learning foundations in Kharghar.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="programs.html">Programs</a></li>
+                    <li><a href="admissions.html">Admissions</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>School Hours</h4>
+                <p><strong>Mon - Fri:</strong> 8:30 AM - 12:30 PM</p>
+                <p><strong>Evening Session:</strong> 5:00 PM - 7:00 PM</p>
+                <p><strong>Sat - Sun:</strong> Closed</p>
+            </div>
+            <div class="footer-col">
+                <h4>Visit Campus</h4>
+                <p>Shop-5/6, Sai World Empire, Mhada Colony, Sector 36, Kharghar, Navi Mumbai, Maharashtra 410210.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Smart Kids Preschool. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/919987335751?text=Hi,%20I%20want%20to%20book%20a%20campus%20tour%20at%20Smart%20Kids%20Preschool" class="whatsapp-float" target="_blank">
+        💬
+    </a>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Mobile Navigation Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Auto-Suggest Program Based on Date of Birth
+        function autoSuggestProgram() {
+            const dobVal = document.getElementById('dob').value;
+            if (!dobVal) return;
+
+            const dob = new Date(dobVal);
+            const today = new Date();
+            let ageInYears = (today - dob) / (365.25 * 24 * 60 * 60 * 1000);
+
+            const progSelect = document.getElementById('programSelect');
+
+            if (ageInYears >= 1.5 && ageInYears < 2.5) {
+                progSelect.value = "Playgroup";
+            } else if (ageInYears >= 2.5 && ageInYears < 3.5) {
+                progSelect.value = "Nursery";
+            } else if (ageInYears >= 3.5 && ageInYears < 4.5) {
+                progSelect.value = "Junior KG";
+            } else if (ageInYears >= 4.5 && ageInYears <= 6) {
+                progSelect.value = "Senior KG";
+            }
+        }
+
+        // Accordion Toggle
+        const accordions = document.querySelectorAll('.accordion-item');
+        accordions.forEach(item => {
+            item.querySelector('.accordion-header').addEventListener('click', () => {
+                item.classList.toggle('open');
+            });
+        });
+
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            const form = document.getElementById('fullAdmissionForm');
+            const btn = document.getElementById('admissionSubmitBtn');
+            const msgBox = document.getElementById('admissionFormMsg');
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+            const data = new FormData(form);
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: data
+            });
+            const result = await response.json();
+            if (result.success) {
+                msgBox.style.display = 'block';
+                msgBox.style.background = '#d1fae5';
+                msgBox.style.color = '#065f46';
+                msgBox.textContent = '✅ Thank you! Your application has been received. Our team will contact you shortly to confirm your campus visit.';
+                form.reset();
+            } else {
+                msgBox.style.display = 'block';
+                msgBox.style.background = '#fee2e2';
+                msgBox.style.color = '#991b1b';
+                msgBox.textContent = '❌ Something went wrong. Please try again or call us directly.';
+            }
+            btn.textContent = 'Submit Admission Inquiry';
+            btn.disabled = false;
+        }
+
+        // Scroll Reveal Observer
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        reveals.forEach(reveal => observer.observe(reveal));
+    </script>
+</body>
+
+<!-- Mirrored from icy-bread-7c23.hardikbiradar.workers.dev/admissions by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Aug 2026 16:05:50 GMT -->
+</html>

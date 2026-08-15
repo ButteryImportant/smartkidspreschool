@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from icy-bread-7c23.hardikbiradar.workers.dev/about by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Aug 2026 16:05:47 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Smart Kids Preschool Kharghar</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #1E3A8A;
+            --accent-yellow: #FFC837;
+            --accent-green: #4EBA6F;
+            --accent-coral: #FF6B6B;
+            --accent-purple: #8B5CF6;
+            --bg-light: #F8FAFC;
+            --text-dark: #0F172A;
+            --text-muted: #475569;
+            --white: #FFFFFF;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4, .logo, .btn-cta, .fac-btn {
+            font-family: 'Fredoka', cursive;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- Header Navigation --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            color: var(--accent-coral);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-yellow);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-blue);
+        }
+
+        .btn-cta {
+            background: linear-gradient(135deg, var(--accent-yellow), #F59E0B);
+            color: var(--primary-blue);
+            padding: 0.75rem 1.6rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: var(--primary-blue);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* --- Page Banner --- */
+        .page-banner {
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+        }
+
+        .page-banner h1 {
+            font-size: 3rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .page-banner p {
+            font-size: 1.2rem;
+            max-width: 650px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* --- Section Titles --- */
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+        }
+
+        .section-subtitle {
+            color: var(--accent-coral);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            line-height: 1.2;
+        }
+
+        /* --- Scroll Animation --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Story & Founder Vision Section --- */
+        .vision-section {
+            max-width: 1250px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .vision-card {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 28px;
+            box-shadow: var(--shadow-lg);
+            border-top: 6px solid var(--accent-yellow);
+        }
+
+        .vision-card h2 {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .vision-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .founder-box {
+            background: #EFF6FF;
+            padding: 2.5rem;
+            border-radius: 28px;
+            border-left: 6px solid var(--primary-blue);
+        }
+
+        .founder-box h3 {
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .founder-title {
+            color: var(--accent-coral);
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .founder-box p {
+            font-style: italic;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- Core Values Grid --- */
+        .values-section {
+            background: #EFF6FF;
+            padding: 5rem 2rem;
+        }
+
+        .values-container {
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .value-card {
+            background: var(--white);
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .value-card h3 {
+            color: var(--primary-blue);
+            font-size: 1.4rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .value-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- Safety & Security Interactive Checklist --- */
+        .safety-section {
+            padding: 5rem 2rem;
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        .safety-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .safety-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            border-left: 5px solid var(--accent-green);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .safety-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .safety-card h3 {
+            color: var(--primary-blue);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .safety-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- Interactive Campus Facilities Tabs --- */
+        .facility-section {
+            background: var(--white);
+            padding: 5rem 2rem;
+        }
+
+        .facility-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .fac-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .fac-btn {
+            background: #F1F5F9;
+            color: var(--text-dark);
+            border: none;
+            padding: 0.8rem 1.6rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .fac-btn.active, .fac-btn:hover {
+            background: var(--accent-coral);
+            color: var(--white);
+            box-shadow: 0 4px 14px rgba(255, 107, 107, 0.4);
+        }
+
+        .fac-content {
+            display: none;
+            background: #F8FAFC;
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow-sm);
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .fac-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fac-content h3 {
+            color: var(--primary-blue);
+            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .fac-content p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #0F172A;
+            color: var(--white);
+            padding: 4rem 2rem 2rem 2rem;
+        }
+
+        .footer-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h4 {
+            font-size: 1.3rem;
+            color: var(--accent-yellow);
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-col p, .footer-col li {
+            color: #94A3B8;
+            font-size: 0.95rem;
+            margin-bottom: 0.6rem;
+            list-style: none;
+        }
+
+        .footer-col a {
+            color: #94A3B8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #64748B;
+            font-size: 0.9rem;
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.5);
+            z-index: 999;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 992px) {
+            .vision-section { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .values-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: var(--white);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: var(--shadow-lg);
+                padding: 2rem 0;
+                gap: 0;
+            }
+            .nav-menu li { padding: 0.5rem 0; }
+            .nav-menu.active { left: 0; }
+            .page-banner { padding: 3rem 1.2rem; border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; }
+            .page-banner h1 { font-size: 2rem; }
+            .page-banner p { font-size: 1rem; }
+            .section-title { font-size: 1.8rem; }
+            .team-grid { grid-template-columns: 1fr; }
+            .values-grid { grid-template-columns: 1fr; }
+            .btn-submit, .fac-btn { width: 100%; }
+            section { padding: 3rem 1.2rem; }
+            .footer-container { grid-template-columns: 1fr; gap: 2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 1.4rem; }
+            .nav-container { padding: 0.8rem 1.2rem; }
+            .page-banner h1 { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo"><img src="logo.png" alt="Smart Kids Preschool" style="height:54px; width:auto; display:block;"></a>
+            
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link active">About Us</a></li>
+                <li><a href="programs.html" class="nav-link">Programs</a></li>
+                <li><a href="admissions.html" class="nav-link">Admissions</a></li>
+                <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="admissions.html" class="btn-cta">Enquire Now</a></li>
+            </ul>
+
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Banner -->
+    <section class="page-banner">
+        <h1>About Smart Kids Preschool</h1>
+        <p>A home away from home in Kharghar where every child is loved, protected, and encouraged to reach their unique potential.</p>
+    </section>
+
+    <!-- Vision & Founder Message Section -->
+    <section class="vision-section">
+        <div class="vision-card reveal">
+            <h2>Our Purpose & Philosophy</h2>
+            <p>Founded with the vision to redefine early childhood education in Kharghar, Smart Kids Preschool provides an environment where learning occurs naturally through discovery and joy.</p>
+            <p>We believe that early years shape lifelong confidence. That is why our curriculum focuses as much on empathy, emotional resilience, and communication as it does on foundational academics.</p>
+        </div>
+
+        <div class="founder-box reveal">
+            <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; margin-bottom:1rem;">
+                <img src="manisha.jpg" alt="Mrs. Manisha Bhume - Principal" style="width:90px; height:90px; border-radius:50%; object-fit:cover; object-position:top center; border:4px solid var(--accent-yellow); flex-shrink:0;">
+                <div>
+                    <h3 style="margin:0 0 0.2rem;">Principal's Message</h3>
+                    <span class="founder-title">Ms. Manisha Bhume &mdash; Principal, Smart Kids Preschool</span>
+                </div>
+            </div>
+            <p>"Every child comes into the world with unlimited potential and curiosity. Our responsibility as educators is not to fill a vessel, but to ignite a lifelong flame of curiosity and confidence. At Smart Kids, we walk alongside every child and family to make those early years truly count."</p>
+            <a href="admissions.html" class="btn-cta">Schedule a Personal Meeting</a>
+        </div>
+    </section>
+
+    <!-- Principal Introduction Section -->
+    <section style="padding: 5rem 2rem; background: var(--white);">
+        <div style="max-width: 1100px; margin: 0 auto;">
+
+            <div class="section-header reveal" style="margin-bottom: 3.5rem;">
+                <span class="section-subtitle">Meet Our Leader</span>
+                <h2 class="section-title">Our Principal</h2>
+            </div>
+
+            <div class="reveal" style="display:flex; gap:4rem; align-items:flex-start; flex-wrap:wrap;">
+
+                <!-- Photo + Badge -->
+                <div style="flex-shrink:0; text-align:center; width:300px; margin: 0 auto;">
+                    <img src="manisha.jpg"
+                         alt="Mrs. Manisha Bhume — Principal, Smart Kids Preschool"
+                         style="width:280px; height:340px; object-fit:cover; object-position:top center;
+                                border-radius:24px; box-shadow:0 20px 60px rgba(30,58,138,0.18);
+                                border:5px solid var(--accent-yellow); display:block; margin:0 auto 1.2rem;">
+                    <div style="background:linear-gradient(135deg,var(--primary-blue),#3B82F6);
+                                color:white; border-radius:16px; padding:1rem 1.2rem;
+                                box-shadow:0 8px 24px rgba(30,58,138,0.25);">
+                        <div style="font-family:'Fredoka',cursive; font-size:1.15rem; font-weight:700; margin-bottom:0.25rem;">Mrs. Manisha Bhume</div>
+                        <div style="font-size:0.85rem; opacity:0.9; margin-bottom:0.6rem;">Principal — Smart Kids Preschool</div>
+                        <div style="display:flex; gap:0.4rem; justify-content:center; flex-wrap:wrap;">
+                            <span style="background:rgba(255,255,255,0.2); padding:0.2rem 0.7rem; border-radius:50px; font-size:0.78rem; font-weight:700;">M.Sc.</span>
+                            <span style="background:rgba(255,255,255,0.2); padding:0.2rem 0.7rem; border-radius:50px; font-size:0.78rem; font-weight:700;">B.Ed.</span>
+                            <span style="background:rgba(255,255,255,0.2); padding:0.2rem 0.7rem; border-radius:50px; font-size:0.78rem; font-weight:700;">TTC</span>
+                            <span style="background:rgba(255,255,255,0.2); padding:0.2rem 0.7rem; border-radius:50px; font-size:0.78rem; font-weight:700;">10+ Years</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bio Text -->
+                <div style="flex:1; min-width:280px;">
+                    <p style="font-size:1.08rem; line-height:1.9; color:var(--text-muted); margin-bottom:1.3rem;">
+                        Mrs. Manisha Bhume, Principal of Smart Kids Preschool, is a highly qualified and accomplished educationist with an <strong style="color:var(--text-dark);">M.Sc., B.Ed. and TTC</strong>, and over <strong style="color:var(--text-dark);">10 years of dedicated experience</strong> in the field of early childhood education. Known for her exceptional leadership, professionalism and all-round abilities, she has played an integral role in creating a nurturing, engaging and values-driven learning environment for young minds.
+                    </p>
+                    <p style="font-size:1.08rem; line-height:1.9; color:var(--text-muted); margin-bottom:2rem;">
+                        A warm, compassionate and inspiring personality, Mrs. Bhume is everyone's favourite and especially loved by the children for her approachable nature and genuine affection towards them. Beyond education, she is also actively involved in <strong style="color:var(--text-dark);">social work and community initiatives</strong>, reflecting her strong sense of responsibility towards society. Her dedication, grace and commitment have earned her the trust, admiration and affection of students, parents, teachers and the community alike.
+                    </p>
+
+                    <!-- Stat Highlights -->
+                    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:2rem;">
+                        <div style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE); border-radius:16px; padding:1.2rem; text-align:center;">
+                            <div style="font-family:'Fredoka',cursive; font-size:2rem; color:var(--primary-blue); font-weight:700; line-height:1;">10+</div>
+                            <div style="font-size:0.82rem; color:var(--text-muted); font-weight:700; margin-top:0.3rem;">Years Experience</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#FFF7ED,#FED7AA); border-radius:16px; padding:1.2rem; text-align:center;">
+                            <div style="font-family:'Fredoka',cursive; font-size:2rem; color:#C2410C; font-weight:700; line-height:1;">3</div>
+                            <div style="font-size:0.82rem; color:var(--text-muted); font-weight:700; margin-top:0.3rem;">Qualifications</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#F0FDF4,#BBF7D0); border-radius:16px; padding:1.2rem; text-align:center;">
+                            <div style="font-size:1.8rem; line-height:1;">🤝</div>
+                            <div style="font-size:0.82rem; color:var(--text-muted); font-weight:700; margin-top:0.3rem;">Community Leader</div>
+                        </div>
+                    </div>
+
+                    <a href="admissions.html" class="btn-cta">Schedule a Meeting with the Principal</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Values Section -->
+    <section class="values-section">
+        <div class="values-container">
+            <div class="section-header reveal">
+                <span class="section-subtitle">What We Stand For</span>
+                <h2 class="section-title">Our Guiding Core Values</h2>
+            </div>
+
+            <div class="values-grid">
+                <div class="value-card reveal">
+                    <div class="value-icon">❤️</div>
+                    <h3>Unconditional Care</h3>
+                    <p>Every child receives warm, compassionate emotional support to feel safe and valued every day.</p>
+                </div>
+
+                <div class="value-card reveal">
+                    <div class="value-icon">🌱</div>
+                    <h3>Holistic Growth</h3>
+                    <p>Balancing physical, social, emotional, and cognitive development in equal measure.</p>
+                </div>
+
+                <div class="value-card reveal">
+                    <div class="value-icon">🤝</div>
+                    <h3>Parent Partnership</h3>
+                    <p>Continuous daily updates and transparent communication with families across Kharghar.</p>
+                </div>
+
+                <div class="value-card reveal">
+                    <div class="value-icon">🌟</div>
+                    <h3>Individual Attention</h3>
+                    <p>Maintaining low teacher-student ratios so no child gets left behind or overlooked.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety & Security Section -->
+    <section class="safety-section">
+        <div class="section-header reveal">
+            <span class="section-subtitle">Parental Peace of Mind</span>
+            <h2 class="section-title">Our 5-Point Safety Guarantee</h2>
+        </div>
+
+        <div class="safety-grid">
+            <div class="safety-card reveal">
+                <h3>📹 24/7 CCTV Monitoring</h3>
+                <p>Complete camera coverage across classrooms, activity zones, and entrance corridors.</p>
+            </div>
+
+            <div class="safety-card reveal">
+                <h3>🧸 Child-Proofed Spaces</h3>
+                <p>Soft rounded furniture corners, non-slip flooring, and finger-guard door hinges throughout.</p>
+            </div>
+
+            <div class="safety-card reveal">
+                <h3>🧼 Daily Sanitization</h3>
+                <p>Multiple daily sanitization rounds for toys, learning mats, and washroom facilities.</p>
+            </div>
+
+            <div class="safety-card reveal">
+                <h3>🩺 First-Aid Certified Staff</h3>
+                <p>Teachers and support staff are trained in pediatric first aid and emergency response.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Campus Facilities Tabs -->
+    <section class="facility-section">
+        <div class="facility-container">
+            <div class="section-header reveal">
+                <span class="section-subtitle">Our Infrastructure</span>
+                <h2 class="section-title">Explore Our Facilities</h2>
+            </div>
+
+            <div class="fac-buttons reveal">
+                <button class="fac-btn active" onclick="switchFacility(event, 'classrooms')">Bright Classrooms</button>
+                <button class="fac-btn" onclick="switchFacility(event, 'playarea')">Indoor Play Zone</button>
+                <button class="fac-btn" onclick="switchFacility(event, 'library')">Reading Corner</button>
+                <button class="fac-btn" onclick="switchFacility(event, 'art')">Creative Art Studio</button>
+            </div>
+
+            <div class="fac-content active" id="classrooms">
+                <h3>Air-Conditioned & Naturally Lit Classrooms</h3>
+                <p>Our classrooms at Sai World Empire (Sector 36) are designed with vibrant colors, ergonomic child-sized furniture, and low-level shelf access to encourage independent exploration.</p>
+            </div>
+
+            <div class="fac-content" id="playarea">
+                <h3>Safe & Cushioned Play Zone</h3>
+                <p>Features soft foam play equipment, sensory balance beams, and gross motor fun tools where children can play safely regardless of outside weather conditions.</p>
+            </div>
+
+            <div class="fac-content" id="library">
+                <h3>Cozy Story & Reading Nook</h3>
+                <p>A quiet, plush space stocked with picture books, touch-and-feel storybooks, and phonics sets to develop early reading habits.</p>
+            </div>
+
+            <div class="fac-content" id="art">
+                <h3>Messy Art & Expressive Station</h3>
+                <p>Equipped with non-toxic washable paints, playdough stations, and craft materials for unrestricted creative expression.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <a href="#" class="logo" style="color: var(--white); margin-bottom: 1rem;">Smart Kids <span>Preschool</span></a>
+                <p>Nurturing young minds with care, creative play, and early learning foundations in Kharghar.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="programs.html">Programs</a></li>
+                    <li><a href="admissions.html">Admissions</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>School Hours</h4>
+                <p><strong>Mon - Fri:</strong> 8:30 AM - 12:30 PM</p>
+                <p><strong>Evening Session:</strong> 5:00 PM - 7:00 PM</p>
+                <p><strong>Sat - Sun:</strong> Closed</p>
+            </div>
+            <div class="footer-col">
+                <h4>Visit Campus</h4>
+                <p>Shop-5/6, Sai World Empire, Mhada Colony, Sector 36, Kharghar, Navi Mumbai, Maharashtra 410210.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Smart Kids Preschool. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/919987335751?text=Hi,%20I%20want%20to%20learn%20more%20about%20Smart%20Kids%20Preschool" class="whatsapp-float" target="_blank">
+        💬
+    </a>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Facility Tab Switcher
+        function switchFacility(event, facId) {
+            const contents = document.querySelectorAll('.fac-content');
+            const buttons = document.querySelectorAll('.fac-btn');
+
+            contents.forEach(c => c.classList.remove('active'));
+            buttons.forEach(b => b.classList.remove('active'));
+
+            document.getElementById(facId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Scroll Reveal Observer
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        reveals.forEach(reveal => observer.observe(reveal));
+    </script>
+</body>
+
+<!-- Mirrored from icy-bread-7c23.hardikbiradar.workers.dev/about by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Aug 2026 16:05:48 GMT -->
+</html>
