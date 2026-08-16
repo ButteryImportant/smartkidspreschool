@@ -4,10 +4,3 @@ compatibility_date = "2026-08-01"
 
 # Modern Cloudflare Static Assets
 assets = { directory = "./" }
-
-# Cloudflare D1 Serverless SQL Database Binding
-[[d1_databases]]
-binding = "DB"
-database_name = "smartkids-db"
-database_id = "smartkids-db-binding"
-migrations_dir = "migrations"
