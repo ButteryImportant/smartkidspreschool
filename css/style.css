@@ -208,7 +208,8 @@ header.site-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 0;
+  padding: 0.35rem 0;
+  min-height: 64px;
 }
 
 .nav-brand {
@@ -216,17 +217,30 @@ header.site-header {
   align-items: center;
   gap: 0.75rem;
   text-decoration: none;
+  padding: 2px 0;
 }
 
 .brand-logo-img {
-  max-height: 48px;
+  max-height: 58px;
   width: auto;
+  height: auto;
   object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  display: block;
+  transition: transform var(--transition-fast);
 }
 
-@media (max-width: 480px) {
+.brand-logo-img:hover {
+  transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    padding: 0.25rem 0;
+    min-height: 58px;
+  }
   .brand-logo-img {
-    max-height: 40px;
+    max-height: 50px;
   }
 }
 
@@ -942,5 +956,207 @@ footer.site-footer {
     flex-direction: column;
     gap: 0.75rem;
     text-align: center;
+  }
+}
+
+/* --- Principal / Director Photo Card & Presentation --- */
+.director-photo-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 1.25rem;
+  box-shadow: 0 20px 40px -15px rgba(30, 58, 138, 0.18), 0 0 0 1.5px rgba(226, 232, 240, 0.9);
+  max-width: 420px;
+  margin: 0 auto;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.director-photo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 50px -12px rgba(30, 58, 138, 0.25);
+}
+
+.director-photo-frame {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.director-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%; /* Perfectly frames face and smile */
+  image-rendering: -webkit-optimize-contrast;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.director-photo-card:hover .director-img {
+  transform: scale(1.03);
+}
+
+.director-experience-badge {
+  position: absolute;
+  bottom: 0.85rem;
+  left: 0.85rem;
+  right: 0.85rem;
+  background: rgba(30, 58, 138, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.director-experience-badge .badge-number {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #FCD34D;
+  line-height: 1;
+  font-family: 'Fredoka', cursive, sans-serif;
+}
+
+.director-experience-badge .badge-text {
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #FFFFFF;
+}
+
+.director-photo-caption {
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.director-photo-caption h3 {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--primary-blue);
+  margin-bottom: 2px;
+}
+
+.director-photo-caption p {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 4px;
+}
+
+.director-photo-caption .director-creds {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #1E3A8A;
+  display: inline-block;
+  background: #EFF6FF;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid #BFDBFE;
+}
+
+/* --- Universal Mobile & Phone Optimizations --- */
+@media (max-width: 640px) {
+  body {
+    font-size: 0.96rem;
+  }
+
+  .container {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+
+  /* Form inputs optimized for touch without iOS auto-zoom */
+  input, select, textarea, .form-control {
+    font-size: 16px !important;
+    min-height: 48px;
+    padding: 0.65rem 0.85rem;
+  }
+
+  /* Buttons mobile tap targets */
+  .btn {
+    min-height: 48px;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  /* Page hero mobile responsiveness */
+  .page-hero {
+    padding: 2.25rem 0 2.75rem;
+  }
+
+  .hero-title {
+    font-size: 1.85rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+  }
+
+  /* Section padding and titles on phone */
+  .section {
+    padding: 2.25rem 0;
+  }
+
+  .section-title {
+    font-size: 1.6rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .section-desc {
+    font-size: 0.94rem !important;
+  }
+
+  /* Director Card on phone */
+  .director-photo-card {
+    max-width: 320px;
+    padding: 0.85rem;
+    border-radius: 20px;
+  }
+
+  .director-photo-frame {
+    aspect-ratio: 4 / 5;
+    border-radius: 14px;
+  }
+
+  .director-experience-badge {
+    padding: 0.45rem 0.65rem;
+    gap: 0.5rem;
+  }
+
+  .director-experience-badge .badge-number {
+    font-size: 1.15rem;
+  }
+
+  .director-experience-badge .badge-text {
+    font-size: 0.72rem;
+  }
+
+  /* Grids collapse cleanly on small screens */
+  .features-grid,
+  .programs-grid,
+  .gallery-grid,
+  .metrics-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+
+  /* Table overflow containers for phone view */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 12px;
   }
 }
