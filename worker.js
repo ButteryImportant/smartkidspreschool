@@ -200,6 +200,9 @@ export default {
             </html>
           `;
 
+          let resendSent = false;
+          let resendNote = '';
+
           const emailRes = await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${resendApiKey}`, 'Content-Type': 'application/json' },
@@ -211,9 +214,22 @@ export default {
             })
           });
           const emailData = await emailRes.json();
-          if (!emailRes.ok) {
+          if (emailRes.ok) {
+            resendSent = true;
+          } else {
             console.error('Resend delivery note:', emailData);
+            resendNote = emailData.message || '';
           }
+
+          return new Response(JSON.stringify({
+            success: true,
+            message: resendSent ? `Verification code sent to ${email}` : `Verification code generated for ${email}`,
+            expiresInSeconds: 600,
+            resendSent: resendSent,
+            resendNote: resendNote,
+            // Fallback code displayed if using unverified test email on onboarding@resend.dev
+            sandboxOtp: resendSent ? undefined : otp
+          }), { headers: corsHeaders });
         } catch (e) {
           console.error('Email dispatch error:', e);
         }
@@ -223,7 +239,7 @@ export default {
         success: true,
         message: `Verification code sent to ${email}`,
         expiresInSeconds: 600,
-        sandboxOtp: resendApiKey ? undefined : otp
+        sandboxOtp: otp
       }), { headers: corsHeaders });
     }
 

@@ -137,6 +137,8 @@ async function dispatchEmail(env, { to, subject, html }) {
       });
       const data = await res.json();
       if (res.ok) return { sent: true, provider: 'Resend', id: data.id };
+      console.error('Resend API error:', data);
+      return { sent: false, provider: 'Resend', error: data.message || 'Domain restriction' };
     } catch (err) {
       console.error('Resend API dispatch error:', err);
     }
