@@ -146,10 +146,52 @@
     </div>
   </main>
 
+  <!-- Parent Registration Email OTP Modal -->
+  <div id="register-otp-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 460px; border-radius: 20px;">
+      <div class="modal-header" style="background: var(--primary-blue); color: white; border-radius: 20px 20px 0 0;">
+        <h3 class="modal-title" style="color: white; font-size: 1.25rem; font-weight:800;">
+          <i class="fas fa-envelope-open-text text-warning"></i> Verify Your Email Address
+        </h3>
+        <button class="modal-close" onclick="closeRegisterOtpModal()" style="background: rgba(255,255,255,0.2); color: white;">&times;</button>
+      </div>
+
+      <div class="modal-body" style="padding: 1.75rem;">
+        <div style="text-align: center; margin-bottom: 1.25rem;">
+          <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📩</div>
+          <p style="font-size: 0.95rem; color: #000000; font-weight:700;">
+            A 6-digit verification code was dispatched to:
+          </p>
+          <strong id="reg-otp-email-display" style="font-size: 1.05rem; color: var(--primary-blue); word-break: break-all;"></strong>
+        </div>
+
+        <div id="reg-sandbox-badge" style="display:none; background: #FEF3C7; border: 1.5px solid #FCD34D; border-radius: 10px; padding: 0.65rem 0.85rem; font-size: 0.88rem; color: #78350F; font-weight: 800; margin-bottom: 1.25rem; text-align: center;">
+          <i class="fas fa-key"></i> Verification Code: <span id="reg-sandbox-code" style="font-size: 1.2rem; letter-spacing: 3px; font-family: monospace;"></span>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label class="form-label" style="text-align: center; display:block;">Enter 6-Digit Verification Code</label>
+          <input type="text" id="reg-input-otp" class="form-control" placeholder="• • • • • •" maxlength="6" inputmode="numeric" autocomplete="one-time-code" style="letter-spacing: 6px; font-size: 1.4rem; text-align: center; font-weight: 900; height: 56px; font-family: monospace;">
+        </div>
+
+        <button type="button" class="btn btn-green btn-block btn-lg" onclick="handleVerifyRegistrationOtp()" style="margin-bottom: 1rem;">
+          <i class="fas fa-check-circle"></i> Verify & Activate Account
+        </button>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; font-weight: 700;">
+          <span id="reg-resend-timer-text" style="color: #64748B;">Resend code in <strong id="reg-resend-timer">60s</strong></span>
+          <button id="reg-resend-btn" type="button" onclick="handleResendRegistrationOtp()" style="background: none; border: none; color: var(--primary-blue); font-weight: 800; cursor: pointer; text-decoration: underline; display: none;">
+            <i class="fas fa-redo-alt"></i> Resend OTP
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Password Reset Modal (3-Step OTP Workflow) -->
   <div id="forgot-password-modal" class="modal-overlay">
-    <div class="modal-content" style="max-width: 480px;">
-      <div class="modal-header" style="background: var(--primary-blue); color: white;">
+    <div class="modal-content" style="max-width: 480px; border-radius: 20px;">
+      <div class="modal-header" style="background: var(--primary-blue); color: white; border-radius: 20px 20px 0 0;">
         <h3 class="modal-title" style="color: white; font-size: 1.25rem; font-weight:800;">
           <i class="fas fa-key text-warning"></i> Password Recovery
         </h3>
@@ -160,45 +202,60 @@
         <!-- Step 1: Enter Email -->
         <div id="reset-step-1">
           <p style="font-size: 0.95rem; color: #000000; font-weight:700; margin-bottom: 1rem;">
-            Enter your registered email address and we'll generate a secure one-time verification OTP.
+            Enter your registered email address and we'll dispatch a secure one-time verification OTP.
           </p>
           <div class="form-group">
-            <label class="form-label">Registered Email</label>
-            <input type="email" id="reset-input-email" class="form-control" placeholder="Enter your registered email address" value="" required>
+            <label class="form-label">Registered Email Address</label>
+            <input type="email" id="reset-input-email" class="form-control" placeholder="e.g. parent@smartkids.edu" value="" required>
           </div>
-          <button type="button" class="btn btn-primary btn-block" onclick="handleSendResetOtp()">
+          <button type="button" class="btn btn-primary btn-block btn-lg" onclick="handleSendResetOtp()">
             <i class="fas fa-paper-plane"></i> Send Verification OTP
           </button>
         </div>
 
         <!-- Step 2: Verify OTP -->
         <div id="reset-step-2" style="display: none;">
-          <div style="background: #F0FDF4; border: 1.5px solid #86EFAC; border-radius: 8px; padding: 0.75rem; font-size: 0.9rem; color: #064E3B; font-weight:700; margin-bottom: 1.25rem;">
-            <i class="fas fa-check-circle"></i> OTP Sent! For verification, your OTP code is: <strong id="displayed-otp-code" style="font-size: 1.15rem; letter-spacing: 2px;">123456</strong>
+          <div style="text-align: center; margin-bottom: 1rem;">
+            <p style="font-size: 0.92rem; color: #000000; font-weight:700; margin-bottom: 4px;">
+              Enter the 6-digit code sent to:
+            </p>
+            <strong id="reset-email-display" style="color: var(--primary-blue);"></strong>
           </div>
-          <div class="form-group">
-            <label class="form-label">Enter 6-Digit OTP Code</label>
-            <input type="text" id="reset-input-otp" class="form-control" placeholder="6-digit code" maxlength="6" style="letter-spacing: 4px; font-size: 1.2rem; text-align: center; font-weight: 800;">
+
+          <div id="reset-sandbox-badge" style="display:none; background: #FEF3C7; border: 1.5px solid #FCD34D; border-radius: 10px; padding: 0.65rem 0.85rem; font-size: 0.88rem; color: #78350F; font-weight: 800; margin-bottom: 1.25rem; text-align: center;">
+            <i class="fas fa-key"></i> Verification Code: <span id="reset-sandbox-code" style="font-size: 1.2rem; letter-spacing: 3px; font-family: monospace;"></span>
           </div>
-          <button type="button" class="btn btn-green btn-block" onclick="handleVerifyOtp()">
+
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label class="form-label" style="text-align: center; display:block;">6-Digit OTP Code</label>
+            <input type="text" id="reset-input-otp" class="form-control" placeholder="• • • • • •" maxlength="6" inputmode="numeric" autocomplete="one-time-code" style="letter-spacing: 6px; font-size: 1.4rem; text-align: center; font-weight: 900; height: 56px; font-family: monospace;">
+          </div>
+          <button type="button" class="btn btn-green btn-block btn-lg" onclick="handleVerifyResetOtp()" style="margin-bottom: 1rem;">
             <i class="fas fa-shield-alt"></i> Verify & Proceed
           </button>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; font-weight: 700;">
+            <span id="reset-resend-timer-text" style="color: #64748B;">Resend code in <strong id="reset-resend-timer">60s</strong></span>
+            <button id="reset-resend-btn" type="button" onclick="handleSendResetOtp()" style="background: none; border: none; color: var(--primary-blue); font-weight: 800; cursor: pointer; text-decoration: underline; display: none;">
+              <i class="fas fa-redo-alt"></i> Resend OTP
+            </button>
+          </div>
         </div>
 
         <!-- Step 3: Set New Password -->
         <div id="reset-step-3" style="display: none;">
           <p style="font-size: 0.95rem; color: #000000; font-weight:700; margin-bottom: 1rem;">
-            Create a new password for your account.
+            Create a secure new password for your account.
           </p>
           <div class="form-group">
             <label class="form-label">New Password</label>
-            <input type="password" id="reset-input-new-pass" class="form-control" placeholder="Minimum 6 characters" minlength="6">
+            <input type="password" id="reset-input-new-pass" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
           </div>
           <div class="form-group">
             <label class="form-label">Confirm New Password</label>
-            <input type="password" id="reset-input-confirm-pass" class="form-control" placeholder="Re-enter password">
+            <input type="password" id="reset-input-confirm-pass" class="form-control" placeholder="Re-enter new password" required>
           </div>
-          <button type="button" class="btn btn-primary btn-block" onclick="handleFinishPasswordReset()">
+          <button type="button" class="btn btn-primary btn-block btn-lg" onclick="handleFinishPasswordReset()">
             <i class="fas fa-save"></i> Update Password & Sign In
           </button>
         </div>
@@ -211,6 +268,10 @@
   <script src="js/db.js"></script>
   <script src="js/auth.js"></script>
   <script>
+    let pendingRegistration = null;
+    let regCooldownInterval = null;
+    let resetCooldownInterval = null;
+
     function switchAuthTab(tab) {
       const isLogin = tab === 'login';
       document.getElementById('auth-pane-login').style.display = isLogin ? 'block' : 'none';
@@ -238,18 +299,101 @@
       await window.authManager.login(email, pass);
     }
 
+    // --- Parent Registration with OTP Verification ---
     async function handleRegisterSubmit(e) {
       e.preventDefault();
-      const name = document.getElementById('reg-name').value;
-      const email = document.getElementById('reg-email').value;
-      const phone = document.getElementById('reg-phone').value;
-      const childName = document.getElementById('reg-child-name').value;
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const phone = document.getElementById('reg-phone').value.trim();
+      const childName = document.getElementById('reg-child-name').value.trim();
       const childClass = document.getElementById('reg-child-class').value;
-      const pass = document.getElementById('reg-password').value;
+      const pass = document.getElementById('reg-password').value.trim();
 
-      await window.authManager.registerParent(name, email, phone, childName, childClass, pass);
+      if (pass.length < 6) {
+        showToast('Password must be at least 6 characters.', 'warning');
+        return;
+      }
+
+      pendingRegistration = { name, email, phone, childName, childClass, password: pass };
+
+      // Dispatch OTP to Email
+      showToast('Dispatching verification OTP to your email...', 'info');
+      const res = await window.authManager.sendEmailOtp(email, 'REGISTRATION');
+      
+      if (res && res.success) {
+        document.getElementById('reg-otp-email-display').innerText = email;
+        document.getElementById('reg-input-otp').value = '';
+        
+        if (res.sandboxOtp) {
+          document.getElementById('reg-sandbox-code').innerText = res.sandboxOtp;
+          document.getElementById('reg-sandbox-badge').style.display = 'block';
+        } else {
+          document.getElementById('reg-sandbox-badge').style.display = 'none';
+        }
+
+        startRegCooldownTimer(60);
+        document.getElementById('register-otp-modal').classList.add('active');
+      }
     }
 
+    function closeRegisterOtpModal() {
+      document.getElementById('register-otp-modal').classList.remove('active');
+      if (regCooldownInterval) clearInterval(regCooldownInterval);
+    }
+
+    function startRegCooldownTimer(seconds) {
+      if (regCooldownInterval) clearInterval(regCooldownInterval);
+      let remaining = seconds;
+      const timerSpan = document.getElementById('reg-resend-timer');
+      const timerText = document.getElementById('reg-resend-timer-text');
+      const resendBtn = document.getElementById('reg-resend-btn');
+
+      timerText.style.display = 'inline';
+      resendBtn.style.display = 'none';
+      timerSpan.innerText = `${remaining}s`;
+
+      regCooldownInterval = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(regCooldownInterval);
+          timerText.style.display = 'none';
+          resendBtn.style.display = 'inline';
+        } else {
+          timerSpan.innerText = `${remaining}s`;
+        }
+      }, 1000);
+    }
+
+    async function handleResendRegistrationOtp() {
+      if (!pendingRegistration) return;
+      showToast('Resending verification OTP...', 'info');
+      const res = await window.authManager.sendEmailOtp(pendingRegistration.email, 'REGISTRATION');
+      if (res && res.success) {
+        if (res.sandboxOtp) {
+          document.getElementById('reg-sandbox-code').innerText = res.sandboxOtp;
+          document.getElementById('reg-sandbox-badge').style.display = 'block';
+        }
+        startRegCooldownTimer(60);
+        showToast('New verification code sent!', 'success');
+      }
+    }
+
+    async function handleVerifyRegistrationOtp() {
+      const enteredOtp = document.getElementById('reg-input-otp').value.trim();
+      if (!pendingRegistration) {
+        showToast('Session expired. Please fill out the registration form again.', 'error');
+        closeRegisterOtpModal();
+        return;
+      }
+
+      const verifyRes = await window.authManager.verifyEmailOtp(pendingRegistration.email, enteredOtp, 'REGISTRATION');
+      if (verifyRes && verifyRes.success) {
+        closeRegisterOtpModal();
+        await window.authManager.completeRegistrationWithOtp(pendingRegistration, verifyRes.verifiedToken);
+      }
+    }
+
+    // --- Password Reset Workflow ---
     function openForgotPasswordModal() {
       document.getElementById('reset-step-1').style.display = 'block';
       document.getElementById('reset-step-2').style.display = 'none';
@@ -259,31 +403,77 @@
 
     function closeForgotPasswordModal() {
       document.getElementById('forgot-password-modal').classList.remove('active');
+      if (resetCooldownInterval) clearInterval(resetCooldownInterval);
     }
 
-    function handleSendResetOtp() {
-      const email = document.getElementById('reset-input-email').value;
-      const otp = window.authManager.requestPasswordReset(email);
-      if (otp) {
-        document.getElementById('displayed-otp-code').innerText = otp;
+    async function handleSendResetOtp() {
+      const email = document.getElementById('reset-input-email').value.trim();
+      if (!email || !email.includes('@')) {
+        showToast('Please enter a valid registered email address.', 'warning');
+        return;
+      }
+
+      showToast('Sending password recovery code...', 'info');
+      const res = await window.authManager.sendEmailOtp(email, 'PASSWORD_RESET');
+      if (res && res.success) {
+        document.getElementById('reset-email-display').innerText = email;
+        document.getElementById('reset-input-otp').value = '';
+
+        if (res.sandboxOtp) {
+          document.getElementById('reset-sandbox-code').innerText = res.sandboxOtp;
+          document.getElementById('reset-sandbox-badge').style.display = 'block';
+        } else {
+          document.getElementById('reset-sandbox-badge').style.display = 'none';
+        }
+
+        startResetCooldownTimer(60);
         document.getElementById('reset-step-1').style.display = 'none';
         document.getElementById('reset-step-2').style.display = 'block';
-        showToast('Verification OTP generated!', 'info');
+        showToast('Verification OTP dispatched!', 'info');
       }
     }
 
-    function handleVerifyOtp() {
-      const otp = document.getElementById('reset-input-otp').value;
-      if (window.authManager.verifyResetOtp(otp)) {
+    function startResetCooldownTimer(seconds) {
+      if (resetCooldownInterval) clearInterval(resetCooldownInterval);
+      let remaining = seconds;
+      const timerSpan = document.getElementById('reset-resend-timer');
+      const timerText = document.getElementById('reset-resend-timer-text');
+      const resendBtn = document.getElementById('reset-resend-btn');
+
+      timerText.style.display = 'inline';
+      resendBtn.style.display = 'none';
+      timerSpan.innerText = `${remaining}s`;
+
+      resetCooldownInterval = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(resetCooldownInterval);
+          timerText.style.display = 'none';
+          resendBtn.style.display = 'inline';
+        } else {
+          timerSpan.innerText = `${remaining}s`;
+        }
+      }, 1000);
+    }
+
+    async function handleVerifyResetOtp() {
+      const email = document.getElementById('reset-input-email').value.trim();
+      const enteredOtp = document.getElementById('reset-input-otp').value.trim();
+
+      const verifyRes = await window.authManager.verifyEmailOtp(email, enteredOtp, 'PASSWORD_RESET');
+      if (verifyRes && verifyRes.success) {
+        sessionStorage.setItem('sk_verified_reset_token', verifyRes.verifiedToken);
         document.getElementById('reset-step-2').style.display = 'none';
         document.getElementById('reset-step-3').style.display = 'block';
-        showToast('OTP verified successfully.', 'success');
+        showToast('Code verified! Please create your new password.', 'success');
       }
     }
 
-    function handleFinishPasswordReset() {
-      const pass = document.getElementById('reset-input-new-pass').value;
-      const confirmPass = document.getElementById('reset-input-confirm-pass').value;
+    async function handleFinishPasswordReset() {
+      const email = document.getElementById('reset-input-email').value.trim();
+      const pass = document.getElementById('reset-input-new-pass').value.trim();
+      const confirmPass = document.getElementById('reset-input-confirm-pass').value.trim();
+      const verifiedToken = sessionStorage.getItem('sk_verified_reset_token');
 
       if (pass !== confirmPass) {
         showToast('Passwords do not match.', 'error');
@@ -294,7 +484,8 @@
         return;
       }
 
-      if (window.authManager.completePasswordReset(pass)) {
+      const success = await window.authManager.completePasswordResetWithOtp(email, verifiedToken, pass);
+      if (success) {
         closeForgotPasswordModal();
         switchAuthTab('login');
       }

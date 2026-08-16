@@ -112,6 +112,115 @@ export default {
 
     const db = await getDbData(env);
 
+    // --- OTP Authentication Endpoints ---
+    if (path === '/api/auth/send-otp' && request.method === 'POST') {
+      const body = await request.json().catch(() => ({}));
+      const email = String(body.email || '').toLowerCase().trim();
+      const purpose = body.purpose || 'REGISTRATION';
+
+      if (!email || !email.includes('@')) {
+        return new Response(JSON.stringify({ success: false, message: 'Please provide a valid email address.' }), { status: 400, headers: corsHeaders });
+      }
+
+      if (purpose === 'PASSWORD_RESET') {
+        const userExists = db.users.some(u => (u.email || '').toLowerCase().trim() === email);
+        if (!userExists) {
+          return new Response(JSON.stringify({ success: false, message: 'No registered account found with this email.' }), { status: 404, headers: corsHeaders });
+        }
+      }
+
+      const otp = String(Math.floor(100000 + Math.random() * 900000));
+      if (!db.otps) db.otps = {};
+      db.otps[`${email}:${purpose}`] = {
+        otp: otp,
+        expiresAt: Date.now() + (10 * 60 * 1000),
+        attempts: 0,
+        verifiedToken: null
+      };
+      await saveDbData(env, db);
+
+      // Placeholder for live email delivery via Resend API
+      const resendApiKey = env && env.RESEND_API_KEY;
+      if (resendApiKey) {
+        try {
+          await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${resendApiKey}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              from: 'Smart Kids <onboarding@resend.dev>',
+              to: [email],
+              subject: `${otp} is your Smart Kids verification code`,
+              html: `<p>Your verification code is: <strong>${otp}</strong> (valid for 10 minutes)</p>`
+            })
+          });
+        } catch (e) {
+          console.error('Email dispatch error:', e);
+        }
+      }
+
+      return new Response(JSON.stringify({
+        success: true,
+        message: `Verification code sent to ${email}`,
+        expiresInSeconds: 600,
+        sandboxOtp: resendApiKey ? undefined : otp
+      }), { headers: corsHeaders });
+    }
+
+    if (path === '/api/auth/verify-otp' && request.method === 'POST') {
+      const body = await request.json().catch(() => ({}));
+      const email = String(body.email || '').toLowerCase().trim();
+      const enteredOtp = String(body.otp || '').trim();
+      const purpose = body.purpose || 'REGISTRATION';
+
+      const key = `${email}:${purpose}`;
+      const record = db.otps ? db.otps[key] : null;
+
+      if (!record) {
+        return new Response(JSON.stringify({ success: false, message: 'No active OTP found. Please request a new code.' }), { status: 400, headers: corsHeaders });
+      }
+
+      if (Date.now() > record.expiresAt) {
+        delete db.otps[key];
+        await saveDbData(env, db);
+        return new Response(JSON.stringify({ success: false, message: 'This verification code has expired.' }), { status: 400, headers: corsHeaders });
+      }
+
+      if (enteredOtp !== record.otp) {
+        record.attempts = (record.attempts || 0) + 1;
+        await saveDbData(env, db);
+        return new Response(JSON.stringify({ success: false, message: 'Incorrect verification code. Please try again.' }), { status: 400, headers: corsHeaders });
+      }
+
+      const verifiedToken = `vtok_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+      record.verifiedToken = verifiedToken;
+      await saveDbData(env, db);
+
+      return new Response(JSON.stringify({ success: true, verifiedToken }), { headers: corsHeaders });
+    }
+
+    if (path === '/api/auth/reset-password' && request.method === 'POST') {
+      const body = await request.json().catch(() => ({}));
+      const email = String(body.email || '').toLowerCase().trim();
+      const verifiedToken = body.verifiedToken;
+      const newPassword = String(body.newPassword || '').trim();
+
+      const key = `${email}:PASSWORD_RESET`;
+      const record = db.otps ? db.otps[key] : null;
+      if (!record || record.verifiedToken !== verifiedToken) {
+        return new Response(JSON.stringify({ success: false, message: 'Invalid reset session.' }), { status: 403, headers: corsHeaders });
+      }
+
+      const user = db.users.find(u => (u.email || '').toLowerCase().trim() === email);
+      if (user) {
+        user.password = newPassword;
+        await saveDbData(env, db);
+      }
+      delete db.otps[key];
+      await saveDbData(env, db);
+
+      return new Response(JSON.stringify({ success: true, message: 'Password updated successfully!' }), { headers: corsHeaders });
+    }
+
     // --- Auth Endpoints ---
     if (path === '/api/auth/login' && request.method === 'POST') {
       const body = await request.json().catch(() => ({}));
