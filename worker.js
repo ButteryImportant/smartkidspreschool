@@ -1,8 +1,14 @@
 /**
  * Smart Kids School - Cloudflare Worker Backend API & Static Router
- * Production Serverless API for Auth, Students, Fees, Gallery, Admissions, & Notices
- * Free 0-cost hosting on Cloudflare Workers / Pages
+ * Production Serverless API with Cloudflare D1 Database & Email OTP Verification
  */
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Content-Type': 'application/json'
+};
 
 const DEFAULT_STATE = {
   users: [
@@ -45,60 +51,43 @@ const DEFAULT_STATE = {
     }
   ],
   admissions: [],
-  gallery: [
-    {
-      id: 'gal-1',
-      title: 'Annual Day Celebrations & Dance',
-      category: 'Annual Day',
-      date: '2026-03-15',
-      imageUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?w=800&auto=format&fit=crop&q=80',
-      description: 'Little stars performing traditional and western fusion dance at Annual Day 2026.'
-    },
-    {
-      id: 'gal-2',
-      title: 'Fun with Colors & Finger Painting',
-      category: 'Art & Craft',
-      date: '2026-04-10',
-      imageUrl: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&auto=format&fit=crop&q=80',
-      description: 'Nursery toddlers exploring vibrant colors and messy hand-print canvas art.'
-    }
-  ]
+  otps: {}
 };
 
-// In-memory or KV Database layer
 async function getDbData(env) {
-  if (env && env.SCHOOL_KV) {
-    const raw = await env.SCHOOL_KV.get('school_data');
-    if (raw) return JSON.parse(raw);
+  if (env && env.SMARTKIDS_KV) {
+    try {
+      const data = await env.SMARTKIDS_KV.get('smartkids_db', { type: 'json' });
+      if (data) return data;
+    } catch (e) {
+      console.error('KV Read Error:', e);
+    }
   }
   return DEFAULT_STATE;
 }
 
 async function saveDbData(env, data) {
-  if (env && env.SCHOOL_KV) {
-    await env.SCHOOL_KV.put('school_data', JSON.stringify(data));
+  if (env && env.SMARTKIDS_KV) {
+    try {
+      await env.SMARTKIDS_KV.put('smartkids_db', JSON.stringify(data));
+    } catch (e) {
+      console.error('KV Write Error:', e);
+    }
   }
 }
-
-// CORS Headers helper
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
-  'Content-Type': 'application/json'
-};
 
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
+    const db = env ? env.DB : null;
 
     // Handle CORS preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
     }
 
-    // Forward all non-API static files to Cloudflare Asset Server
+    // Forward non-API static files to Cloudflare Asset Server
     if (!path.startsWith('/api')) {
       if (env && env.ASSETS) {
         return env.ASSETS.fetch(request);
@@ -107,12 +96,21 @@ export default {
 
     // Health check
     if (path === '/api/health') {
-      return new Response(JSON.stringify({ status: 'healthy', timestamp: new Date().toISOString() }), { headers: corsHeaders });
+      return new Response(JSON.stringify({
+        status: 'ONLINE',
+        engine: 'Cloudflare Worker & D1 API',
+        database: db ? 'Cloudflare D1 (Connected)' : 'In-Memory Edge Store',
+        emailService: (env && env.RESEND_API_KEY) ? 'Resend (Active)' : 'Sandbox Mode',
+        timestamp: new Date().toISOString()
+      }), { headers: corsHeaders });
     }
 
-    const db = await getDbData(env);
+    const fallbackDb = await getDbData(env);
 
-    // --- OTP Authentication Endpoints ---
+    // ========================================================================
+    // OTP AUTHENTICATION ENDPOINTS
+    // ========================================================================
+
     if (path === '/api/auth/send-otp' && request.method === 'POST') {
       const body = await request.json().catch(() => ({}));
       const email = String(body.email || '').toLowerCase().trim();
@@ -123,23 +121,33 @@ export default {
       }
 
       if (purpose === 'PASSWORD_RESET') {
-        const userExists = db.users.some(u => (u.email || '').toLowerCase().trim() === email);
+        let userExists = false;
+        if (db) {
+          const u = await db.prepare('SELECT id FROM users WHERE LOWER(email) = ?').bind(email).first();
+          userExists = !!u;
+        } else {
+          userExists = fallbackDb.users.some(u => (u.email || '').toLowerCase().trim() === email);
+        }
+
         if (!userExists) {
           return new Response(JSON.stringify({ success: false, message: 'No registered account found with this email.' }), { status: 404, headers: corsHeaders });
         }
       }
 
       const otp = String(Math.floor(100000 + Math.random() * 900000));
-      if (!db.otps) db.otps = {};
-      db.otps[`${email}:${purpose}`] = {
-        otp: otp,
-        expiresAt: Date.now() + (10 * 60 * 1000),
-        attempts: 0,
-        verifiedToken: null
-      };
-      await saveDbData(env, db);
+      const expiresAt = Date.now() + (10 * 60 * 1000);
 
-      // Placeholder for live email delivery via Resend API
+      if (db) {
+        await db.prepare('DELETE FROM otps WHERE LOWER(email) = ? AND purpose = ?').bind(email, purpose).run();
+        await db.prepare('INSERT INTO otps (id, email, purpose, otp_code, expires_at, attempts) VALUES (?, ?, ?, ?, ?, 0)')
+          .bind(`otp_${Date.now()}`, email, purpose, otp, expiresAt).run();
+      } else {
+        if (!fallbackDb.otps) fallbackDb.otps = {};
+        fallbackDb.otps[`${email}:${purpose}`] = { otp, expiresAt, attempts: 0, verifiedToken: null };
+        await saveDbData(env, fallbackDb);
+      }
+
+      // Live email delivery via Resend API
       const resendApiKey = env && env.RESEND_API_KEY;
       if (resendApiKey) {
         try {
@@ -172,28 +180,34 @@ export default {
       const enteredOtp = String(body.otp || '').trim();
       const purpose = body.purpose || 'REGISTRATION';
 
-      const key = `${email}:${purpose}`;
-      const record = db.otps ? db.otps[key] : null;
+      let record = null;
+      if (db) {
+        record = await db.prepare('SELECT * FROM otps WHERE LOWER(email) = ? AND purpose = ?').bind(email, purpose).first();
+      } else {
+        const key = `${email}:${purpose}`;
+        record = fallbackDb.otps ? fallbackDb.otps[key] : null;
+      }
 
       if (!record) {
         return new Response(JSON.stringify({ success: false, message: 'No active OTP found. Please request a new code.' }), { status: 400, headers: corsHeaders });
       }
 
-      if (Date.now() > record.expiresAt) {
-        delete db.otps[key];
-        await saveDbData(env, db);
+      const expiresAt = record.expires_at || record.expiresAt;
+      if (Date.now() > expiresAt) {
+        if (db) await db.prepare('DELETE FROM otps WHERE id = ?').bind(record.id).run();
         return new Response(JSON.stringify({ success: false, message: 'This verification code has expired.' }), { status: 400, headers: corsHeaders });
       }
 
-      if (enteredOtp !== record.otp) {
-        record.attempts = (record.attempts || 0) + 1;
-        await saveDbData(env, db);
+      const storedOtp = record.otp_code || record.otp;
+      if (enteredOtp !== storedOtp) {
+        if (db) await db.prepare('UPDATE otps SET attempts = attempts + 1 WHERE id = ?').bind(record.id).run();
         return new Response(JSON.stringify({ success: false, message: 'Incorrect verification code. Please try again.' }), { status: 400, headers: corsHeaders });
       }
 
       const verifiedToken = `vtok_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
-      record.verifiedToken = verifiedToken;
-      await saveDbData(env, db);
+      if (db) {
+        await db.prepare('UPDATE otps SET verified_token = ? WHERE id = ?').bind(verifiedToken, record.id).run();
+      }
 
       return new Response(JSON.stringify({ success: true, verifiedToken }), { headers: corsHeaders });
     }
@@ -204,49 +218,56 @@ export default {
       const verifiedToken = body.verifiedToken;
       const newPassword = String(body.newPassword || '').trim();
 
-      const key = `${email}:PASSWORD_RESET`;
-      const record = db.otps ? db.otps[key] : null;
-      if (!record || record.verifiedToken !== verifiedToken) {
-        return new Response(JSON.stringify({ success: false, message: 'Invalid reset session.' }), { status: 403, headers: corsHeaders });
+      if (db) {
+        const otpRecord = await db.prepare('SELECT id FROM otps WHERE LOWER(email) = ? AND purpose = ? AND verified_token = ?').bind(email, 'PASSWORD_RESET', verifiedToken).first();
+        if (!otpRecord) {
+          return new Response(JSON.stringify({ success: false, message: 'Invalid reset session.' }), { status: 403, headers: corsHeaders });
+        }
+        await db.prepare('UPDATE users SET password = ? WHERE LOWER(email) = ?').bind(newPassword, email).run();
+        await db.prepare('DELETE FROM otps WHERE id = ?').bind(otpRecord.id).run();
+      } else {
+        const user = fallbackDb.users.find(u => (u.email || '').toLowerCase().trim() === email);
+        if (user) user.password = newPassword;
+        await saveDbData(env, fallbackDb);
       }
-
-      const user = db.users.find(u => (u.email || '').toLowerCase().trim() === email);
-      if (user) {
-        user.password = newPassword;
-        await saveDbData(env, db);
-      }
-      delete db.otps[key];
-      await saveDbData(env, db);
 
       return new Response(JSON.stringify({ success: true, message: 'Password updated successfully!' }), { headers: corsHeaders });
     }
 
-    // --- Auth Endpoints ---
+    // ========================================================================
+    // GENERAL AUTHENTICATION ENDPOINTS
+    // ========================================================================
+
     if (path === '/api/auth/login' && request.method === 'POST') {
       const body = await request.json().catch(() => ({}));
       const id = String(body.email || body.username || '').toLowerCase().trim();
       const pass = String(body.password || '').trim();
 
-      // Check admin credentials
+      // Admin bypass checks
       if ((id === 'manisha' || id === 'manisha@smartkids.edu') && 
           (pass === 'Manisha123' || pass.toLowerCase() === 'manisha123')) {
-        const user = { id: 'usr_admin_1', name: 'Mrs. Manisha Bhume (Principal & Director)', username: 'Manisha', email: 'manisha@smartkids.edu', role: 'admin', avatar: '👩‍🏫' };
+        const user = { id: 'usr-admin-01', name: 'Mrs. Manisha Bhume (Principal & Director)', username: 'Manisha', email: 'manisha@smartkids.edu', role: 'admin', avatar: '👩‍🏫' };
         const token = btoa(`${user.id}:${Date.now()}:${user.role}`);
         return new Response(JSON.stringify({ success: true, token, user }), { headers: corsHeaders });
       }
 
       if ((id === 'hardik' || id === 'hardik@smartkids.edu') && 
           (pass === 'hardik' || pass.toLowerCase() === 'hardik' || pass.toLowerCase() === 'hardik123')) {
-        const user = { id: 'usr_admin_2', name: 'Hardik Biradar', username: 'Hardik', email: 'hardik@smartkids.edu', role: 'admin', avatar: '👨‍💼' };
+        const user = { id: 'usr-admin-02', name: 'Hardik Biradar', username: 'Hardik', email: 'hardik@smartkids.edu', role: 'admin', avatar: '👨‍💼' };
         const token = btoa(`${user.id}:${Date.now()}:${user.role}`);
         return new Response(JSON.stringify({ success: true, token, user }), { headers: corsHeaders });
       }
 
-      const user = db.users.find(u => 
-        ((u.username && u.username.toLowerCase() === id) || (u.email && u.email.toLowerCase() === id)) && 
-        (u.password === pass || (u.password && u.password.toLowerCase() === pass.toLowerCase()))
-      );
-      if (user) {
+      let user = null;
+      if (db) {
+        user = await db.prepare('SELECT id, name, username, email, password, role, student_id AS studentId, avatar FROM users WHERE LOWER(email) = ? OR LOWER(username) = ?').bind(id, id).first();
+      } else {
+        user = fallbackDb.users.find(u => 
+          ((u.username && u.username.toLowerCase() === id) || (u.email && u.email.toLowerCase() === id))
+        );
+      }
+
+      if (user && (user.password === pass || user.password.toLowerCase() === pass.toLowerCase())) {
         const token = btoa(`${user.id}:${Date.now()}:${user.role}`);
         const { password, ...safeUser } = user;
         return new Response(JSON.stringify({ success: true, token, user: safeUser }), { headers: corsHeaders });
@@ -257,76 +278,69 @@ export default {
     if (path === '/api/auth/register' && request.method === 'POST') {
       const body = await request.json().catch(() => ({}));
       const cleanEmail = (body.email || '').toLowerCase().trim();
-      const exists = db.users.find(u => (u.email || '').toLowerCase().trim() === cleanEmail);
-      if (exists) {
-        return new Response(JSON.stringify({ success: false, error: 'Email already registered' }), { status: 400, headers: corsHeaders });
+
+      if (db) {
+        const exists = await db.prepare('SELECT id FROM users WHERE LOWER(email) = ?').bind(cleanEmail).first();
+        if (exists) {
+          return new Response(JSON.stringify({ success: false, error: 'Email already registered' }), { status: 400, headers: corsHeaders });
+        }
+
+        const countResult = await db.prepare('SELECT COUNT(*) as count FROM students').first();
+        const nextCount = (countResult ? countResult.count : 0) + 1;
+        const newStudentId = body.studentId || `SK-2026-${String(nextCount).padStart(3, '0')}`;
+
+        await db.prepare(`
+          INSERT INTO students (id, name, class, section, roll_no, parent_name, parent_email, parent_phone, admission_date, avatar, attendance_percent, fee_status, fee_due, term)
+          VALUES (?, ?, ?, 'A', ?, ?, ?, ?, ?, '🧒', 100.0, 'Unassigned', 0, '2026-27')
+        `).bind(newStudentId, body.childName || 'Child', body.childClass || 'Nursery', String(nextCount).padStart(2, '0'), body.name, cleanEmail, body.phone || '', new Date().toISOString().split('T')[0]).run();
+
+        const newUserId = `usr_${Date.now()}`;
+        await db.prepare(`
+          INSERT INTO users (id, name, email, password, phone, student_id, role, status, avatar, email_verified)
+          VALUES (?, ?, ?, ?, ?, ?, 'parent', 'Active', '👨‍💼', 1)
+        `).bind(newUserId, body.name, cleanEmail, body.password, body.phone || '', newStudentId).run();
+
+        const safeUser = { id: newUserId, name: body.name, email: cleanEmail, role: 'parent', studentId: newStudentId, avatar: '👨‍💼' };
+        const token = btoa(`${newUserId}:${Date.now()}:parent`);
+        return new Response(JSON.stringify({ success: true, token, user: safeUser }), { headers: corsHeaders });
+      } else {
+        const exists = fallbackDb.users.find(u => (u.email || '').toLowerCase().trim() === cleanEmail);
+        if (exists) {
+          return new Response(JSON.stringify({ success: false, error: 'Email already registered' }), { status: 400, headers: corsHeaders });
+        }
+
+        const newStudentId = body.studentId || `SK-2026-${String(fallbackDb.students.length + 1).padStart(3, '0')}`;
+        const newStudent = { id: newStudentId, name: body.childName || 'Child', class: body.childClass || 'Nursery', parentName: body.name, parentEmail: cleanEmail, parentPhone: body.phone, feeStatus: 'Unassigned', feeDue: 0 };
+        fallbackDb.students.push(newStudent);
+
+        const newUser = { id: `usr_${Date.now()}`, name: body.name, email: cleanEmail, password: body.password, role: 'parent', phone: body.phone, studentId: newStudentId, avatar: '👨‍💼', createdAt: new Date().toISOString() };
+        fallbackDb.users.push(newUser);
+        await saveDbData(env, fallbackDb);
+
+        const token = btoa(`${newUser.id}:${Date.now()}:${newUser.role}`);
+        const { password, ...safeUser } = newUser;
+        return new Response(JSON.stringify({ success: true, token, user: safeUser, student: newStudent }), { headers: corsHeaders });
       }
-
-      const newStudentId = body.studentId || `SK-2026-${String(db.students.length + 1).padStart(3, '0')}`;
-      const newStudent = {
-        id: newStudentId,
-        name: body.childName || 'Child',
-        dob: '',
-        age: '',
-        class: body.childClass || 'Nursery',
-        section: 'A',
-        rollNo: String(db.students.length + 1).padStart(2, '0'),
-        bloodGroup: '',
-        parentName: body.name,
-        parentEmail: cleanEmail,
-        parentPhone: body.phone || '',
-        address: '',
-        admissionDate: new Date().toISOString().split('T')[0],
-        avatar: '🧒',
-        attendancePercent: 0,
-        feeStatus: 'Unassigned',
-        feeDue: 0,
-        term: '2026-27',
-        reportCard: []
-      };
-      db.students.push(newStudent);
-
-      const newUser = {
-        id: `usr_${Date.now()}`,
-        name: body.name,
-        email: cleanEmail,
-        password: body.password,
-        role: 'parent',
-        phone: body.phone,
-        studentId: newStudentId,
-        avatar: '👨‍💼',
-        createdAt: new Date().toISOString()
-      };
-      db.users.push(newUser);
-      await saveDbData(env, db);
-
-      const token = btoa(`${newUser.id}:${Date.now()}:${newUser.role}`);
-      const { password, ...safeUser } = newUser;
-      return new Response(JSON.stringify({ success: true, token, user: safeUser, student: newStudent }), { headers: corsHeaders });
     }
 
-    // --- Students Endpoints ---
+    // ========================================================================
+    // DATA ENDPOINTS (Students, Fees, Admissions)
+    // ========================================================================
+
     if (path === '/api/students' && request.method === 'GET') {
-      return new Response(JSON.stringify(db.students), { headers: corsHeaders });
+      if (db) {
+        const rows = await db.prepare('SELECT * FROM students ORDER BY name ASC').all();
+        return new Response(JSON.stringify(rows.results || []), { headers: corsHeaders });
+      }
+      return new Response(JSON.stringify(fallbackDb.students), { headers: corsHeaders });
     }
 
-    if (path === '/api/students' && request.method === 'POST') {
-      const body = await request.json().catch(() => ({}));
-      const newStudent = {
-        ...body,
-        id: `STU-2026-00${db.students.length + 1}`,
-        attendancePercent: 100,
-        feeStatus: (body.feeDue || 0) > 0 ? 'Pending' : 'Paid',
-        admissionDate: new Date().toISOString().split('T')[0]
-      };
-      db.students.push(newStudent);
-      await saveDbData(env, db);
-      return new Response(JSON.stringify({ success: true, student: newStudent }), { headers: corsHeaders });
-    }
-
-    // --- Fees & Transactions Endpoints ---
     if (path === '/api/fees' && request.method === 'GET') {
-      return new Response(JSON.stringify(db.transactions), { headers: corsHeaders });
+      if (db) {
+        const rows = await db.prepare('SELECT * FROM transactions ORDER BY created_at DESC').all();
+        return new Response(JSON.stringify(rows.results || []), { headers: corsHeaders });
+      }
+      return new Response(JSON.stringify(fallbackDb.transactions), { headers: corsHeaders });
     }
 
     if (path === '/api/fees' && request.method === 'POST') {
@@ -347,65 +361,49 @@ export default {
         collectedBy: body.collectedBy || 'Online Gateway'
       };
 
-      db.transactions.unshift(txn);
-      // update student
-      const student = db.students.find(s => s.id === txn.studentId);
-      if (student) {
-        student.feeDue = Math.max(0, (student.feeDue || 0) - txn.amount);
-        if (student.feeDue === 0) student.feeStatus = 'Paid';
+      if (db) {
+        await db.prepare(`
+          INSERT INTO transactions (id, receipt_no, student_id, student_name, class, amount, fee_type, payment_method, razorpay_payment_id, status, date, collected_by)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).bind(txn.id, txn.receiptNo, txn.studentId, txn.studentName, txn.class, txn.amount, txn.feeType, txn.paymentMethod, txn.razorpayPaymentId, txn.status, txn.date, txn.collectedBy).run();
+      } else {
+        fallbackDb.transactions.unshift(txn);
+        await saveDbData(env, fallbackDb);
       }
-      await saveDbData(env, db);
+
       return new Response(JSON.stringify({ success: true, transaction: txn }), { headers: corsHeaders });
     }
 
-    // --- Gallery Endpoints ---
-    if (path === '/api/gallery' && request.method === 'GET') {
-      return new Response(JSON.stringify(db.gallery), { headers: corsHeaders });
-    }
-
-    if (path === '/api/gallery' && request.method === 'POST') {
-      const body = await request.json().catch(() => ({}));
-      const item = {
-        id: `gal-${Date.now()}`,
-        title: body.title,
-        category: body.category || 'Classroom Fun',
-        date: body.date || new Date().toISOString().split('T')[0],
-        imageUrl: body.imageUrl,
-        description: body.description || ''
-      };
-      db.gallery.unshift(item);
-      await saveDbData(env, db);
-      return new Response(JSON.stringify({ success: true, item }), { headers: corsHeaders });
-    }
-
-    // --- Admissions Endpoints ---
     if (path === '/api/admissions' && request.method === 'GET') {
-      return new Response(JSON.stringify(db.admissions), { headers: corsHeaders });
+      if (db) {
+        const rows = await db.prepare('SELECT * FROM admissions ORDER BY submitted_at DESC').all();
+        return new Response(JSON.stringify(rows.results || []), { headers: corsHeaders });
+      }
+      return new Response(JSON.stringify(fallbackDb.admissions), { headers: corsHeaders });
     }
 
     if (path === '/api/admissions' && request.method === 'POST') {
       const body = await request.json().catch(() => ({}));
       const newAdm = {
-        id: `ADM-2026-${Math.floor(100 + Math.random() * 900)}`,
-        childName: body.childName,
-        dob: body.dob,
-        seekingClass: body.seekingClass,
-        parentName: body.parentName,
-        email: body.email,
-        phone: body.phone,
+        id: `ADM-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+        ...body,
         status: 'Under Review',
-        applyDate: new Date().toISOString().split('T')[0],
-        notes: body.notes || ''
+        submittedAt: new Date().toISOString()
       };
-      db.admissions.unshift(newAdm);
-      await saveDbData(env, db);
+
+      if (db) {
+        await db.prepare(`
+          INSERT INTO admissions (id, parent_name, parent_email, parent_phone, child_name, child_dob, program, academic_year, status, notes)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).bind(newAdm.id, newAdm.parentName, newAdm.parentEmail, newAdm.parentPhone, newAdm.childName, newAdm.childDob, newAdm.program, '2026-27', newAdm.status, newAdm.notes || '').run();
+      } else {
+        fallbackDb.admissions.unshift(newAdm);
+        await saveDbData(env, fallbackDb);
+      }
+
       return new Response(JSON.stringify({ success: true, admission: newAdm }), { headers: corsHeaders });
     }
 
-    // Fallback response: try assets or return 404
-    if (env && env.ASSETS) {
-      return env.ASSETS.fetch(request);
-    }
-    return new Response(JSON.stringify({ error: 'Endpoint not found' }), { status: 404, headers: corsHeaders });
+    return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: corsHeaders });
   }
 };
