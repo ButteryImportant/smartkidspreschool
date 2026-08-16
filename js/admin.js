@@ -20,6 +20,7 @@ class AdminController {
     this.renderAdmissionsTable();
     this.renderFeeLedgerTable();
     this.renderAnnouncementsList();
+    this.renderUsersTable();
     this.renderDbSystemHealth();
   }
 
@@ -488,6 +489,90 @@ class AdminController {
     showToast('Circular published across parent portal & notice boards!', 'success');
     this.renderAnnouncementsList();
   }
+
+  renderUsersTable() {
+    const tbody = document.getElementById('admin-users-tbody');
+    if (!tbody) return;
+
+    const users = window.schoolStore.getUsers();
+    tbody.innerHTML = users.map(u => `
+      <tr>
+        <td>
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div class="user-avatar-mini" style="font-size:1rem;">${u.avatar || '👤'}</div>
+            <div>
+              <div style="font-weight:800; color:#000000;">${u.name}</div>
+              <div style="font-size:0.82rem; color:#000000; font-weight:700;">${u.email}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <span class="badge ${u.role === 'admin' ? 'badge-coral' : u.role === 'teacher' ? 'badge-yellow' : 'badge-blue'}" style="font-weight:800; text-transform:uppercase;">
+            ${u.role}
+          </span>
+        </td>
+        <td style="font-weight:700; color:#000000;">
+          ${u.studentId || (u.role === 'admin' ? 'All Access (Admin)' : 'Staff Access')}
+        </td>
+        <td>
+          <span class="badge ${u.status === 'Inactive' ? 'badge-coral' : 'badge-green'}" style="font-weight:800;">
+            ${u.status || 'Active'}
+          </span>
+        </td>
+        <td>
+          <div class="table-action-btns">
+            ${u.role !== 'admin' ? `
+              <button class="btn btn-outline btn-sm" onclick="window.adminController.toggleUserStatus('${u.id}')" title="Toggle Active/Inactive">
+                <i class="fas fa-power-off"></i> ${u.status === 'Inactive' ? 'Activate' : 'Suspend'}
+              </button>
+              <button class="btn btn-outline btn-sm" onclick="window.adminController.promoteUserRole('${u.id}')" title="Change Role">
+                <i class="fas fa-user-tag"></i> Role
+              </button>
+              <button class="btn btn-coral btn-sm" onclick="window.adminController.deleteUserAccount('${u.id}')" title="Delete">
+                <i class="fas fa-trash"></i>
+              </button>
+            ` : `
+              <span style="font-size:0.82rem; font-weight:800; color:#065F46;"><i class="fas fa-shield-alt"></i> Super Admin</span>
+            `}
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  toggleUserStatus(userId) {
+    const users = window.schoolStore.getUsers();
+    const user = users.find(u => u.id === userId);
+    if (user) {
+      user.status = user.status === 'Inactive' ? 'Active' : 'Inactive';
+      window.schoolStore.saveUsers(users);
+      showToast(`User ${user.name} is now ${user.status}.`, 'info');
+      this.renderUsersTable();
+    }
+  }
+
+  promoteUserRole(userId) {
+    const users = window.schoolStore.getUsers();
+    const user = users.find(u => u.id === userId);
+    if (user) {
+      const nextRole = user.role === 'parent' ? 'teacher' : 'parent';
+      user.role = nextRole;
+      window.schoolStore.saveUsers(users);
+      showToast(`User ${user.name} role updated to ${nextRole.toUpperCase()}.`, 'success');
+      this.renderUsersTable();
+    }
+  }
+
+  deleteUserAccount(userId) {
+    if (confirm('Are you sure you want to delete this user account?')) {
+      let users = window.schoolStore.getUsers();
+      users = users.filter(u => u.id !== userId);
+      window.schoolStore.saveUsers(users);
+      showToast('User account deleted.', 'info');
+      this.renderUsersTable();
+    }
+  }
 }
 
 window.adminController = new AdminController();
+

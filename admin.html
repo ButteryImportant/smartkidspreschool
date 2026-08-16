@@ -64,6 +64,11 @@
           </button>
         </li>
         <li>
+          <button class="admin-nav-item" onclick="window.adminController.switchTab('accounts', this)">
+            <i class="fas fa-user-shield"></i> User Accounts & Auth
+          </button>
+        </li>
+        <li>
           <button class="admin-nav-item" onclick="window.adminController.switchTab('database', this)">
             <i class="fas fa-database"></i> Database & Health
           </button>
@@ -279,7 +284,34 @@
         </div>
       </div>
 
-      <!-- Tab 6: Database & System Health -->
+      <!-- Tab 6: User Accounts & Authorization -->
+      <div id="admin-pane-accounts" class="admin-tab-pane">
+        <div class="table-toolbar">
+          <div>
+            <h3 style="font-size:1.35rem; color:#1E3A8A; font-weight:800; margin:0;">User Accounts & Role Authorization</h3>
+            <p style="font-size:0.9rem; color:#000000; font-weight:700; margin:0;">Authorize parents, assign teacher access, manage active logins</p>
+          </div>
+        </div>
+
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>User Account</th>
+                <th>Role</th>
+                <th>Linked Student ID</th>
+                <th>Account Status</th>
+                <th>Authorization Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 7: Database & System Health -->
       <div id="admin-pane-database" class="admin-tab-pane">
         <div class="table-toolbar">
           <div>
