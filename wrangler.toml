@@ -4,3 +4,10 @@ compatibility_date = "2026-08-01"
 
 # Modern Cloudflare Static Assets
 assets = { directory = "./" }
+
+# Cloudflare D1 Serverless Database Binding
+[[d1_databases]]
+binding = "DB"
+database_name = "smartkids-db"
+database_id = "smartkids-db-binding" # Will be updated with actual UUID after running 'npx wrangler d1 create smartkids-db'
+migrations_dir = "migrations"
