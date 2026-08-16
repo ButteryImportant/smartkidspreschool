@@ -151,16 +151,69 @@ export default {
       const resendApiKey = env && env.RESEND_API_KEY;
       if (resendApiKey) {
         try {
-          await fetch('https://api.resend.com/emails', {
+          const isReset = purpose === 'PASSWORD_RESET';
+          const actionTitle = isReset ? 'Password Reset Verification' : 'Welcome to Smart Kids! Email Verification';
+          const actionDesc = isReset 
+            ? 'You requested to reset your password. Use the verification code below to complete the process:' 
+            : 'Thank you for registering at Smart Kids Preschool & Daycare. Please verify your email address to activate your parent portal account:';
+
+          const emailHtml = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <style>
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #F8FAFC; margin: 0; padding: 20px; }
+                .card { max-width: 520px; margin: 0 auto; background: #FFFFFF; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #E2E8F0; }
+                .header { background: #1E3A8A; color: #FFFFFF; padding: 24px; text-align: center; }
+                .header h1 { margin: 0; font-size: 22px; font-weight: 800; }
+                .header p { margin: 4px 0 0; font-size: 13px; opacity: 0.9; }
+                .body { padding: 28px 24px; color: #1E293B; line-height: 1.6; }
+                .otp-box { background: #EFF6FF; border: 2px dashed #3B82F6; border-radius: 12px; padding: 18px; text-align: center; margin: 20px 0; }
+                .otp-code { font-size: 32px; font-weight: 900; letter-spacing: 6px; color: #1E3A8A; font-family: monospace; }
+                .expiry { font-size: 12px; color: #64748B; font-weight: 600; margin-top: 6px; }
+                .footer { background: #F1F5F9; padding: 16px 24px; text-align: center; font-size: 12px; color: #64748B; border-top: 1px solid #E2E8F0; }
+              </style>
+            </head>
+            <body>
+              <div class="card">
+                <div class="header">
+                  <h1>Smart Kids Preschool & Daycare</h1>
+                  <p>Sector 36, Kharghar, Navi Mumbai</p>
+                </div>
+                <div class="body">
+                  <h2 style="font-size: 18px; color: #1E3A8A; margin-top: 0;">${actionTitle}</h2>
+                  <p style="font-size: 14px; color: #334155;">${actionDesc}</p>
+                  <div class="otp-box">
+                    <div class="otp-code">${otp}</div>
+                    <div class="expiry">Valid for 10 minutes. Do not share this code with anyone.</div>
+                  </div>
+                  <p style="font-size: 13px; color: #64748B; margin-bottom: 0;">
+                    If you did not request this verification, you can safely ignore this email.
+                  </p>
+                </div>
+                <div class="footer">
+                  &copy; 2026 Smart Kids Preschool & Daycare • Admissions & Student Services
+                </div>
+              </div>
+            </body>
+            </html>
+          `;
+
+          const emailRes = await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${resendApiKey}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              from: 'Smart Kids <onboarding@resend.dev>',
+              from: 'Smart Kids Preschool <onboarding@resend.dev>',
               to: [email],
-              subject: `${otp} is your Smart Kids verification code`,
-              html: `<p>Your verification code is: <strong>${otp}</strong> (valid for 10 minutes)</p>`
+              subject: isReset ? `${otp} is your Smart Kids password reset code` : `${otp} is your Smart Kids verification code`,
+              html: emailHtml
             })
           });
+          const emailData = await emailRes.json();
+          if (!emailRes.ok) {
+            console.error('Resend delivery note:', emailData);
+          }
         } catch (e) {
           console.error('Email dispatch error:', e);
         }
