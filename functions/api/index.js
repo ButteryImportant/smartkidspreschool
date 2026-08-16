@@ -9,97 +9,16 @@ let memoryStore = {
     { id: 'usr-admin-01', name: 'Mrs. Manisha (Principal)', username: 'Manisha', email: 'manisha@smartkids.edu', password: 'Manisha123', role: 'admin', avatar: '👩‍🏫', status: 'Active' },
     { id: 'usr-admin-02', name: 'Hardik Biradar', username: 'Hardik', email: 'hardik@smartkids.edu', password: 'hardik', role: 'admin', avatar: '👨‍💼', status: 'Active' }
   ],
-  students: [
-    {
-      id: 'SK-2026-001',
-      name: 'Aarav Kulkarni',
-      dob: '2022-04-12',
-      age: '4.2 Years',
-      gender: 'Boy',
-      bloodGroup: 'B+',
-      class: 'Junior KG',
-      section: 'A',
-      rollNo: '04',
-      avatar: '👦',
-      parentName: 'Rajesh Kulkarni',
-      parentEmail: 'parent@smartkids.edu',
-      parentPhone: '+91 98201 11223',
-      address: 'Sector 36, Kharghar, Navi Mumbai',
-      attendancePercent: 95,
-      feeDue: 18500,
-      feeStatus: 'Due Pending',
-      term: 'Term 2 (2026-27)',
-      reportCard: [
-        { subject: 'English & Phonics', grade: 'O', remarks: 'Recognizes all phonics blends and speaks in full sentences.' },
-        { subject: 'Montessori Math', grade: 'A+', remarks: 'Excellent counting (1-50) and shape recognition.' },
-        { subject: 'Creative Arts & Craft', grade: 'O', remarks: 'Shows great fine motor coordination in coloring.' },
-        { subject: 'Social & Emotional Habits', grade: 'A+', remarks: 'Polite, shares toys during playtime.' }
-      ]
-    },
-    {
-      id: 'SK-2026-002',
-      name: 'Ananya Sharma',
-      dob: '2023-01-18',
-      age: '3.5 Years',
-      gender: 'Girl',
-      bloodGroup: 'O+',
-      class: 'Nursery',
-      section: 'A',
-      rollNo: '11',
-      avatar: '👧',
-      parentName: 'Deepak Sharma',
-      parentEmail: 'deepak.sharma@gmail.com',
-      parentPhone: '+91 98334 55667',
-      address: 'Sector 35, Kharghar, Navi Mumbai',
-      attendancePercent: 92,
-      feeDue: 0,
-      feeStatus: 'Paid',
-      term: 'Term 2 (2026-27)',
-      reportCard: [
-        { subject: 'English & Phonics', grade: 'A+', remarks: 'Very attentive during circle rhymes.' },
-        { subject: 'Montessori Math', grade: 'A', remarks: 'Counts beads with confidence.' },
-        { subject: 'Creative Arts & Craft', grade: 'O', remarks: 'Loves finger painting.' },
-        { subject: 'Social & Emotional Habits', grade: 'A+', remarks: 'Helpful and friendly.' }
-      ]
-    }
-  ],
-  transactions: [
-    {
-      id: 'TXN-984321',
-      receiptNo: 'REC-2026-8812',
-      studentId: 'SK-2026-002',
-      studentName: 'Ananya Sharma',
-      class: 'Nursery',
-      amount: 18500,
-      feeType: 'Term 2 Tuition & Activity Fee',
-      paymentMethod: 'UPI (GPay / PhonePe)',
-      razorpayPaymentId: 'pay_rzp_99482711',
-      status: 'Success',
-      date: '12 Aug 2026, 11:30 AM',
-      collectedBy: 'Razorpay Online Gateway'
-    }
-  ],
-  admissions: [
-    {
-      id: 'ADM-2026-890',
-      childName: 'Reyansh Gupta',
-      dob: '2023-05-20',
-      seekingClass: 'Nursery',
-      parentName: 'Vikram Gupta',
-      email: 'vikram.gupta@gmail.com',
-      phone: '+91 98200 44332',
-      status: 'Approved',
-      applyDate: '2026-08-10',
-      notes: 'Sibling discount eligible (elder brother in Class 2).'
-    }
-  ],
+  students: [],
+  transactions: [],
+  admissions: [],
   announcements: [
     {
       id: 'ann-1',
-      title: 'Term 2 Parent-Teacher Interaction Meet (PTM)',
-      category: 'Academic',
-      date: '2026-08-25',
-      content: 'Individual 1-on-1 progress evaluations scheduled for Saturday, 29th August 2026.',
+      title: 'Admissions Open for Academic Session 2026-27',
+      category: 'Admissions',
+      date: '2026-08-01',
+      content: 'Admissions are now open for Playgroup, Nursery, Junior KG, Senior KG & Daycare. Applications can be submitted online.',
       urgent: false,
       author: "Principal's Desk"
     }

@@ -70,6 +70,11 @@ class AdminController {
       );
     }
 
+    if (students.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2.5rem 1rem; color:#000000; font-weight:800;"><i class="fas fa-user-graduate" style="font-size:1.6rem; color:#3B82F6; display:block; margin-bottom:0.5rem;"></i>No students registered in roster yet. Click "+ Add New Student" above to enroll children.</td></tr>`;
+      return;
+    }
+
     tbody.innerHTML = students.map(s => `
       <tr>
         <td>
@@ -77,23 +82,23 @@ class AdminController {
             <span style="font-size:1.4rem;">${s.avatar || '👦'}</span>
             <div>
               <div style="font-weight:800; color:#000000;">${s.name}</div>
-              <div style="font-size:0.82rem; color:#000000; font-weight:700;">${s.id} • Roll #${s.rollNo}</div>
+              <div style="font-size:0.82rem; color:#000000; font-weight:700;">${s.id} • Roll #${s.rollNo || '--'}</div>
             </div>
           </div>
         </td>
-        <td><span class="badge badge-blue" style="font-weight:800;">${s.class} (${s.section})</span></td>
+        <td><span class="badge badge-blue" style="font-weight:800;">${s.class} (${s.section || 'A'})</span></td>
         <td>
-          <div style="font-size:0.92rem; font-weight:800; color:#000000;">${s.parentName}</div>
-          <div style="font-size:0.82rem; color:#000000; font-weight:700;">${s.parentPhone}</div>
+          <div style="font-size:0.92rem; font-weight:800; color:#000000;">${s.parentName || '--'}</div>
+          <div style="font-size:0.82rem; color:#000000; font-weight:700;">${s.parentPhone || '--'}</div>
         </td>
         <td>
           <span class="badge ${s.attendancePercent >= 90 ? 'badge-green' : 'badge-yellow'}" style="font-weight:800;">
-            ${s.attendancePercent}%
+            ${s.attendancePercent || 0}%
           </span>
         </td>
         <td>
           <span class="badge ${s.feeStatus === 'Paid' ? 'badge-green' : 'badge-coral'}" style="font-weight:800;">
-            ${s.feeStatus} (₹${s.feeDue})
+            ${s.feeStatus || 'Unassigned'} ${s.feeDue > 0 ? '(₹' + s.feeDue + ')' : ''}
           </span>
         </td>
         <td>
@@ -122,12 +127,17 @@ class AdminController {
     if (!tbody) return;
 
     const admissions = window.schoolStore.getAdmissions();
+    if (admissions.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2.5rem 1rem; color:#000000; font-weight:800;"><i class="fas fa-inbox" style="font-size:1.6rem; color:#F59E0B; display:block; margin-bottom:0.5rem;"></i>No online admission applications submitted yet.</td></tr>`;
+      return;
+    }
+
     tbody.innerHTML = admissions.map(adm => `
       <tr>
         <td style="font-weight:800; color:#1E3A8A;">${adm.id}</td>
         <td>
           <div style="font-weight:800; color:#000000;">${adm.childName}</div>
-          <div style="font-size:0.82rem; color:#000000; font-weight:700;">DOB: ${adm.dob}</div>
+          <div style="font-size:0.82rem; color:#000000; font-weight:700;">DOB: ${adm.dob || '--'}</div>
         </td>
         <td><span class="badge badge-yellow" style="font-weight:800; color:#000000;">${adm.seekingClass}</span></td>
         <td>
@@ -172,6 +182,11 @@ class AdminController {
     if (!tbody) return;
 
     const txns = window.schoolStore.getTransactions();
+    if (txns.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2.5rem 1rem; color:#000000; font-weight:800;"><i class="fas fa-receipt" style="font-size:1.6rem; color:#10B981; display:block; margin-bottom:0.5rem;"></i>No fee payment records yet. Collected fees will appear in this ledger.</td></tr>`;
+      return;
+    }
+
     tbody.innerHTML = txns.map(t => `
       <tr>
         <td style="font-weight:800; color:#1E3A8A;">${t.receiptNo}</td>

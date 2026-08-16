@@ -31,126 +31,20 @@ const DEFAULT_STATE = {
       createdAt: '2026-01-01T00:00:00.000Z'
     }
   ],
-  students: [
-    {
-      id: 'STU-2026-001',
-      name: 'Aarav Sharma',
-      dob: '2022-04-15',
-      age: '4 Years',
-      class: 'Junior KG',
-      section: 'A',
-      rollNo: '12',
-      bloodGroup: 'B+',
-      parentName: 'Rajesh & Sunita Sharma',
-      parentEmail: 'parent@smartkids.edu',
-      parentPhone: '+91 98765 43210',
-      address: 'Flat 402, Seawood Palms, Sector 36, Kharghar',
-      admissionDate: '2025-06-10',
-      avatar: '👦',
-      attendancePercent: 94,
-      feeStatus: 'Pending',
-      feeDue: 18500,
-      term: 'Term 2 (2026-27)',
-      reportCard: [
-        { subject: 'English & Phonics', grade: 'A+', remarks: 'Excellent vocabulary and phonics recognition' },
-        { subject: 'Mathematics & Logic', grade: 'A', remarks: 'Good grasp of counting and spatial patterns' },
-        { subject: 'Environmental Studies', grade: 'A+', remarks: 'Very inquisitive and active in nature walks' },
-        { subject: 'Art & Craft', grade: 'O', remarks: 'Outstanding creativity with colors & clay' },
-        { subject: 'Physical & Motor Skills', grade: 'A', remarks: 'Enthusiastic and coordinated in playground games' },
-        { subject: 'Social & Emotional Habits', grade: 'A+', remarks: 'Polite, shares toys, and helps peers' }
-      ]
-    },
-    {
-      id: 'STU-2026-002',
-      name: 'Ananya Patil',
-      dob: '2023-01-20',
-      age: '3.5 Years',
-      class: 'Nursery',
-      section: 'B',
-      rollNo: '05',
-      bloodGroup: 'O+',
-      parentName: 'Sanjay Patil',
-      parentEmail: 'sanjay.patil@gmail.com',
-      parentPhone: '+91 98221 55443',
-      address: 'B-201, Hyde Park, Sector 35, Kharghar',
-      admissionDate: '2025-06-12',
-      avatar: '👧',
-      attendancePercent: 98,
-      feeStatus: 'Paid',
-      feeDue: 0,
-      term: 'Term 2 (2026-27)',
-      reportCard: [
-        { subject: 'English & Phonics', grade: 'A', remarks: 'Quick learner, speaks in short sentences' },
-        { subject: 'Numbers & Shapes', grade: 'A+', remarks: 'Identifies shapes and counts up to 20 effortlessly' },
-        { subject: 'Rhymes & Music', grade: 'O', remarks: 'Loves singing rhymes with joyful expressions' }
-      ]
-    },
-    {
-      id: 'STU-2026-003',
-      name: 'Reyansh Biradar',
-      dob: '2021-08-05',
-      age: '5 Years',
-      class: 'Senior KG',
-      section: 'A',
-      rollNo: '18',
-      bloodGroup: 'A+',
-      parentName: 'Hardik Biradar',
-      parentEmail: 'hardik@example.com',
-      parentPhone: '+91 99887 66554',
-      address: 'Row House 14, Valley Vista, Sector 36, Kharghar',
-      admissionDate: '2024-06-01',
-      avatar: '👦',
-      attendancePercent: 96,
-      feeStatus: 'Paid',
-      feeDue: 0,
-      term: 'Term 2 (2026-27)',
-      reportCard: [
-        { subject: 'Language & Reading', grade: 'O', remarks: 'Fluent story reading and cursive letters' },
-        { subject: 'Mathematics', grade: 'A+', remarks: 'Solves picture math quickly' }
-      ]
-    }
-  ],
-  transactions: [
-    {
-      id: 'TXN-984210',
-      receiptNo: 'REC-2026-1042',
-      studentId: 'STU-2026-002',
-      studentName: 'Ananya Patil',
-      class: 'Nursery',
-      amount: 18500,
-      feeType: 'Term 2 Tuition & Activity Fee',
-      paymentMethod: 'UPI (Google Pay)',
-      razorpayPaymentId: 'pay_M9kL87sDb12A',
-      status: 'Success',
-      date: '2026-08-12 11:24 AM',
-      collectedBy: 'Razorpay Online Gateway'
-    }
-  ],
+  students: [],
+  transactions: [],
   announcements: [
     {
       id: 'ANN-001',
-      title: 'Annual Sports Day & Fun Fiesta 2026',
-      date: '2026-08-20',
-      category: 'Event',
-      urgent: true,
-      content: 'Dear Parents, Our Annual Sports Day will be held on Saturday, 29th August 2026 at Kharghar Sports Complex ground.',
+      title: 'Admissions Open for Academic Session 2026-27',
+      date: '2026-08-01',
+      category: 'Admissions',
+      urgent: false,
+      content: 'Admissions are now open for Playgroup, Nursery, Junior KG, Senior KG & Daycare. Applications can be submitted online.',
       author: 'Principal Office'
     }
   ],
-  admissions: [
-    {
-      id: 'ADM-2026-890',
-      childName: 'Myra Kulkarni',
-      dob: '2022-09-02',
-      seekingClass: 'Junior KG',
-      parentName: 'Neha Kulkarni',
-      email: 'neha.k@gmail.com',
-      phone: '+91 99201 44889',
-      status: 'Approved',
-      applyDate: '2026-08-11',
-      notes: 'Document verification completed.'
-    }
-  ],
+  admissions: [],
   gallery: [
     {
       id: 'gal-1',

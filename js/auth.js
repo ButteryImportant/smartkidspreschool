@@ -70,35 +70,32 @@ class AuthManager {
       return false;
     }
 
-    const newStudentId = `STU-2026-00${window.schoolStore.getStudents().length + 1}`;
+    const students = window.schoolStore.getStudents();
+    const newStudentId = `SK-2026-${String(students.length + 1).padStart(3, '0')}`;
     
-    // Create new student
+    // Clean student profile linked to parent
     const newStudent = {
       id: newStudentId,
       name: childName,
-      dob: '2023-01-01',
-      age: '3.5 Years',
+      dob: '',
+      age: '',
       class: childClass,
       section: 'A',
-      rollNo: String(window.schoolStore.getStudents().length + 1).padStart(2, '0'),
-      bloodGroup: 'B+',
+      rollNo: String(students.length + 1).padStart(2, '0'),
+      bloodGroup: '',
       parentName: name,
       parentEmail: email,
       parentPhone: phone,
-      address: 'Kharghar, Navi Mumbai',
+      address: '',
       admissionDate: new Date().toISOString().split('T')[0],
       avatar: '🧒',
-      attendancePercent: 100,
-      feeStatus: 'Pending',
-      feeDue: 18500,
-      term: 'Term 2 (2026-27)',
-      reportCard: [
-        { subject: 'English & Phonics', grade: 'A', remarks: 'Good starter' },
-        { subject: 'Rhymes & Activities', grade: 'A+', remarks: 'Very enthusiastic' }
-      ]
+      attendancePercent: 0,
+      feeStatus: 'Unassigned',
+      feeDue: 0,
+      term: '2026-27',
+      reportCard: []
     };
 
-    const students = window.schoolStore.getStudents();
     students.push(newStudent);
     window.schoolStore.saveStudents(students);
 
@@ -111,7 +108,8 @@ class AuthManager {
       role: 'parent',
       phone: phone,
       studentId: newStudentId,
-      avatar: '👨‍👩‍👦'
+      avatar: '👨‍💼',
+      status: 'Active'
     };
 
     users.push(newUser);

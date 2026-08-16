@@ -27,13 +27,30 @@ class PortalController {
   }
 
   resolveStudent(user) {
-    const students = window.schoolStore.getStudents();
     if (user.studentId) {
-      this.currentStudent = window.schoolStore.findStudentById(user.studentId) || students[0];
-    } else if (user.role === 'teacher') {
-      this.currentStudent = students[0];
-    } else {
-      this.currentStudent = window.schoolStore.findStudentByParentEmail(user.email) || students[0];
+      this.currentStudent = window.schoolStore.findStudentById(user.studentId);
+    }
+    if (!this.currentStudent) {
+      this.currentStudent = window.schoolStore.findStudentByParentEmail(user.email);
+    }
+    if (!this.currentStudent) {
+      this.currentStudent = {
+        id: user.studentId || 'SK-PENDING',
+        name: user.name + "'s Child",
+        class: 'Pending Class',
+        section: 'A',
+        rollNo: '--',
+        avatar: '🧒',
+        dob: '--',
+        age: '--',
+        bloodGroup: '--',
+        parentName: user.name,
+        parentPhone: user.phone || '--',
+        feeStatus: 'Unassigned',
+        feeDue: 0,
+        attendancePercent: 0,
+        reportCard: []
+      };
     }
   }
 
@@ -46,23 +63,23 @@ class PortalController {
       <div class="student-card">
         <div class="student-avatar">${s.avatar || '👦'}</div>
         <h3 class="student-name">${s.name}</h3>
-        <p class="student-id">${s.id} • Class ${s.class} (${s.section})</p>
-        <span class="badge ${s.feeStatus === 'Paid' ? 'badge-green' : 'badge-coral'}" style="font-weight:800;">
-          Fees: ${s.feeStatus}
+        <p class="student-id">${s.id} • Class ${s.class} (${s.section || 'A'})</p>
+        <span class="badge ${s.feeStatus === 'Paid' ? 'badge-green' : 'badge-blue'}" style="font-weight:800;">
+          Status: ${s.feeStatus || 'Enrolled'}
         </span>
 
         <div class="student-details-list">
           <div class="student-detail-row">
             <span class="student-detail-label">Roll Number:</span>
-            <span class="student-detail-val">#${s.rollNo}</span>
+            <span class="student-detail-val">#${s.rollNo || '--'}</span>
           </div>
           <div class="student-detail-row">
             <span class="student-detail-label">Age / DOB:</span>
-            <span class="student-detail-val">${s.age} (${s.dob})</span>
+            <span class="student-detail-val">${s.dob ? s.age + ' (' + s.dob + ')' : 'To be provided'}</span>
           </div>
           <div class="student-detail-row">
             <span class="student-detail-label">Blood Group:</span>
-            <span class="student-detail-val">${s.bloodGroup}</span>
+            <span class="student-detail-val">${s.bloodGroup || 'To be provided'}</span>
           </div>
           <div class="student-detail-row">
             <span class="student-detail-label">Parent / Guardian:</span>
@@ -70,21 +87,9 @@ class PortalController {
           </div>
           <div class="student-detail-row">
             <span class="student-detail-label">Parent Contact:</span>
-            <span class="student-detail-val">${s.parentPhone}</span>
+            <span class="student-detail-val">${s.parentPhone || '--'}</span>
           </div>
         </div>
-      </div>
-
-      <!-- Quick Switcher -->
-      <div style="background:white; border-radius:14px; padding:1rem; border:1.5px solid var(--border-light); font-size:0.9rem;">
-        <label style="font-weight:800; color:#000000; display:block; margin-bottom:0.4rem;">
-          <i class="fas fa-users text-primary"></i> Switch Student Profile:
-        </label>
-        <select class="form-control" onchange="window.portalController.switchActiveStudent(this.value)" style="font-size:0.9rem; padding:0.5rem 0.75rem; font-weight:700;">
-          ${window.schoolStore.getStudents().map(st => `
-            <option value="${st.id}" ${st.id === s.id ? 'selected' : ''}>${st.name} (${st.class})</option>
-          `).join('')}
-        </select>
       </div>
 
       <!-- Portal Navigation Links -->
@@ -146,7 +151,7 @@ class PortalController {
           </div>
           <div class="metric-content">
             <h4>Attendance</h4>
-            <div class="metric-val">${s.attendancePercent}%</div>
+            <div class="metric-val">${s.attendancePercent > 0 ? s.attendancePercent + '%' : 'Session Starting'}</div>
           </div>
         </div>
 
@@ -156,7 +161,7 @@ class PortalController {
           </div>
           <div class="metric-content">
             <h4>Fee Balance</h4>
-            <div class="metric-val">₹${s.feeDue.toLocaleString('en-IN')}</div>
+            <div class="metric-val">${s.feeDue > 0 ? '₹' + s.feeDue.toLocaleString('en-IN') : 'No Dues'}</div>
           </div>
         </div>
 
@@ -165,8 +170,8 @@ class PortalController {
             <i class="fas fa-star"></i>
           </div>
           <div class="metric-content">
-            <h4>Overall Grade</h4>
-            <div class="metric-val">A+ (Distinction)</div>
+            <h4>Evaluation</h4>
+            <div class="metric-val" style="font-size:1.1rem;">${s.reportCard && s.reportCard.length > 0 ? 'Evaluated' : 'In Progress'}</div>
           </div>
         </div>
 
@@ -175,41 +180,11 @@ class PortalController {
             <i class="fas fa-shapes"></i>
           </div>
           <div class="metric-content">
-            <h4>Current Term</h4>
-            <div class="metric-val" style="font-size:1.2rem;">Term 2 (2026)</div>
+            <h4>Academic Year</h4>
+            <div class="metric-val" style="font-size:1.1rem;">2026-27</div>
           </div>
         </div>
       </div>
-
-      <!-- Quick Action / Fee Alert Card -->
-      ${s.feeDue > 0 ? `
-        <div style="background: linear-gradient(135deg, #FEF2F2 0%, #FFE4E6 100%); border: 2px solid #FDA4AF; border-radius: 16px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;">
-          <div>
-            <h4 style="color:#881337; font-size:1.2rem; font-weight:800; margin-bottom:4px;">
-              <i class="fas fa-exclamation-circle"></i> Outstanding Term 2 Fee: ₹${s.feeDue.toLocaleString('en-IN')}
-            </h4>
-            <p style="color:#000000; font-size:0.92rem; font-weight:700;">
-              Due Date: 31st August 2026. Clear online to get instant authenticated receipt.
-            </p>
-          </div>
-          <button class="btn btn-coral" onclick="window.feeEngine.startPayment('${s.id}', ${s.feeDue})">
-            <i class="fas fa-credit-card"></i> Pay Now (Instant Receipt)
-          </button>
-        </div>
-      ` : `
-        <div style="background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border: 2px solid #86EFAC; border-radius: 16px; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap:wrap; gap:0.5rem;">
-          <div style="display:flex; align-items:center; gap:0.75rem;">
-            <i class="fas fa-check-circle" style="font-size:1.8rem; color:#059669;"></i>
-            <div>
-              <h4 style="color:#064E3B; font-size:1.15rem; font-weight:800; margin:0;">All Term 2 Fees Paid in Full</h4>
-              <p style="color:#000000; font-size:0.9rem; font-weight:700; margin:0;">Your account is in good standing. No dues pending.</p>
-            </div>
-          </div>
-          <button class="btn btn-outline btn-sm" onclick="window.portalController.switchTab('fees')">
-            <i class="fas fa-file-invoice"></i> View Invoices
-          </button>
-        </div>
-      `}
     `;
   }
 
@@ -222,12 +197,8 @@ class PortalController {
 
     for (let d = 1; d <= 31; d++) {
       const dayOfWeek = (d + 5) % 7;
-      let status = 'present';
-      if (dayOfWeek === 0) status = 'holiday';
-      else if (d === 15) status = 'holiday';
-      else if (d === 7 || d === 19) status = 'absent';
-      else if (d > 16) status = 'future';
-
+      let status = 'future';
+      if (dayOfWeek === 0 || d === 15) status = 'holiday';
       days.push({ day: d, status: status });
     }
 
@@ -241,7 +212,7 @@ class PortalController {
       <div class="calendar-day-header" style="color:#DC2626;">Sun</div>
       ${days.map(d => {
         if (d.empty) return `<div class="calendar-day-cell empty"></div>`;
-        if (d.status === 'future') return `<div class="calendar-day-cell" style="opacity:0.4;">${d.day}</div>`;
+        if (d.status === 'future') return `<div class="calendar-day-cell" style="opacity:0.6;">${d.day}</div>`;
         return `<div class="calendar-day-cell ${d.status}" title="${d.status.toUpperCase()}">${d.day}</div>`;
       }).join('')}
     `;
@@ -250,7 +221,20 @@ class PortalController {
   renderReportCard() {
     const s = this.currentStudent;
     const container = document.getElementById('report-card-tbody');
-    if (!container || !s || !s.reportCard) return;
+    if (!container || !s) return;
+
+    if (!s.reportCard || s.reportCard.length === 0) {
+      container.innerHTML = `
+        <tr>
+          <td colspan="3" style="text-align:center; padding:2.5rem 1rem; color:#000000; font-weight:800; font-size:1rem;">
+            <i class="fas fa-book-reader text-primary" style="font-size:1.8rem; display:block; margin-bottom:0.5rem;"></i>
+            No academic grades or evaluations published yet for this term.<br>
+            <span style="font-size:0.88rem; font-weight:700;">Class teachers will publish assessment reports following term reviews.</span>
+          </td>
+        </tr>
+      `;
+      return;
+    }
 
     container.innerHTML = s.reportCard.map(item => `
       <tr>
