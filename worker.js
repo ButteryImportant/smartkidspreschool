@@ -8,7 +8,7 @@ const DEFAULT_STATE = {
   users: [
     {
       id: 'usr_admin_1',
-      name: 'Mrs. Manisha (Principal & Director)',
+      name: 'Mrs. Manisha Bhume (Principal & Director)',
       username: 'Manisha',
       email: 'manisha@smartkids.edu',
       password: 'Manisha123',
@@ -230,7 +230,7 @@ export default {
       // Check admin credentials
       if ((id === 'manisha' || id === 'manisha@smartkids.edu') && 
           (pass === 'Manisha123' || pass.toLowerCase() === 'manisha123')) {
-        const user = { id: 'usr_admin_1', name: 'Mrs. Manisha (Principal)', username: 'Manisha', email: 'manisha@smartkids.edu', role: 'admin', avatar: '👩‍🏫' };
+        const user = { id: 'usr_admin_1', name: 'Mrs. Manisha Bhume (Principal & Director)', username: 'Manisha', email: 'manisha@smartkids.edu', role: 'admin', avatar: '👩‍🏫' };
         const token = btoa(`${user.id}:${Date.now()}:${user.role}`);
         return new Response(JSON.stringify({ success: true, token, user }), { headers: corsHeaders });
       }

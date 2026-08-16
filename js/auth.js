@@ -38,17 +38,16 @@ class AuthManager {
     if ((cleanId === 'manisha' || cleanId === 'manisha@smartkids.edu') && 
         (cleanPass === 'Manisha123' || cleanPass.toLowerCase() === 'manisha123')) {
       const adminUser = {
-        id: 'usr_admin_1',
-        name: 'Mrs. Manisha (Principal & Director)',
+        id: 'usr-admin-01',
+        name: 'Mrs. Manisha Bhume (Principal & Director)',
         username: 'Manisha',
         email: 'manisha@smartkids.edu',
         role: 'admin',
-        phone: '+91 98200 12345',
         avatar: '👩‍🏫',
         status: 'Active'
       };
       this.setCurrentUser(adminUser);
-      showToast('Welcome back, Mrs. Manisha! Logging into Admin Command Center...', 'success');
+      showToast('Welcome back, Mrs. Manisha Bhume! Logging into Admin Command Center...', 'success');
       this.redirectByRole('admin');
       return true;
     }

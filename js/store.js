@@ -36,7 +36,7 @@ function showToast(message, type = 'info', duration = 3500) {
 const DEFAULT_USERS = [
   {
     id: 'usr_admin_1',
-    name: 'Mrs. Manisha (Principal & Director)',
+    name: 'Mrs. Manisha Bhume (Principal & Director)',
     username: 'Manisha',
     email: 'manisha@smartkids.edu',
     password: 'Manisha123',

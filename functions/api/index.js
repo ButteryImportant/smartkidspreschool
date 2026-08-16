@@ -25,7 +25,7 @@ const EMAIL_CONFIG = {
 // Edge In-Memory Storage
 let memoryStore = {
   users: [
-    { id: 'usr-admin-01', name: 'Mrs. Manisha (Principal)', username: 'Manisha', email: 'manisha@smartkids.edu', password: 'Manisha123', role: 'admin', avatar: '👩‍🏫', status: 'Active', emailVerified: true },
+    { id: 'usr-admin-01', name: 'Mrs. Manisha Bhume (Principal & Director)', username: 'Manisha', email: 'manisha@smartkids.edu', password: 'Manisha123', role: 'admin', avatar: '👩‍🏫', status: 'Active', emailVerified: true },
     { id: 'usr-admin-02', name: 'Hardik Biradar', username: 'Hardik', email: 'hardik@smartkids.edu', password: 'hardik', role: 'admin', avatar: '👨‍💼', status: 'Active', emailVerified: true }
   ],
   students: [],
@@ -353,7 +353,7 @@ export async function onRequest(context) {
           (pass === 'Manisha123' || pass.toLowerCase() === 'manisha123')) {
         return new Response(JSON.stringify({
           success: true,
-          user: { id: 'usr-admin-01', name: 'Mrs. Manisha (Principal)', username: 'Manisha', email: 'manisha@smartkids.edu', role: 'admin', avatar: '👩‍🏫' }
+          user: { id: 'usr-admin-01', name: 'Mrs. Manisha Bhume (Principal & Director)', username: 'Manisha', email: 'manisha@smartkids.edu', role: 'admin', avatar: '👩‍🏫' }
         }), { headers: corsHeaders() });
       }
 
