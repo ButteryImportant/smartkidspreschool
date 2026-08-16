@@ -204,6 +204,13 @@ export default {
       return new Response(null, { headers: corsHeaders });
     }
 
+    // Forward all non-API static files to Cloudflare Asset Server
+    if (!path.startsWith('/api')) {
+      if (env && env.ASSETS) {
+        return env.ASSETS.fetch(request);
+      }
+    }
+
     // Health check
     if (path === '/api/health') {
       return new Response(JSON.stringify({ status: 'healthy', timestamp: new Date().toISOString() }), { headers: corsHeaders });
@@ -374,7 +381,10 @@ export default {
       return new Response(JSON.stringify({ success: true, admission: newAdm }), { headers: corsHeaders });
     }
 
-    // Fallback response
+    // Fallback response: try assets or return 404
+    if (env && env.ASSETS) {
+      return env.ASSETS.fetch(request);
+    }
     return new Response(JSON.stringify({ error: 'Endpoint not found' }), { status: 404, headers: corsHeaders });
   }
 };
