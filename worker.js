@@ -405,45 +405,88 @@ export default {
     }
 
     // ========================================================================
-    // CLOUDFLARE R2 OBJECT STORAGE (File Uploads & Documents)
+    // ZERO-CREDIT-CARD FILE STORAGE (Cloudflare D1 SQL BLOB Storage)
     // ========================================================================
 
     if (path.startsWith('/api/files/') && request.method === 'GET') {
-      const fileKey = decodeURIComponent(path.replace('/api/files/', ''));
+      const fileId = decodeURIComponent(path.replace('/api/files/', ''));
+
+      // 1. Try R2 if configured
       if (env && env.BUCKET) {
-        const object = await env.BUCKET.get(fileKey);
-        if (!object) {
-          return new Response('File not found', { status: 404, headers: corsHeaders });
+        try {
+          const object = await env.BUCKET.get(fileId);
+          if (object) {
+            const headers = new Headers();
+            object.writeHttpMetadata(headers);
+            headers.set('etag', object.httpEtag);
+            headers.set('Cache-Control', 'public, max-age=31536000');
+            headers.set('Access-Control-Allow-Origin', '*');
+            return new Response(object.body, { headers });
+          }
+        } catch (e) {
+          console.error('R2 read error:', e);
         }
-        const headers = new Headers();
-        object.writeHttpMetadata(headers);
-        headers.set('etag', object.httpEtag);
-        headers.set('Cache-Control', 'public, max-age=31536000');
-        headers.set('Access-Control-Allow-Origin', '*');
-        return new Response(object.body, { headers });
       }
-      return new Response(JSON.stringify({ error: 'R2 storage bucket not configured' }), { status: 501, headers: corsHeaders });
+
+      // 2. Default: Read directly from Cloudflare D1 Database
+      if (db) {
+        try {
+          const fileRow = await db.prepare('SELECT * FROM files WHERE id = ?').bind(fileId).first();
+          if (fileRow && fileRow.data_base64) {
+            const binaryStr = atob(fileRow.data_base64);
+            const len = binaryStr.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+              bytes[i] = binaryStr.charCodeAt(i);
+            }
+            return new Response(bytes.buffer, {
+              headers: {
+                'Content-Type': fileRow.mime_type || 'application/octet-stream',
+                'Cache-Control': 'public, max-age=31536000',
+                'Access-Control-Allow-Origin': '*'
+              }
+            });
+          }
+        } catch (e) {
+          console.error('D1 file read error:', e);
+        }
+      }
+
+      return new Response('File not found', { status: 404, headers: corsHeaders });
     }
 
     if (path === '/api/upload' && (request.method === 'POST' || request.method === 'PUT')) {
-      if (!env || !env.BUCKET) {
-        return new Response(JSON.stringify({ success: false, message: 'R2 Bucket not configured. Bind BUCKET in Cloudflare settings.' }), { status: 501, headers: corsHeaders });
-      }
       try {
         const contentType = request.headers.get('content-type') || 'application/octet-stream';
         const filename = request.headers.get('x-filename') || `doc_${Date.now()}`;
-        const safeKey = `uploads/${new Date().toISOString().slice(0,7)}/${Date.now()}_${filename.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+        const buffer = await request.arrayBuffer();
+        const bytes = new Uint8Array(buffer);
 
-        await env.BUCKET.put(safeKey, request.body, {
-          httpMetadata: { contentType: contentType }
-        });
+        let binary = '';
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        const base64 = btoa(binary);
+        const fileId = `doc_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
-        return new Response(JSON.stringify({
-          success: true,
-          key: safeKey,
-          url: `/api/files/${safeKey}`,
-          message: 'File uploaded successfully to Cloudflare R2'
-        }), { headers: corsHeaders });
+        if (db) {
+          await db.prepare(`
+            INSERT INTO files (id, filename, mime_type, size_bytes, data_base64)
+            VALUES (?, ?, ?, ?, ?)
+          `).bind(fileId, filename, contentType, len, base64).run();
+
+          return new Response(JSON.stringify({
+            success: true,
+            fileId: fileId,
+            url: `/api/files/${fileId}`,
+            filename: filename,
+            sizeBytes: len,
+            storage: 'Cloudflare D1 (Free, Zero-Card)'
+          }), { headers: corsHeaders });
+        }
+
+        return new Response(JSON.stringify({ success: false, message: 'Database not connected.' }), { status: 500, headers: corsHeaders });
       } catch (err) {
         return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500, headers: corsHeaders });
       }

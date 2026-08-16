@@ -55,6 +55,7 @@ async function ensureD1Tables(db) {
       CREATE TABLE IF NOT EXISTS admissions (id TEXT PRIMARY KEY, parent_name TEXT, parent_email TEXT, parent_phone TEXT, child_name TEXT, child_dob TEXT, program TEXT, academic_year TEXT, status TEXT, notes TEXT, submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP);
       CREATE TABLE IF NOT EXISTS announcements (id TEXT PRIMARY KEY, title TEXT, category TEXT, date TEXT, content TEXT, urgent INTEGER, author TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
       CREATE TABLE IF NOT EXISTS otps (id TEXT PRIMARY KEY, email TEXT, purpose TEXT, otp_code TEXT, expires_at INTEGER, attempts INTEGER, verified_token TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
+      CREATE TABLE IF NOT EXISTS files (id TEXT PRIMARY KEY, filename TEXT, mime_type TEXT, size_bytes INTEGER, data_base64 TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
       INSERT OR IGNORE INTO users (id, name, username, email, password, role, avatar, status, email_verified) VALUES ('usr-admin-01', 'Mrs. Manisha Bhume (Principal & Director)', 'Manisha', 'manisha@smartkids.edu', 'Manisha123', 'admin', '👩‍🏫', 'Active', 1);
       INSERT OR IGNORE INTO users (id, name, username, email, password, role, avatar, status, email_verified) VALUES ('usr-admin-02', 'Hardik Biradar', 'Hardik', 'hardik@smartkids.edu', 'hardik', 'admin', '👨‍💼', 'Active', 1);
     `);
@@ -510,43 +511,92 @@ export async function onRequest(context) {
     }
   }
 
-  // 9. File Storage & Uploads (Cloudflare R2 Object Storage)
+  // 9. Zero-Credit-Card File Storage & Uploads (D1 Database BLOB / Base64 Storage)
   if (path.startsWith('/files/') && request.method === 'GET') {
-    const fileKey = decodeURIComponent(path.replace('/files/', ''));
+    const fileId = decodeURIComponent(path.replace('/files/', ''));
+
+    // 1. Try R2 if configured
     if (env && env.BUCKET) {
-      const object = await env.BUCKET.get(fileKey);
-      if (!object) {
-        return new Response('File not found', { status: 404, headers: corsHeaders() });
+      try {
+        const object = await env.BUCKET.get(fileId);
+        if (object) {
+          const headers = new Headers();
+          object.writeHttpMetadata(headers);
+          headers.set('etag', object.httpEtag);
+          headers.set('Cache-Control', 'public, max-age=31536000');
+          headers.set('Access-Control-Allow-Origin', '*');
+          return new Response(object.body, { headers });
+        }
+      } catch (e) {
+        console.error('R2 read error:', e);
       }
-      const headers = new Headers();
-      object.writeHttpMetadata(headers);
-      headers.set('etag', object.httpEtag);
-      headers.set('Cache-Control', 'public, max-age=31536000');
-      headers.set('Access-Control-Allow-Origin', '*');
-      return new Response(object.body, { headers });
     }
-    return new Response(JSON.stringify({ error: 'R2 storage not configured' }), { status: 501, headers: corsHeaders() });
+
+    // 2. Default: Read directly from Cloudflare D1 SQL database (100% Free, Zero Credit Card Required)
+    if (db) {
+      try {
+        const fileRow = await db.prepare('SELECT * FROM files WHERE id = ?').bind(fileId).first();
+        if (fileRow && fileRow.data_base64) {
+          const binaryStr = atob(fileRow.data_base64);
+          const len = binaryStr.length;
+          const bytes = new Uint8Array(len);
+          for (let i = 0; i < len; i++) {
+            bytes[i] = binaryStr.charCodeAt(i);
+          }
+          return new Response(bytes.buffer, {
+            headers: {
+              'Content-Type': fileRow.mime_type || 'application/octet-stream',
+              'Cache-Control': 'public, max-age=31536000',
+              'Access-Control-Allow-Origin': '*'
+            }
+          });
+        }
+      } catch (e) {
+        console.error('D1 file read error:', e);
+      }
+    }
+
+    return new Response('File not found', { status: 404, headers: corsHeaders() });
   }
 
   if (path === '/upload' && (request.method === 'POST' || request.method === 'PUT')) {
-    if (!env || !env.BUCKET) {
-      return new Response(JSON.stringify({ success: false, message: 'R2 Bucket is not configured yet. Bind BUCKET in Cloudflare Settings.' }), { status: 501, headers: corsHeaders() });
-    }
     try {
       const contentType = request.headers.get('content-type') || 'application/octet-stream';
-      const filename = request.headers.get('x-filename') || `doc_${Date.now()}`;
-      const safeKey = `uploads/${new Date().toISOString().slice(0,7)}/${Date.now()}_${filename.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+      const filename = request.headers.get('x-filename') || `document_${Date.now()}`;
+      const buffer = await request.arrayBuffer();
+      const bytes = new Uint8Array(buffer);
 
-      await env.BUCKET.put(safeKey, request.body, {
-        httpMetadata: { contentType: contentType }
-      });
+      // Encode to base64
+      let binary = '';
+      const len = bytes.byteLength;
+      for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      const base64 = btoa(binary);
+      const fileId = `doc_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+      // Store in D1 Database (No credit card needed)
+      if (db) {
+        await db.prepare(`
+          INSERT INTO files (id, filename, mime_type, size_bytes, data_base64)
+          VALUES (?, ?, ?, ?, ?)
+        `).bind(fileId, filename, contentType, len, base64).run();
+
+        return new Response(JSON.stringify({
+          success: true,
+          fileId: fileId,
+          url: `/api/files/${fileId}`,
+          filename: filename,
+          sizeBytes: len,
+          storage: 'Cloudflare D1 (Free, Zero-Card)'
+        }), { headers: corsHeaders() });
+      }
 
       return new Response(JSON.stringify({
-        success: true,
-        key: safeKey,
-        url: `/api/files/${safeKey}`,
-        message: 'File uploaded successfully to Cloudflare R2'
-      }), { headers: corsHeaders() });
+        success: false,
+        message: 'Database not connected. Please ensure D1 DB binding is added.'
+      }), { status: 500, headers: corsHeaders() });
+
     } catch (err) {
       return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500, headers: corsHeaders() });
     }
