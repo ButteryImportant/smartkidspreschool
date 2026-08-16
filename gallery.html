@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Gallery & Moments | Smart Kids Preschool</title>
+  <meta name="description" content="Browse vibrant photos of Annual Day, Sports Meet, classroom activities, festivals, and learning moments at Smart Kids Preschool, Kharghar.">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/portal.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-notice-bar">
+    <div class="ticker">
+      <span class="badge">Gallery</span>
+      <span>Capturing golden preschool memories, festivals, and hands-on learning every day!</span>
+    </div>
+    <div class="top-contact-info">
+      <a href="tel:+919820012345"><i class="fas fa-phone-alt"></i> +91 98200 12345</a>
+      <a href="fees.html"><i class="fas fa-credit-card"></i> Online Fees</a>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="nav-brand">
+        <img src="logo.png" alt="Smart Kids" class="brand-logo-img">
+      </a>
+
+      <button class="mobile-nav-toggle" onclick="toggleMobileNav()">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div class="nav-menu-wrapper" id="navMenuWrapper">
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="programs.html" class="nav-link">Programs</a></li>
+          <li><a href="admissions.html" class="nav-link">Admissions</a></li>
+          <li><a href="gallery.html" class="nav-link active">Gallery</a></li>
+          <li><a href="fees.html" class="nav-link">Online Fees</a></li>
+          <li><a href="portal.html" class="nav-link">Student Portal</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <div class="nav-auth-container">
+            <a href="login.html" class="btn btn-outline btn-sm">
+              <i class="fas fa-user-lock"></i> Portal Login
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="nav-backdrop" id="navBackdrop" onclick="toggleMobileNav()"></div>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="hero-breadcrumb">
+        <a href="index.html">Home</a> <i class="fas fa-chevron-right" style="font-size:0.75rem;"></i> <span>Photo Gallery</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h1 class="hero-title">Photo <span>Gallery</span> & Events</h1>
+          <p class="hero-subtitle">
+            Explore glimpses of joyful learning, celebrations, sports events, art exhibitions, and preschool life in Kharghar.
+          </p>
+        </div>
+        <div>
+          <button class="btn btn-yellow btn-lg" onclick="window.galleryEngine.openUploadModal()">
+            <i class="fas fa-cloud-upload-alt"></i> Upload New Photos
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Gallery Section -->
+  <main class="container section">
+    
+    <!-- Filter Category Buttons -->
+    <div style="display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; margin-bottom: 2.5rem;">
+      <button class="btn btn-primary btn-sm gallery-filter-btn" onclick="window.galleryEngine.filterGallery('all', this)">
+        All Moments
+      </button>
+      <button class="btn btn-outline btn-sm gallery-filter-btn" onclick="window.galleryEngine.filterGallery('Annual Day', this)">
+        🎭 Annual Day
+      </button>
+      <button class="btn btn-outline btn-sm gallery-filter-btn" onclick="window.galleryEngine.filterGallery('Sports Meet', this)">
+        🏃 Sports Meet
+      </button>
+      <button class="btn btn-outline btn-sm gallery-filter-btn" onclick="window.galleryEngine.filterGallery('Art & Craft', this)">
+        🎨 Art & Craft
+      </button>
+      <button class="btn btn-outline btn-sm gallery-filter-btn" onclick="window.galleryEngine.filterGallery('Field Trips', this)">
+        🌳 Field Trips
+      </button>
+      <button class="btn btn-outline btn-sm gallery-filter-btn" onclick="window.galleryEngine.filterGallery('Classroom Fun', this)">
+        🧩 Classroom Fun
+      </button>
+      <button class="btn btn-outline btn-sm gallery-filter-btn" onclick="window.galleryEngine.filterGallery('Festivals', this)">
+        🎉 Festivals
+      </button>
+    </div>
+
+    <!-- Gallery Dynamic Grid -->
+    <div id="gallery-grid-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.75rem;">
+      <!-- Populated by gallery.js -->
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="logo.png" alt="Smart Kids" style="max-height: 48px; margin-bottom: 1rem; object-fit: contain;">
+          <p>Nurturing young minds through joy, exploration, and structured Montessori-based early childhood education in Kharghar, Sector 36.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+            <li><a href="programs.html"><i class="fas fa-chevron-right"></i> Programs</a></li>
+            <li><a href="admissions.html"><i class="fas fa-chevron-right"></i> Admissions</a></li>
+            <li><a href="gallery.html"><i class="fas fa-chevron-right"></i> Photo Gallery</a></li>
+            <li><a href="fees.html"><i class="fas fa-chevron-right"></i> Online Fees</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Portals</h4>
+          <ul class="footer-links">
+            <li><a href="portal.html"><i class="fas fa-chevron-right"></i> Parent & Student Portal</a></li>
+            <li><a href="admin.html"><i class="fas fa-chevron-right"></i> School Admin Dashboard</a></li>
+            <li><a href="login.html"><i class="fas fa-chevron-right"></i> Login / Register</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Contact Office</h4>
+          <div class="footer-contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Sector 36, Kharghar, Navi Mumbai, Maharashtra - 410210</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="fas fa-phone"></i>
+            <span>+91 98200 12345 / 022-27741234</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Smart Kids Preschool & Daycare. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/gallery.js"></script>
+  <script>
+    function toggleMobileNav() {
+      document.getElementById('navMenuWrapper').classList.toggle('open');
+      document.getElementById('navBackdrop').classList.toggle('open');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      window.galleryEngine.renderGalleryGrid('gallery-grid-container', 'all');
+    });
+  </script>
+</body>
+</html>

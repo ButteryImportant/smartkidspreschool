@@ -1,0 +1,485 @@
+/* ==========================================================================
+   Smart Kids - Parent & Student Portal Stylesheet
+   High-Contrast Bold Typography & Mobile-Optimized Layouts
+   ========================================================================== */
+
+.portal-wrapper {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  margin: 2.5rem auto;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .portal-wrapper {
+    grid-template-columns: 1fr;
+    margin: 1.5rem auto;
+    gap: 1.5rem;
+  }
+}
+
+/* --- Portal Sidebar / Student Info Card --- */
+.portal-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: sticky;
+  top: 90px;
+}
+
+@media (max-width: 992px) {
+  .portal-sidebar {
+    position: static;
+  }
+}
+
+.student-card {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  border: 1.5px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  padding: 1.75rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.student-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-light));
+}
+
+.student-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 4px solid var(--white);
+  box-shadow: var(--shadow-md);
+  margin: 20px auto 1rem;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  color: var(--primary-blue);
+  overflow: hidden;
+}
+
+.student-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 0.25rem;
+}
+
+.student-id {
+  font-size: 0.88rem;
+  color: #000000;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.student-details-list {
+  text-align: left;
+  border-top: 1.5px solid var(--border-light);
+  padding-top: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  font-size: 0.92rem;
+}
+
+.student-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.student-detail-label {
+  color: #000000;
+  font-weight: 800;
+}
+
+.student-detail-val {
+  color: #000000;
+  font-weight: 800;
+}
+
+/* Sidebar Navigation Tabs */
+.portal-nav {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border-light);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+@media (max-width: 992px) {
+  .portal-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.5rem;
+  }
+}
+
+.portal-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.15rem;
+  border-radius: var(--radius-md);
+  color: #000000;
+  font-weight: 800;
+  font-size: 0.96rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  min-height: 44px;
+}
+
+.portal-nav-item i {
+  font-size: 1.15rem;
+  width: 22px;
+  text-align: center;
+  color: var(--primary-light);
+}
+
+.portal-nav-item:hover {
+  background: var(--bg-alt);
+  color: var(--primary-blue);
+}
+
+.portal-nav-item.active {
+  background: var(--primary-blue);
+  color: var(--white);
+}
+
+.portal-nav-item.active i {
+  color: var(--accent-yellow);
+}
+
+/* --- Portal Main Content Area --- */
+.portal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 0; /* Prevents overflow in flex child */
+}
+
+.portal-tab-pane {
+  display: none;
+  flex-direction: column;
+  gap: 1.75rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.portal-tab-pane.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Overview Metric Grid --- */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
+}
+
+@media (max-width: 600px) {
+  .metrics-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+}
+
+.metric-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border-light);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.metric-icon-box {
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.metric-icon-blue   { background: #DBEAFE; color: #1E40AF; }
+.metric-icon-green  { background: var(--accent-green-light); color: #065F46; }
+.metric-icon-yellow { background: var(--accent-yellow-light); color: #92400E; }
+.metric-icon-coral  { background: var(--accent-coral-light); color: #9F1239; }
+
+.metric-content h4 {
+  font-size: 0.82rem;
+  color: #000000;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.2rem;
+}
+
+.metric-val {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #000000;
+  font-family: 'Fredoka', cursive, sans-serif;
+}
+
+/* --- Attendance Calendar Grid --- */
+.attendance-calendar-box {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border-light);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 600px) {
+  .attendance-calendar-box {
+    padding: 1rem;
+  }
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.4rem;
+  text-align: center;
+}
+
+.calendar-day-header {
+  font-weight: 800;
+  font-size: 0.84rem;
+  color: #000000;
+  padding: 0.4rem 0;
+  text-transform: uppercase;
+}
+
+.calendar-day-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 0.95rem;
+  background: var(--bg-alt);
+  position: relative;
+  color: #000000;
+  transition: transform var(--transition-fast);
+}
+
+.calendar-day-cell.present {
+  background: #D1FAE5;
+  color: #064E3B;
+  font-weight: 800;
+  border: 1.5px solid #6EE7B7;
+}
+
+.calendar-day-cell.absent {
+  background: #FFE4E6;
+  color: #881337;
+  font-weight: 800;
+  border: 1.5px solid #FDA4AF;
+}
+
+.calendar-day-cell.holiday {
+  background: #FEF3C7;
+  color: #78350F;
+  font-weight: 800;
+  border: 1.5px solid #FCD34D;
+}
+
+.calendar-day-cell.empty {
+  background: transparent;
+  border: none;
+}
+
+/* --- Timetable & Daily Schedule Cards --- */
+.schedule-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.schedule-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-light);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow: var(--shadow-xs);
+  transition: transform var(--transition-fast);
+}
+
+@media (max-width: 600px) {
+  .schedule-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+}
+
+.schedule-time {
+  min-width: 130px;
+  font-weight: 800;
+  color: var(--primary-blue);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.schedule-badge {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  background: var(--accent-yellow-light);
+}
+
+.schedule-info h4 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 0.2rem;
+}
+
+.schedule-info p {
+  font-size: 0.92rem;
+  color: #000000;
+  font-weight: 700;
+}
+
+/* --- Gradebook / Term Report Card --- */
+.report-card-container {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border-light);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 600px) {
+  .report-card-container {
+    padding: 1rem;
+  }
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  min-width: 480px;
+}
+
+.report-table th, .report-table td {
+  padding: 0.85rem 1.15rem;
+  text-align: left;
+  border-bottom: 1.5px solid var(--border-light);
+  font-size: 0.95rem;
+  color: #000000;
+  font-weight: 700;
+}
+
+.report-table th {
+  background: var(--bg-alt);
+  font-weight: 800;
+  color: #000000;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+}
+
+.report-table tr:hover td {
+  background: #F8FAFC;
+}
+
+.grade-pill {
+  font-weight: 800;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+}
+
+.grade-excellent { background: #D1FAE5; color: #064E3B; }
+.grade-good      { background: #DBEAFE; color: #1E3A8A; }
+.grade-average   { background: #FEF3C7; color: #78350F; }
+
+/* --- Notice Card Component --- */
+.notice-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-light);
+  border-left: 5px solid var(--primary-light);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.notice-card p {
+  color: #000000;
+  font-weight: 700;
+}
+
+.notice-card.urgent {
+  border-left-color: var(--accent-coral);
+}
+
+.notice-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: #000000;
+  font-weight: 700;
+}

@@ -1,0 +1,11 @@
+name = "smartkids-school"
+main = "worker.js"
+compatibility_date = "2026-08-01"
+
+[site]
+bucket = "./"
+
+# Optional Cloudflare KV binding for persistent cloud storage
+# [[kv_namespaces]]
+# binding = "SCHOOL_KV"
+# id = "your-kv-namespace-id"

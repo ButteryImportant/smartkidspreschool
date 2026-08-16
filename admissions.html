@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Admissions (2026-27) | Smart Kids Preschool Kharghar</title>
+  <meta name="description" content="Apply online for preschool admissions for Academic Session 2026-27. Track your application status live.">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/portal.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-notice-bar">
+    <div class="ticker">
+      <span class="badge">Admissions 2026-27</span>
+      <span>Early bird enrollment & sibling concessions open for Playgroup, Nursery, Jr. KG, Sr. KG!</span>
+    </div>
+    <div class="top-contact-info">
+      <a href="tel:+919820012345"><i class="fas fa-phone-alt"></i> +91 98200 12345</a>
+      <a href="fees.html"><i class="fas fa-credit-card"></i> Online Fees</a>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="nav-brand">
+        <img src="logo.png" alt="Smart Kids" class="brand-logo-img">
+      </a>
+
+      <button class="mobile-nav-toggle" onclick="toggleMobileNav()">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div class="nav-menu-wrapper" id="navMenuWrapper">
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="programs.html" class="nav-link">Programs</a></li>
+          <li><a href="admissions.html" class="nav-link active">Admissions</a></li>
+          <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+          <li><a href="fees.html" class="nav-link">Online Fees</a></li>
+          <li><a href="portal.html" class="nav-link">Student Portal</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <div class="nav-auth-container">
+            <a href="login.html" class="btn btn-outline btn-sm">
+              <i class="fas fa-user-lock"></i> Portal Login
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="nav-backdrop" id="navBackdrop" onclick="toggleMobileNav()"></div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="hero-breadcrumb">
+        <a href="index.html">Home</a> <i class="fas fa-chevron-right" style="font-size:0.75rem;"></i> <span>Admissions 2026-27</span>
+      </div>
+      <h1 class="hero-title">Preschool <span>Admissions</span> 2026-27</h1>
+      <p class="hero-subtitle">
+        Submit your online admission form in minutes or track your application status live.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="container section">
+    
+    <!-- Application Status Tracker Bar -->
+    <div class="card" style="margin-bottom: 3rem; background: #EFF6FF; border-color: #BFDBFE; border-radius: var(--radius-xl);">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h3 style="color: var(--primary-blue); font-size: 1.3rem; font-weight:800; margin-bottom: 2px;">
+            <i class="fas fa-search-location text-primary"></i> Track Application Status
+          </h3>
+          <p style="font-size: 0.92rem; color: #000000; font-weight:700;">Already applied? Enter your Application ID (e.g. ADM-2026-890) to check status</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; width: 100%; max-width: 420px; flex-wrap:wrap;">
+          <input type="text" id="track-app-input" class="form-control" placeholder="ADM-2026-890" value="ADM-2026-890" style="flex:1; min-width:180px;">
+          <button class="btn btn-primary" onclick="trackApplicationStatus()">
+            <i class="fas fa-arrow-right"></i> Check Status
+          </button>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div id="app-track-result" style="display: none; margin-top: 1.25rem; background: white; padding: 1.25rem; border-radius: 12px; border: 1.5px solid #CBD5E1;">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Application Form Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; align-items: start;">
+      
+      <!-- Left: Interactive Form -->
+      <div class="card" style="border-radius: var(--radius-xl); padding: 2rem; box-shadow: var(--shadow-md);">
+        <h2 style="font-size: 1.7rem; color: var(--primary-blue); font-weight:800; margin-bottom: 0.5rem;">
+          <i class="fas fa-edit text-warning"></i> Online Admission Form
+        </h2>
+        <p style="font-size: 0.95rem; color: #000000; font-weight:700; margin-bottom: 2rem;">
+          Please provide child and parent details accurately. Our admissions desk will contact you within 24 hours.
+        </p>
+
+        <form id="online-admission-form" onsubmit="handleAdmissionSubmit(event)">
+          <h4 style="color: var(--primary-blue); font-size: 1.15rem; font-weight:800; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+            1. Child Information
+          </h4>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Child Full Name *</label>
+              <input type="text" id="adm-child-name" class="form-control" placeholder="Child's Name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date of Birth *</label>
+              <input type="date" id="adm-child-dob" class="form-control" required value="2023-03-15">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Gender *</label>
+              <select id="adm-child-gender" class="form-control" required>
+                <option value="Boy">Boy</option>
+                <option value="Girl">Girl</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Seeking Admission In *</label>
+              <select id="adm-seeking-class" class="form-control" required>
+                <option value="Playgroup">Playgroup (1.5 - 2.5 yrs)</option>
+                <option value="Nursery" selected>Nursery (2.5 - 3.5 yrs)</option>
+                <option value="Junior KG">Junior KG (3.5 - 4.5 yrs)</option>
+                <option value="Senior KG">Senior KG (4.5 - 5.5 yrs)</option>
+                <option value="Daycare">Daycare & Extended Care</option>
+              </select>
+            </div>
+          </div>
+
+          <h4 style="color: var(--primary-blue); font-size: 1.15rem; font-weight:800; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem; margin: 1.75rem 0 1rem;">
+            2. Parent & Contact Details
+          </h4>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Parent / Guardian Name *</label>
+              <input type="text" id="adm-parent-name" class="form-control" placeholder="Father / Mother Name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mobile Number *</label>
+              <input type="tel" id="adm-parent-phone" class="form-control" placeholder="+91 98XXX XXXXX" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input type="email" id="adm-parent-email" class="form-control" placeholder="parent@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Residential Address (Kharghar / Navi Mumbai)</label>
+            <textarea id="adm-address" class="form-control" rows="2" placeholder="Building, Sector, Kharghar..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Any Special Requirements / Notes</label>
+            <textarea id="adm-notes" class="form-control" rows="2" placeholder="Preferred timing, food allergies, transport requirement..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-green btn-block btn-lg" style="margin-top: 1.5rem;">
+            <i class="fas fa-paper-plane"></i> Submit Admission Application
+          </button>
+        </form>
+      </div>
+
+      <!-- Right: Eligibility Matrix & FAQ -->
+      <div>
+        <div class="card" style="border-radius: var(--radius-xl); margin-bottom: 2rem;">
+          <h3 style="color: var(--primary-blue); font-size: 1.3rem; font-weight:800; margin-bottom: 1rem;">
+            <i class="fas fa-calendar-alt text-primary"></i> Age Eligibility (as of 31st July 2026)
+          </h3>
+
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.95rem; font-weight:700;">
+            <div style="background: #F8FAFC; padding: 0.75rem 1rem; border-radius: 8px; display: flex; justify-content: space-between; border:1px solid #E2E8F0;">
+              <strong>Playgroup</strong>
+              <span style="color: #000000; font-weight:800;">1.5 to 2.5 Years</span>
+            </div>
+            <div style="background: #F8FAFC; padding: 0.75rem 1rem; border-radius: 8px; display: flex; justify-content: space-between; border:1px solid #E2E8F0;">
+              <strong>Nursery</strong>
+              <span style="color: #000000; font-weight:800;">2.5 to 3.5 Years</span>
+            </div>
+            <div style="background: #F8FAFC; padding: 0.75rem 1rem; border-radius: 8px; display: flex; justify-content: space-between; border:1px solid #E2E8F0;">
+              <strong>Junior KG</strong>
+              <span style="color: #000000; font-weight:800;">3.5 to 4.5 Years</span>
+            </div>
+            <div style="background: #F8FAFC; padding: 0.75rem 1rem; border-radius: 8px; display: flex; justify-content: space-between; border:1px solid #E2E8F0;">
+              <strong>Senior KG</strong>
+              <span style="color: #000000; font-weight:800;">4.5 to 5.5 Years</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="border-radius: var(--radius-xl); background: #FFFBEB; border-color: #FDE68A;">
+          <h4 style="color: #92400E; font-size: 1.15rem; font-weight:800; margin-bottom: 0.75rem;">
+            <i class="fas fa-gift"></i> Sibling Concession & Referral Discount
+          </h4>
+          <p style="font-size: 0.92rem; color: #000000; font-weight:700; line-height: 1.6;">
+            We offer an ongoing <strong>10% tuition fee concession</strong> for the younger sibling. Mention sibling details in the notes field or during campus interaction.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="logo.png" alt="Smart Kids" style="max-height: 48px; margin-bottom: 1rem; object-fit: contain;">
+          <p>Nurturing young minds through joy, exploration, and structured Montessori-based early childhood education in Kharghar, Sector 36.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+            <li><a href="programs.html"><i class="fas fa-chevron-right"></i> Programs</a></li>
+            <li><a href="admissions.html"><i class="fas fa-chevron-right"></i> Admissions</a></li>
+            <li><a href="gallery.html"><i class="fas fa-chevron-right"></i> Photo Gallery</a></li>
+            <li><a href="fees.html"><i class="fas fa-chevron-right"></i> Online Fees</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Portals</h4>
+          <ul class="footer-links">
+            <li><a href="portal.html"><i class="fas fa-chevron-right"></i> Parent & Student Portal</a></li>
+            <li><a href="admin.html"><i class="fas fa-chevron-right"></i> School Admin Dashboard</a></li>
+            <li><a href="login.html"><i class="fas fa-chevron-right"></i> Login / Register</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Contact Office</h4>
+          <div class="footer-contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Sector 36, Kharghar, Navi Mumbai, Maharashtra - 410210</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="fas fa-phone"></i>
+            <span>+91 98200 12345 / 022-27741234</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Smart Kids Preschool & Daycare. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    function toggleMobileNav() {
+      document.getElementById('navMenuWrapper').classList.toggle('open');
+      document.getElementById('navBackdrop').classList.toggle('open');
+    }
+
+    function handleAdmissionSubmit(e) {
+      e.preventDefault();
+      const childName = document.getElementById('adm-child-name').value.trim();
+      const dob = document.getElementById('adm-child-dob').value;
+      const seekingClass = document.getElementById('adm-seeking-class').value;
+      const parentName = document.getElementById('adm-parent-name').value.trim();
+      const phone = document.getElementById('adm-parent-phone').value.trim();
+      const email = document.getElementById('adm-parent-email').value.trim();
+      const notes = document.getElementById('adm-notes').value.trim();
+
+      const newId = `ADM-2026-${Math.floor(100 + Math.random() * 900)}`;
+      const newAdm = {
+        id: newId,
+        childName: childName,
+        dob: dob,
+        seekingClass: seekingClass,
+        parentName: parentName,
+        email: email,
+        phone: phone,
+        status: 'Under Review',
+        applyDate: new Date().toISOString().split('T')[0],
+        notes: notes
+      };
+
+      window.schoolStore.addAdmission(newAdm);
+      showToast(`Application submitted! Your App ID is ${newId}`, 'success', 5000);
+
+      document.getElementById('track-app-input').value = newId;
+      trackApplicationStatus();
+      document.getElementById('online-admission-form').reset();
+    }
+
+    function trackApplicationStatus() {
+      const id = document.getElementById('track-app-input').value.trim();
+      const admissions = window.schoolStore.getAdmissions();
+      const item = admissions.find(a => a.id.toLowerCase() === id.toLowerCase() || a.email.toLowerCase() === id.toLowerCase());
+
+      const resultBox = document.getElementById('app-track-result');
+      if (!resultBox) return;
+
+      if (item) {
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+            <div>
+              <h4 style="color:#1E3A8A; font-size:1.2rem; font-weight:800; margin-bottom:2px;">
+                Application ID: <strong>${item.id}</strong> - ${item.childName}
+              </h4>
+              <p style="font-size:0.92rem; color:#000000; font-weight:700; margin:0;">
+                Applied for <strong>${item.seekingClass}</strong> on ${item.applyDate}
+              </p>
+            </div>
+            <span class="badge ${item.status === 'Approved' ? 'badge-green' : item.status === 'Rejected' ? 'badge-coral' : 'badge-blue'}" style="font-size:0.95rem; font-weight:800; padding:0.4rem 0.85rem;">
+              Status: ${item.status}
+            </span>
+          </div>
+          ${item.status === 'Approved' ? `
+            <div style="margin-top:0.75rem; font-size:0.92rem; color:#064E3B; font-weight:700; background:#DCFCE7; padding:0.75rem; border-radius:8px; border:1px solid #86EFAC;">
+              <i class="fas fa-check-circle"></i> Congratulations! Your application has been approved. You can proceed to <a href="fees.html" style="font-weight:800; color:#064E3B; text-decoration:underline;">Online Fee Payment</a> or visit campus for documentation.
+            </div>
+          ` : ''}
+        `;
+      } else {
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `<div style="color:#DC2626; font-size:0.95rem; font-weight:800;"><i class="fas fa-exclamation-circle"></i> No application found matching "${id}". Please check your Application ID.</div>`;
+      }
+    }
+  </script>
+</body>
+</html>

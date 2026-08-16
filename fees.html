@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Fee Payment & Invoices | Smart Kids Preschool</title>
+  <meta name="description" content="Pay school tuition, term fees, daycare, and transport fees online securely via Razorpay with instant GST receipts.">
+
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/portal.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-notice-bar">
+    <div class="ticker">
+      <span class="badge">Notice</span>
+      <span>Term 2 Fees due date: 31st August 2026. Pay online to download authenticated GST receipts.</span>
+    </div>
+    <div class="top-contact-info">
+      <a href="tel:+919820012345"><i class="fas fa-phone-alt"></i> +91 98200 12345</a>
+      <a href="mailto:accounts@smartkids.edu"><i class="fas fa-envelope"></i> accounts@smartkids.edu</a>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="nav-brand">
+        <img src="logo.png" alt="Smart Kids" class="brand-logo-img">
+      </a>
+
+      <button class="mobile-nav-toggle" onclick="toggleMobileNav()">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div class="nav-menu-wrapper" id="navMenuWrapper">
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="programs.html" class="nav-link">Programs</a></li>
+          <li><a href="admissions.html" class="nav-link">Admissions</a></li>
+          <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+          <li><a href="fees.html" class="nav-link active">Online Fees</a></li>
+          <li><a href="portal.html" class="nav-link">Student Portal</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <div class="nav-auth-container">
+            <a href="login.html" class="btn btn-outline btn-sm">
+              <i class="fas fa-user-lock"></i> Portal Login
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="nav-backdrop" id="navBackdrop" onclick="toggleMobileNav()"></div>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="hero-breadcrumb">
+        <a href="index.html">Home</a> <i class="fas fa-chevron-right" style="font-size:0.75rem;"></i> <span>Fee Payment Portal</span>
+      </div>
+      <h1 class="hero-title">Online <span>Fee Payment</span> & Receipts</h1>
+      <p class="hero-subtitle">
+        Secure, instant, and frictionless tuition fee collection with automated GST invoices, official stamps, and Razorpay gateway.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Fee Payment Container -->
+  <main class="container section">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; align-items: start;">
+      
+      <!-- Left Column: Fee Lookup & Payment Card -->
+      <div>
+        <div class="card" style="margin-bottom: 2rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-md);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.25rem; flex-wrap:wrap; gap:0.5rem;">
+            <h3 style="color: var(--primary-blue); font-size: 1.35rem; font-weight:800;">
+              <i class="fas fa-credit-card text-warning"></i> Select Student for Fee Payment
+            </h3>
+            <span class="badge badge-yellow" style="font-weight:800;">Term 2 (2026-27)</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Choose Student Record</label>
+            <select id="fee-student-select" class="form-control" onchange="renderSelectedStudentFeeDetails(this.value)">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <!-- Student Fee Detail Summary Display -->
+          <div id="fee-student-summary-box" style="background: #F8FAFC; border-radius: 14px; padding: 1.5rem; border: 1.5px solid var(--border-light); margin-bottom: 1.5rem;">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Payment Trigger Button -->
+          <button id="btn-trigger-fee-payment" class="btn btn-green btn-block btn-lg" onclick="handlePayButtonClick()">
+            <i class="fas fa-shield-alt"></i> Proceed to Pay via Razorpay
+          </button>
+        </div>
+
+        <!-- Payment Security Badges -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; background: white; padding: 1.25rem; border-radius: var(--radius-lg); border: 1.5px solid var(--border-light); text-align: center;">
+          <div>
+            <i class="fas fa-lock" style="font-size: 1.5rem; color: var(--accent-green); margin-bottom: 4px;"></i>
+            <div style="font-weight: 800; font-size: 0.9rem; color: #000000;">256-bit SSL</div>
+            <div style="font-size: 0.8rem; color: #000000; font-weight:700;">Encrypted</div>
+          </div>
+          <div>
+            <i class="fas fa-qrcode" style="font-size: 1.5rem; color: var(--primary-light); margin-bottom: 4px;"></i>
+            <div style="font-weight: 800; font-size: 0.9rem; color: #000000;">UPI & QR</div>
+            <div style="font-size: 0.8rem; color: #000000; font-weight:700;">GPay, Paytm</div>
+          </div>
+          <div>
+            <i class="fas fa-receipt" style="font-size: 1.5rem; color: var(--accent-yellow); margin-bottom: 4px;"></i>
+            <div style="font-weight: 800; font-size: 0.9rem; color: #000000;">GST Receipt</div>
+            <div style="font-size: 0.8rem; color: #000000; font-weight:700;">Instant PDF</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Standard Preschool Fee Structure & Info -->
+      <div>
+        <div class="card" style="border-radius: var(--radius-xl); margin-bottom: 2rem;">
+          <h3 style="color: var(--primary-blue); font-size: 1.3rem; margin-bottom: 1rem; font-weight:800;">
+            <i class="fas fa-list-alt text-primary"></i> Standard Preschool Fee Schedule
+          </h3>
+          
+          <div style="overflow-x:auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.92rem;">
+              <thead>
+                <tr style="background: var(--bg-alt);">
+                  <th style="padding: 10px; text-align: left; font-weight:800; color:#000000;">Program</th>
+                  <th style="padding: 10px; text-align: left; font-weight:800; color:#000000;">Timings</th>
+                  <th style="padding: 10px; text-align: right; font-weight:800; color:#000000;">Per Term</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 10px; border-bottom: 1.5px solid var(--border-light); font-weight: 800; color:#000000;">Playgroup</td>
+                  <td style="padding: 10px; border-bottom: 1.5px solid var(--border-light); color: #000000; font-weight:700;">9:30 AM - 11:30 AM</td>
+                  <td style="padding: 10px; border-bottom: 1.5px solid var(--border-light); text-align: right; font-weight: 800; color: var(--primary-blue);">₹14,000</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px; border-bottom: 1.5px solid var(--border-light); font-weight: 800; color:#000000;">Nursery</td>
+                  <td style="padding: 10px; border-bottom: 1.5px solid var(--border-light); color: #000000; font-weight:700;">9:00 AM - 12:00 PM</td>
+                  <td style="padding: 10px; border-bottom: 1.5px solid var(--border-light); text-align: right; font-weight: 800; color: var(--primary-blue);">₹18,500</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px; border-bottom: 1.5px solid var(--border-light); font-weight: 800; color:#000000;">Junior KG</td>
+                  <td style="padding: 10px; border-bottom: 1.5px solid var(--border-light); color: #000000; font-weight:700;">9:00 AM - 12:30 PM</td>
+                  <td style="padding: 10px; border-bottom: 1.5px solid var(--border-light); text-align: right; font-weight: 800; color: var(--primary-blue);">₹18,500</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px; border-bottom: 1.5px solid var(--border-light); font-weight: 800; color:#000000;">Senior KG</td>
+                  <td style="padding: 10px; border-bottom: 1.5px solid var(--border-light); color: #000000; font-weight:700;">9:00 AM - 01:00 PM</td>
+                  <td style="padding: 10px; border-bottom: 1.5px solid var(--border-light); text-align: right; font-weight: 800; color: var(--primary-blue);">₹20,000</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px; font-weight: 800; color:#000000;">Daycare & Extended Care</td>
+                  <td style="padding: 10px; color: #000000; font-weight:700;">Flexible (Up to 7 PM)</td>
+                  <td style="padding: 10px; text-align: right; font-weight: 800; color: var(--accent-coral);">₹4,500 / mo</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="margin-top: 1.25rem; font-size: 0.85rem; color: #000000; font-weight: 700; line-height: 1.5;">
+            * Fee includes all learning kits, Montessori activity materials, art supplies, and festival celebrations. Sibling discount of 10% applicable on tuition fee.
+          </div>
+        </div>
+
+        <!-- Direct Support Helpbox -->
+        <div class="card" style="background: #FFFBEB; border-color: #FDE68A;">
+          <h4 style="color: #92400E; font-size: 1.1rem; margin-bottom: 0.5rem; font-weight:800;">
+            <i class="fas fa-question-circle"></i> Need Help with Fee Payment?
+          </h4>
+          <p style="font-size: 0.9rem; color: #000000; font-weight:700; margin-bottom: 0.75rem;">
+            For fee receipts, installment plans, or corporate fee reimbursements, reach our Accounts Desk:
+          </p>
+          <div style="font-size: 0.95rem; font-weight: 800; color: #92400E;">
+            <i class="fas fa-phone"></i> +91 98200 12345 | <i class="fab fa-whatsapp"></i> +91 98765 43210
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Recent Payment Ledger & History -->
+    <div style="margin-top: 3.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.5rem;">
+        <div>
+          <h2 style="font-size: 1.6rem; color: var(--primary-blue); font-weight:800;">Recent School Fee Transactions</h2>
+          <p style="font-size: 0.95rem; color: #000000; font-weight:700;">Verified online fee collection records & printable receipts</p>
+        </div>
+      </div>
+
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Receipt No.</th>
+              <th>Student Details</th>
+              <th>Fee Particulars</th>
+              <th>Amount (INR)</th>
+              <th>Payment Mode</th>
+              <th>Date & Time</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="public-fee-ledger-tbody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="logo.png" alt="Smart Kids" style="max-height: 48px; margin-bottom: 1rem; object-fit: contain;">
+          <p>Nurturing young minds through joy, exploration, and structured Montessori-based early childhood education in Kharghar, Sector 36.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+            <li><a href="programs.html"><i class="fas fa-chevron-right"></i> Programs</a></li>
+            <li><a href="admissions.html"><i class="fas fa-chevron-right"></i> Admissions</a></li>
+            <li><a href="gallery.html"><i class="fas fa-chevron-right"></i> Photo Gallery</a></li>
+            <li><a href="fees.html"><i class="fas fa-chevron-right"></i> Online Fees</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Portals</h4>
+          <ul class="footer-links">
+            <li><a href="portal.html"><i class="fas fa-chevron-right"></i> Parent & Student Portal</a></li>
+            <li><a href="admin.html"><i class="fas fa-chevron-right"></i> School Admin Dashboard</a></li>
+            <li><a href="login.html"><i class="fas fa-chevron-right"></i> Login / Register</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Contact Office</h4>
+          <div class="footer-contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Sector 36, Kharghar, Navi Mumbai, Maharashtra - 410210</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="fas fa-phone"></i>
+            <span>+91 98200 12345 / 022-27741234</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Smart Kids Preschool & Daycare. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/fees.js"></script>
+  <script>
+    function toggleMobileNav() {
+      document.getElementById('navMenuWrapper').classList.toggle('open');
+      document.getElementById('navBackdrop').classList.toggle('open');
+    }
+
+    let selectedStudent = null;
+
+    function renderFeesPage() {
+      const students = window.schoolStore.getStudents();
+      const select = document.getElementById('fee-student-select');
+      if (!select) return;
+
+      select.innerHTML = students.map(s => `
+        <option value="${s.id}">${s.name} • Class ${s.class} (${s.id}) - Due: ₹${s.feeDue}</option>
+      `).join('');
+
+      renderSelectedStudentFeeDetails(students[0].id);
+      renderLedgerTable();
+    }
+
+    function renderSelectedStudentFeeDetails(studentId) {
+      selectedStudent = window.schoolStore.findStudentById(studentId);
+      const summaryBox = document.getElementById('fee-student-summary-box');
+      const payBtn = document.getElementById('btn-trigger-fee-payment');
+      if (!summaryBox || !selectedStudent) return;
+
+      const gst = Math.round(selectedStudent.feeDue * 0.05);
+      const base = selectedStudent.feeDue - gst;
+
+      if (selectedStudent.feeDue > 0) {
+        summaryBox.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+            <div>
+              <h4 style="font-size:1.3rem; color:#000000; font-weight:800; margin-bottom:2px;">${selectedStudent.name}</h4>
+              <span class="badge badge-blue" style="font-weight:800;">Class: ${selectedStudent.class} (Roll #${selectedStudent.rollNo})</span>
+              <div style="font-size:0.9rem; color:#000000; font-weight:700; margin-top:4px;">Parent: <strong>${selectedStudent.parentName}</strong> (${selectedStudent.parentPhone})</div>
+            </div>
+            <span class="badge badge-coral" style="font-size:0.88rem; padding:0.35rem 0.75rem; font-weight:800;">Status: Due Pending</span>
+          </div>
+
+          <div style="border-top:1.5px solid #CBD5E1; padding-top:1rem;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:0.95rem; font-weight:700; color:#000000;">
+              <span>Term 2 Tuition & Activity Charges:</span>
+              <span style="font-weight:800;">₹${base.toLocaleString('en-IN')}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:0.95rem; font-weight:700; color:#000000;">
+              <span>School Services Tax / Levy (5%):</span>
+              <span style="font-weight:800;">₹${gst.toLocaleString('en-IN')}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-top:2px dashed #CBD5E1; padding-top:8px; margin-top:8px; font-size:1.2rem; font-weight:800; color:#1E3A8A;">
+              <span>Total Outstanding Amount:</span>
+              <span>₹${selectedStudent.feeDue.toLocaleString('en-IN')}</span>
+            </div>
+          </div>
+        `;
+        payBtn.disabled = false;
+        payBtn.innerHTML = `<i class="fas fa-shield-alt"></i> Pay ₹${selectedStudent.feeDue.toLocaleString('en-IN')} via Razorpay`;
+        payBtn.className = 'btn btn-green btn-block btn-lg';
+      } else {
+        summaryBox.innerHTML = `
+          <div style="text-align:center; padding:1rem 0;">
+            <i class="fas fa-check-circle" style="font-size:3rem; color:#059669; margin-bottom:0.5rem;"></i>
+            <h4 style="color:#064E3B; font-size:1.25rem; font-weight:800;">All Fees Paid in Full!</h4>
+            <p style="color:#000000; font-size:0.95rem; font-weight:700;">${selectedStudent.name} (${selectedStudent.class}) has no pending fee balance.</p>
+          </div>
+        `;
+        payBtn.disabled = true;
+        payBtn.className = 'btn btn-outline btn-block btn-lg';
+        payBtn.innerHTML = `<i class="fas fa-check"></i> No Outstanding Balance`;
+      }
+    }
+
+    function handlePayButtonClick() {
+      if (selectedStudent && selectedStudent.feeDue > 0) {
+        window.feeEngine.startPayment(selectedStudent.id, selectedStudent.feeDue);
+      }
+    }
+
+    function renderLedgerTable() {
+      const tbody = document.getElementById('public-fee-ledger-tbody');
+      if (!tbody) return;
+
+      const txns = window.schoolStore.getTransactions();
+      tbody.innerHTML = txns.map(t => `
+        <tr>
+          <td style="font-weight:800; color:#1E3A8A;">${t.receiptNo}</td>
+          <td>
+            <div style="font-weight:800; color:#000000;">${t.studentName}</div>
+            <div style="font-size:0.85rem; color:#000000; font-weight:700;">${t.class} (${t.studentId})</div>
+          </td>
+          <td style="color:#000000; font-weight:700;">${t.feeType}</td>
+          <td style="font-weight:800; color:#059669;">₹${t.amount.toLocaleString('en-IN')}</td>
+          <td><span class="badge badge-purple" style="font-weight:800;">${t.paymentMethod}</span></td>
+          <td style="font-size:0.9rem; color:#000000; font-weight:700;">${t.date}</td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick='window.feeEngine.showOfficialReceipt(${JSON.stringify(t)})'>
+              <i class="fas fa-print"></i> View Receipt
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderFeesPage();
+    });
+  </script>
+</body>
+</html>

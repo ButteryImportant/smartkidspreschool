@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student & Parent Portal | Smart Kids Preschool</title>
+  <meta name="description" content="Parent & Student portal for attendance, term report cards, daily timetable, notices, and online fee payments.">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/portal.css">
+</head>
+<body style="background-color: #F8FAFC;">
+
+  <!-- Main Navigation Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="nav-brand">
+        <img src="logo.png" alt="Smart Kids" class="brand-logo-img">
+      </a>
+
+      <button class="mobile-nav-toggle" onclick="toggleMobileNav()">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div class="nav-menu-wrapper" id="navMenuWrapper">
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About Us</a></li>
+          <li><a href="programs.html" class="nav-link">Programs</a></li>
+          <li><a href="admissions.html" class="nav-link">Admissions</a></li>
+          <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+          <li><a href="fees.html" class="nav-link">Online Fees</a></li>
+          <li><a href="portal.html" class="nav-link active">Student Portal</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <div class="nav-auth-container">
+            <!-- Populated by authManager -->
+          </div>
+        </div>
+      </div>
+      <div class="nav-backdrop" id="navBackdrop" onclick="toggleMobileNav()"></div>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="page-hero" style="padding: 2.5rem 0 2rem;">
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h1 class="hero-title" style="font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: 0.25rem;">
+            Parent & Student <span>Portal</span>
+          </h1>
+          <p class="hero-subtitle" style="font-size: 1rem;">
+            Track live attendance, progress report cards, daily schedules, circulars & fee records.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Portal Layout -->
+  <main class="container">
+    <div class="portal-wrapper">
+      
+      <!-- Left Column: Student Profile Sidebar -->
+      <aside class="portal-sidebar" id="portal-student-sidebar">
+        <!-- Rendered dynamically by portal.js -->
+      </aside>
+
+      <!-- Right Column: Portal Content Panes -->
+      <div class="portal-content">
+        
+        <!-- Tab 1: Overview Pane -->
+        <div id="tab-pane-overview" class="portal-tab-pane active">
+          <div>
+            <h2 style="font-size: 1.6rem; color: var(--primary-blue); font-weight:800; margin-bottom: 0.25rem;">
+              Academic Overview & Progress
+            </h2>
+            <p style="font-size: 0.95rem; color: #000000; font-weight:700;">Real-time snapshot of student activities and status</p>
+          </div>
+
+          <div id="overview-metrics-container">
+            <!-- Rendered by portal.js -->
+          </div>
+
+          <!-- Highlight: Today's Preschool Routine -->
+          <div class="card" style="margin-top: 1rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.25rem; flex-wrap:wrap; gap:0.5rem;">
+              <h3 style="color: var(--primary-blue); font-size: 1.3rem; font-weight:800;">
+                <i class="fas fa-clock text-warning"></i> Today's Preschool Schedule
+              </h3>
+              <span class="badge badge-yellow" style="font-weight:800; color:#000000;">9:00 AM - 12:30 PM</span>
+            </div>
+            <div class="schedule-timeline">
+              <div class="schedule-card">
+                <div class="schedule-badge">🌅</div>
+                <div class="schedule-time"><i class="far fa-clock"></i> 09:00 - 09:30 AM</div>
+                <div class="schedule-info">
+                  <h4>Circle Time & Morning Assembly</h4>
+                  <p>Rhymes, weather chart, attendance, and gentle stretching exercises.</p>
+                </div>
+              </div>
+              <div class="schedule-card">
+                <div class="schedule-badge">📖</div>
+                <div class="schedule-time"><i class="far fa-clock"></i> 09:30 - 10:15 AM</div>
+                <div class="schedule-info">
+                  <h4>Phonics & Sight Words Discovery</h4>
+                  <p>Interactive letter sound matching and storytelling session.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Attendance Calendar Pane -->
+        <div id="tab-pane-attendance" class="portal-tab-pane">
+          <div>
+            <h2 style="font-size: 1.6rem; color: var(--primary-blue); font-weight:800; margin-bottom: 0.25rem;">
+              Monthly Attendance Tracker
+            </h2>
+            <p style="font-size: 0.95rem; color: #000000; font-weight:700;">August 2026 Attendance Records</p>
+          </div>
+
+          <div class="attendance-calendar-box">
+            <div class="calendar-header">
+              <h3 style="font-size: 1.3rem; color: var(--primary-blue); font-weight:800; margin: 0;">August 2026</h3>
+              <div style="display:flex; gap: 1rem; font-size: 0.9rem; font-weight: 800; flex-wrap:wrap;">
+                <span style="color: #064E3B;"><i class="fas fa-square" style="color:#D1FAE5;"></i> Present (22)</span>
+                <span style="color: #881337;"><i class="fas fa-square" style="color:#FFE4E6;"></i> Absent (2)</span>
+                <span style="color: #78350F;"><i class="fas fa-square" style="color:#FEF3C7;"></i> Holiday / Sun (7)</span>
+              </div>
+            </div>
+
+            <div class="calendar-grid" id="attendance-calendar-grid">
+              <!-- Rendered dynamically by portal.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Gradebook & Term Report Card Pane -->
+        <div id="tab-pane-report" class="portal-tab-pane">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+            <div>
+              <h2 style="font-size: 1.6rem; color: var(--primary-blue); font-weight:800; margin-bottom: 0.25rem;">
+                Term 2 Holistic Progress Report Card
+              </h2>
+              <p style="font-size: 0.95rem; color: #000000; font-weight:700;">Continuous Comprehensive Evaluation (CCE)</p>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="window.print()">
+              <i class="fas fa-print"></i> Print Report Card
+            </button>
+          </div>
+
+          <div class="report-card-container">
+            <div style="display:flex; justify-content:space-between; border-bottom: 2.5px solid var(--primary-blue); padding-bottom: 0.75rem; margin-bottom: 1rem; flex-wrap:wrap; gap:0.5rem;">
+              <div>
+                <h3 style="font-size: 1.25rem; color: var(--primary-blue); font-weight:800;">Smart Kids Preschool Evaluator</h3>
+                <p style="font-size: 0.9rem; color: #000000; font-weight:700;">Grading Scale: O (Outstanding 90%+), A+ (Excellent 80-89%), A (Good 70-79%)</p>
+              </div>
+              <div style="text-align:right;">
+                <span class="badge badge-green" style="font-size:0.95rem; font-weight:800;">RESULT: PASSED (DISTINCTION)</span>
+              </div>
+            </div>
+
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>Subject / Developmental Area</th>
+                  <th>Grade</th>
+                  <th>Teacher Observations & Remarks</th>
+                </tr>
+              </thead>
+              <tbody id="report-card-tbody">
+                <!-- Rendered dynamically by portal.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab 4: Timetable Pane -->
+        <div id="tab-pane-timetable" class="portal-tab-pane">
+          <div>
+            <h2 style="font-size: 1.6rem; color: var(--primary-blue); font-weight:800; margin-bottom: 0.25rem;">
+              Weekly Preschool Daily Timetable
+            </h2>
+            <p style="font-size: 0.95rem; color: #000000; font-weight:700;">Balanced mix of learning, creative play, snack & rest</p>
+          </div>
+
+          <div id="timetable-schedule-container" class="schedule-timeline">
+            <!-- Rendered dynamically by portal.js -->
+          </div>
+        </div>
+
+        <!-- Tab 5: Fees & Ledger Pane -->
+        <div id="tab-pane-fees" class="portal-tab-pane">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+            <div>
+              <h2 style="font-size: 1.6rem; color: var(--primary-blue); font-weight:800; margin-bottom: 0.25rem;">
+                Fee Invoices & Receipts
+              </h2>
+              <p style="font-size: 0.95rem; color: #000000; font-weight:700;">Verified online payment receipts with GST breakdown</p>
+            </div>
+            <a href="fees.html" class="btn btn-green btn-sm">
+              <i class="fas fa-credit-card"></i> Pay Term Fee
+            </a>
+          </div>
+
+          <div class="data-table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Receipt No.</th>
+                  <th>Fee Description</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Date Paid</th>
+                  <th>Receipt</th>
+                </tr>
+              </thead>
+              <tbody id="fee-ledger-tbody">
+                <!-- Rendered dynamically by portal.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab 6: Notice Board Pane -->
+        <div id="tab-pane-notices" class="portal-tab-pane">
+          <div>
+            <h2 style="font-size: 1.6rem; color: var(--primary-blue); font-weight:800; margin-bottom: 0.25rem;">
+              School Circulars & Event Notices
+            </h2>
+            <p style="font-size: 0.95rem; color: #000000; font-weight:700;">Official announcements published by the Principal's office</p>
+          </div>
+
+          <div id="portal-notices-container" style="display:flex; flex-direction:column; gap:1rem;">
+            <!-- Rendered dynamically by portal.js -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="logo.png" alt="Smart Kids" style="max-height: 48px; margin-bottom: 1rem; object-fit: contain;">
+          <p>Nurturing young minds through joy, exploration, and structured Montessori-based early childhood education in Kharghar, Sector 36.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+            <li><a href="programs.html"><i class="fas fa-chevron-right"></i> Programs</a></li>
+            <li><a href="admissions.html"><i class="fas fa-chevron-right"></i> Admissions</a></li>
+            <li><a href="gallery.html"><i class="fas fa-chevron-right"></i> Photo Gallery</a></li>
+            <li><a href="fees.html"><i class="fas fa-chevron-right"></i> Online Fees</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Portals</h4>
+          <ul class="footer-links">
+            <li><a href="portal.html"><i class="fas fa-chevron-right"></i> Parent & Student Portal</a></li>
+            <li><a href="admin.html"><i class="fas fa-chevron-right"></i> School Admin Dashboard</a></li>
+            <li><a href="login.html"><i class="fas fa-chevron-right"></i> Login / Register</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Contact Office</h4>
+          <div class="footer-contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Sector 36, Kharghar, Navi Mumbai, Maharashtra - 410210</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="fas fa-phone"></i>
+            <span>+91 98200 12345 / 022-27741234</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Smart Kids Preschool & Daycare. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/fees.js"></script>
+  <script src="js/portal.js"></script>
+  <script>
+    function toggleMobileNav() {
+      document.getElementById('navMenuWrapper').classList.toggle('open');
+      document.getElementById('navBackdrop').classList.toggle('open');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      window.portalController.init();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Login & Accounts | Smart Kids</title>
+  <meta name="description" content="Secure login for parents, teachers, and administrators of Smart Kids, Kharghar.">
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="background: linear-gradient(135deg, #F8FAFC 0%, #EEF2F6 100%);">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="nav-brand">
+        <img src="logo.png" alt="Smart Kids" class="brand-logo-img">
+      </a>
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-outline btn-sm">
+          <i class="fas fa-arrow-left"></i> Back to Website
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Login Container -->
+  <main class="container" style="max-width: 520px; margin: 2.5rem auto 4.5rem; padding: 0 1rem;">
+    <!-- 1-Click Quick Demo Login Switcher -->
+    <div class="card" style="margin-bottom: 1.5rem; background: #EFF6FF; border-color: #BFDBFE; text-align: center;">
+      <h4 style="color: #1E3A8A; font-size: 1.1rem; font-weight:800; margin-bottom: 0.5rem;">
+        <i class="fas fa-bolt text-warning"></i> Instant 1-Click Demo Evaluation
+      </h4>
+      <p style="font-size: 0.9rem; color: #000000; font-weight:700; margin-bottom: 0.85rem;">
+        Test different roles instantly without manual passwords:
+      </p>
+      <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+        <button class="btn btn-primary btn-sm" onclick="window.authManager.quickDemoLogin('parent')">
+          <i class="fas fa-user-friends"></i> Parent Demo
+        </button>
+        <button class="btn btn-yellow btn-sm" onclick="window.authManager.quickDemoLogin('admin')">
+          <i class="fas fa-user-shield"></i> Admin Demo
+        </button>
+        <button class="btn btn-green btn-sm" onclick="window.authManager.quickDemoLogin('teacher')">
+          <i class="fas fa-chalkboard-teacher"></i> Teacher Demo
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Auth Card with Tabs -->
+    <div class="card" style="box-shadow: var(--shadow-xl); border-radius: var(--radius-xl); padding: 2rem;">
+      <!-- Auth Tab Headers -->
+      <div style="display: flex; border-bottom: 2px solid var(--border-light); margin-bottom: 1.75rem;">
+        <button id="tab-btn-login" class="btn" style="flex: 1; border-radius: 0; border-bottom: 3px solid var(--primary-blue); color: var(--primary-blue); font-weight: 800;" onclick="switchAuthTab('login')">
+          <i class="fas fa-sign-in-alt"></i> Sign In
+        </button>
+        <button id="tab-btn-register" class="btn" style="flex: 1; border-radius: 0; border-bottom: 3px solid transparent; color: #000000; font-weight: 800;" onclick="switchAuthTab('register')">
+          <i class="fas fa-user-plus"></i> New Parent
+        </button>
+      </div>
+
+      <!-- Sign In Form -->
+      <div id="auth-pane-login">
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <h2 style="font-size: 1.6rem; color: #000000; font-weight:800;">Welcome Back!</h2>
+          <p style="font-size: 0.95rem; color: #000000; font-weight:700;">Sign in to access student progress & fees</p>
+        </div>
+
+        <form onsubmit="handleLoginSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <div style="position: relative;">
+              <input type="email" id="login-email" class="form-control" placeholder="parent@smartkids.edu" required value="parent@smartkids.edu" style="padding-left: 2.5rem;">
+              <i class="fas fa-envelope" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #000000;"></i>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;">
+              <label class="form-label" style="margin-bottom: 0;">Password</label>
+              <a href="javascript:void(0)" onclick="openForgotPasswordModal()" style="font-size: 0.88rem; font-weight: 800; color: var(--primary-light);">
+                Forgot Password?
+              </a>
+            </div>
+            <div style="position: relative;">
+              <input type="password" id="login-password" class="form-control" placeholder="••••••••" required value="password123" style="padding-left: 2.5rem;">
+              <i class="fas fa-lock" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #000000;"></i>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 1.5rem;">
+            <i class="fas fa-arrow-right"></i> Sign In to Portal
+          </button>
+        </form>
+      </div>
+
+      <!-- Parent Registration Form -->
+      <div id="auth-pane-register" style="display: none;">
+        <div style="text-align: center; margin-bottom: 1.25rem;">
+          <h2 style="font-size: 1.5rem; color: #000000; font-weight:800;">Parent Account Signup</h2>
+          <p style="font-size: 0.95rem; color: #000000; font-weight:700;">Create parent profile & link student</p>
+        </div>
+
+        <form onsubmit="handleRegisterSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Parent Full Name *</label>
+            <input type="text" id="reg-name" class="form-control" placeholder="e.g. Ramesh Kulkarni" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Email Address *</label>
+              <input type="email" id="reg-email" class="form-control" placeholder="ramesh@gmail.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mobile Number *</label>
+              <input type="tel" id="reg-phone" class="form-control" placeholder="+91 98XXX XXXXX" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Child Name *</label>
+              <input type="text" id="reg-child-name" class="form-control" placeholder="Child Full Name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Program / Class *</label>
+              <select id="reg-child-class" class="form-control" required>
+                <option value="Playgroup">Playgroup (1.5 - 2.5 yrs)</option>
+                <option value="Nursery" selected>Nursery (2.5 - 3.5 yrs)</option>
+                <option value="Junior KG">Junior KG (3.5 - 4.5 yrs)</option>
+                <option value="Senior KG">Senior KG (4.5 - 5.5 yrs)</option>
+                <option value="Daycare">Daycare & Activity Club</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Create Password *</label>
+            <input type="password" id="reg-password" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
+          </div>
+
+          <button type="submit" class="btn btn-green btn-block btn-lg" style="margin-top: 1rem;">
+            <i class="fas fa-check-circle"></i> Create Account & Proceed
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Password Reset Modal (3-Step OTP Workflow) -->
+  <div id="forgot-password-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header" style="background: var(--primary-blue); color: white;">
+        <h3 class="modal-title" style="color: white; font-size: 1.25rem; font-weight:800;">
+          <i class="fas fa-key text-warning"></i> Password Recovery
+        </h3>
+        <button class="modal-close" onclick="closeForgotPasswordModal()" style="background: rgba(255,255,255,0.2); color: white;">&times;</button>
+      </div>
+
+      <div class="modal-body" style="padding: 1.75rem;">
+        <!-- Step 1: Enter Email -->
+        <div id="reset-step-1">
+          <p style="font-size: 0.95rem; color: #000000; font-weight:700; margin-bottom: 1rem;">
+            Enter your registered email address and we'll generate a secure one-time verification OTP.
+          </p>
+          <div class="form-group">
+            <label class="form-label">Registered Email</label>
+            <input type="email" id="reset-input-email" class="form-control" placeholder="parent@smartkids.edu" value="parent@smartkids.edu">
+          </div>
+          <button type="button" class="btn btn-primary btn-block" onclick="handleSendResetOtp()">
+            <i class="fas fa-paper-plane"></i> Send Verification OTP
+          </button>
+        </div>
+
+        <!-- Step 2: Verify OTP -->
+        <div id="reset-step-2" style="display: none;">
+          <div style="background: #F0FDF4; border: 1.5px solid #86EFAC; border-radius: 8px; padding: 0.75rem; font-size: 0.9rem; color: #064E3B; font-weight:700; margin-bottom: 1.25rem;">
+            <i class="fas fa-check-circle"></i> OTP Sent! For verification, your OTP code is: <strong id="displayed-otp-code" style="font-size: 1.15rem; letter-spacing: 2px;">123456</strong>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Enter 6-Digit OTP Code</label>
+            <input type="text" id="reset-input-otp" class="form-control" placeholder="6-digit code" maxlength="6" style="letter-spacing: 4px; font-size: 1.2rem; text-align: center; font-weight: 800;">
+          </div>
+          <button type="button" class="btn btn-green btn-block" onclick="handleVerifyOtp()">
+            <i class="fas fa-shield-alt"></i> Verify & Proceed
+          </button>
+        </div>
+
+        <!-- Step 3: Set New Password -->
+        <div id="reset-step-3" style="display: none;">
+          <p style="font-size: 0.95rem; color: #000000; font-weight:700; margin-bottom: 1rem;">
+            Create a new password for your account.
+          </p>
+          <div class="form-group">
+            <label class="form-label">New Password</label>
+            <input type="password" id="reset-input-new-pass" class="form-control" placeholder="Minimum 6 characters" minlength="6">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm New Password</label>
+            <input type="password" id="reset-input-confirm-pass" class="form-control" placeholder="Re-enter password">
+          </div>
+          <button type="button" class="btn btn-primary btn-block" onclick="handleFinishPasswordReset()">
+            <i class="fas fa-save"></i> Update Password & Sign In
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    function switchAuthTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('auth-pane-login').style.display = isLogin ? 'block' : 'none';
+      document.getElementById('auth-pane-register').style.display = isLogin ? 'none' : 'block';
+
+      document.getElementById('tab-btn-login').style.borderBottomColor = isLogin ? 'var(--primary-blue)' : 'transparent';
+      document.getElementById('tab-btn-login').style.color = isLogin ? 'var(--primary-blue)' : '#000000';
+      
+      document.getElementById('tab-btn-register').style.borderBottomColor = isLogin ? 'transparent' : 'var(--primary-blue)';
+      document.getElementById('tab-btn-register').style.color = isLogin ? '#000000' : 'var(--primary-blue)';
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-password').value;
+      await window.authManager.login(email, pass);
+    }
+
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value;
+      const phone = document.getElementById('reg-phone').value;
+      const childName = document.getElementById('reg-child-name').value;
+      const childClass = document.getElementById('reg-child-class').value;
+      const pass = document.getElementById('reg-password').value;
+
+      await window.authManager.registerParent(name, email, phone, childName, childClass, pass);
+    }
+
+    function openForgotPasswordModal() {
+      document.getElementById('reset-step-1').style.display = 'block';
+      document.getElementById('reset-step-2').style.display = 'none';
+      document.getElementById('reset-step-3').style.display = 'none';
+      document.getElementById('forgot-password-modal').classList.add('active');
+    }
+
+    function closeForgotPasswordModal() {
+      document.getElementById('forgot-password-modal').classList.remove('active');
+    }
+
+    function handleSendResetOtp() {
+      const email = document.getElementById('reset-input-email').value;
+      const otp = window.authManager.requestPasswordReset(email);
+      if (otp) {
+        document.getElementById('displayed-otp-code').innerText = otp;
+        document.getElementById('reset-step-1').style.display = 'none';
+        document.getElementById('reset-step-2').style.display = 'block';
+        showToast('Verification OTP generated!', 'info');
+      }
+    }
+
+    function handleVerifyOtp() {
+      const otp = document.getElementById('reset-input-otp').value;
+      if (window.authManager.verifyResetOtp(otp)) {
+        document.getElementById('reset-step-2').style.display = 'none';
+        document.getElementById('reset-step-3').style.display = 'block';
+        showToast('OTP verified successfully.', 'success');
+      }
+    }
+
+    function handleFinishPasswordReset() {
+      const pass = document.getElementById('reset-input-new-pass').value;
+      const confirmPass = document.getElementById('reset-input-confirm-pass').value;
+
+      if (pass !== confirmPass) {
+        showToast('Passwords do not match.', 'error');
+        return;
+      }
+      if (pass.length < 6) {
+        showToast('Password must be at least 6 characters.', 'error');
+        return;
+      }
+
+      if (window.authManager.completePasswordReset(pass)) {
+        closeForgotPasswordModal();
+        switchAuthTab('login');
+      }
+    }
+  </script>
+</body>
+</html>
