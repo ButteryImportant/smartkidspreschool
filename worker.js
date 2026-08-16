@@ -404,6 +404,51 @@ export default {
       return new Response(JSON.stringify({ success: true, admission: newAdm }), { headers: corsHeaders });
     }
 
+    // ========================================================================
+    // CLOUDFLARE R2 OBJECT STORAGE (File Uploads & Documents)
+    // ========================================================================
+
+    if (path.startsWith('/api/files/') && request.method === 'GET') {
+      const fileKey = decodeURIComponent(path.replace('/api/files/', ''));
+      if (env && env.BUCKET) {
+        const object = await env.BUCKET.get(fileKey);
+        if (!object) {
+          return new Response('File not found', { status: 404, headers: corsHeaders });
+        }
+        const headers = new Headers();
+        object.writeHttpMetadata(headers);
+        headers.set('etag', object.httpEtag);
+        headers.set('Cache-Control', 'public, max-age=31536000');
+        headers.set('Access-Control-Allow-Origin', '*');
+        return new Response(object.body, { headers });
+      }
+      return new Response(JSON.stringify({ error: 'R2 storage bucket not configured' }), { status: 501, headers: corsHeaders });
+    }
+
+    if (path === '/api/upload' && (request.method === 'POST' || request.method === 'PUT')) {
+      if (!env || !env.BUCKET) {
+        return new Response(JSON.stringify({ success: false, message: 'R2 Bucket not configured. Bind BUCKET in Cloudflare settings.' }), { status: 501, headers: corsHeaders });
+      }
+      try {
+        const contentType = request.headers.get('content-type') || 'application/octet-stream';
+        const filename = request.headers.get('x-filename') || `doc_${Date.now()}`;
+        const safeKey = `uploads/${new Date().toISOString().slice(0,7)}/${Date.now()}_${filename.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+
+        await env.BUCKET.put(safeKey, request.body, {
+          httpMetadata: { contentType: contentType }
+        });
+
+        return new Response(JSON.stringify({
+          success: true,
+          key: safeKey,
+          url: `/api/files/${safeKey}`,
+          message: 'File uploaded successfully to Cloudflare R2'
+        }), { headers: corsHeaders });
+      } catch (err) {
+        return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500, headers: corsHeaders });
+      }
+    }
+
     return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: corsHeaders });
   }
 };

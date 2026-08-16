@@ -510,6 +510,48 @@ export async function onRequest(context) {
     }
   }
 
+  // 9. File Storage & Uploads (Cloudflare R2 Object Storage)
+  if (path.startsWith('/files/') && request.method === 'GET') {
+    const fileKey = decodeURIComponent(path.replace('/files/', ''));
+    if (env && env.BUCKET) {
+      const object = await env.BUCKET.get(fileKey);
+      if (!object) {
+        return new Response('File not found', { status: 404, headers: corsHeaders() });
+      }
+      const headers = new Headers();
+      object.writeHttpMetadata(headers);
+      headers.set('etag', object.httpEtag);
+      headers.set('Cache-Control', 'public, max-age=31536000');
+      headers.set('Access-Control-Allow-Origin', '*');
+      return new Response(object.body, { headers });
+    }
+    return new Response(JSON.stringify({ error: 'R2 storage not configured' }), { status: 501, headers: corsHeaders() });
+  }
+
+  if (path === '/upload' && (request.method === 'POST' || request.method === 'PUT')) {
+    if (!env || !env.BUCKET) {
+      return new Response(JSON.stringify({ success: false, message: 'R2 Bucket is not configured yet. Bind BUCKET in Cloudflare Settings.' }), { status: 501, headers: corsHeaders() });
+    }
+    try {
+      const contentType = request.headers.get('content-type') || 'application/octet-stream';
+      const filename = request.headers.get('x-filename') || `doc_${Date.now()}`;
+      const safeKey = `uploads/${new Date().toISOString().slice(0,7)}/${Date.now()}_${filename.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+
+      await env.BUCKET.put(safeKey, request.body, {
+        httpMetadata: { contentType: contentType }
+      });
+
+      return new Response(JSON.stringify({
+        success: true,
+        key: safeKey,
+        url: `/api/files/${safeKey}`,
+        message: 'File uploaded successfully to Cloudflare R2'
+      }), { headers: corsHeaders() });
+    } catch (err) {
+      return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500, headers: corsHeaders() });
+    }
+  }
+
   // Fallback 404
   return new Response(JSON.stringify({ success: false, message: `Endpoint ${path} not found` }), { status: 404, headers: corsHeaders() });
 }
