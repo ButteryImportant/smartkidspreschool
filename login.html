@@ -30,27 +30,9 @@
   </header>
 
   <!-- Login Container -->
-  <main class="container" style="max-width: 520px; margin: 2.5rem auto 4.5rem; padding: 0 1rem;">
-    <!-- 1-Click Quick Admin Switcher -->
-    <div class="card" style="margin-bottom: 1.5rem; background: #EFF6FF; border-color: #BFDBFE; text-align: center;">
-      <h4 style="color: #1E3A8A; font-size: 1.1rem; font-weight:800; margin-bottom: 0.5rem;">
-        <i class="fas fa-user-shield text-warning"></i> Quick Administrator Sign In
-      </h4>
-      <p style="font-size: 0.9rem; color: #000000; font-weight:700; margin-bottom: 0.85rem;">
-        Click below to login directly as school administrator:
-      </p>
-      <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
-        <button class="btn btn-primary btn-sm" onclick="window.authManager.quickAdminLogin('Manisha')">
-          👩‍🏫 Login as Manisha
-        </button>
-        <button class="btn btn-yellow btn-sm" onclick="window.authManager.quickAdminLogin('Hardik')">
-          👨‍💼 Login as Hardik
-        </button>
-      </div>
-    </div>
-
+  <main class="container" style="max-width: 500px; margin: 3.5rem auto 5rem; padding: 0 1rem;">
     <!-- Main Auth Card with Tabs -->
-    <div class="card" style="box-shadow: var(--shadow-xl); border-radius: var(--radius-xl); padding: 2rem;">
+    <div class="card" style="box-shadow: var(--shadow-xl); border-radius: var(--radius-xl); padding: 2.25rem;">
       <!-- Auth Tab Headers -->
       <div style="display: flex; border-bottom: 2px solid var(--border-light); margin-bottom: 1.75rem;">
         <button id="tab-btn-login" class="btn" style="flex: 1; border-radius: 0; border-bottom: 3px solid var(--primary-blue); color: var(--primary-blue); font-weight: 800;" onclick="switchAuthTab('login')">
@@ -63,16 +45,16 @@
 
       <!-- Sign In Form -->
       <div id="auth-pane-login">
-        <div style="text-align: center; margin-bottom: 1.5rem;">
-          <h2 style="font-size: 1.6rem; color: #000000; font-weight:800;">Welcome Back!</h2>
-          <p style="font-size: 0.95rem; color: #000000; font-weight:700;">Sign in to access admin command center or student portal</p>
+        <div style="text-align: center; margin-bottom: 1.75rem;">
+          <h2 style="font-size: 1.6rem; color: #000000; font-weight:800;">Portal Sign In</h2>
+          <p style="font-size: 0.95rem; color: #000000; font-weight:700;">Enter your administrator or registered parent credentials</p>
         </div>
 
         <form onsubmit="handleLoginSubmit(event)">
           <div class="form-group">
             <label class="form-label">Username or Email Address</label>
             <div style="position: relative;">
-              <input type="text" id="login-email" class="form-control" placeholder="Username (e.g. Manisha or Hardik) or Email" required value="Manisha" style="padding-left: 2.5rem;">
+              <input type="text" id="login-email" class="form-control" placeholder="Enter username or email" required value="" style="padding-left: 2.5rem;" autocomplete="username">
               <i class="fas fa-user" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #000000;"></i>
             </div>
           </div>
@@ -85,7 +67,7 @@
               </a>
             </div>
             <div style="position: relative;">
-              <input type="password" id="login-password" class="form-control" placeholder="••••••••" required value="Manisha123" style="padding-left: 2.5rem;">
+              <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required value="" style="padding-left: 2.5rem;" autocomplete="current-password">
               <i class="fas fa-lock" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #000000;"></i>
             </div>
           </div>

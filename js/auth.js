@@ -50,26 +50,6 @@ class AuthManager {
     return true;
   }
 
-  quickAdminLogin(username) {
-    const users = window.schoolStore.getUsers();
-    const user = users.find(u => u.username && u.username.toLowerCase() === username.toLowerCase());
-    if (user) {
-      this.setCurrentUser(user);
-      showToast(`Logged in as ${user.name} (Admin)`, 'success');
-      this.redirectByRole(user.role);
-    }
-  }
-
-  quickDemoLogin(role) {
-    const users = window.schoolStore.getUsers();
-    const user = users.find(u => u.role === role);
-    if (user) {
-      this.setCurrentUser(user);
-      showToast(`Logged in as ${user.name} (${role.toUpperCase()})`, 'success');
-      this.redirectByRole(role);
-    }
-  }
-
   redirectByRole(role) {
     setTimeout(() => {
       if (role === 'admin') {

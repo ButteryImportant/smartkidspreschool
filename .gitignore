@@ -6,6 +6,11 @@ node_modules/
 .wrangler/
 .mf/
 
+# Local Private Credentials & Environment
+*.local.*
+.env
+.env.local
+
 # System files
 .DS_Store
 Thumbs.db

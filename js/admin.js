@@ -11,7 +11,7 @@ class AdminController {
   init() {
     const user = window.authManager.getCurrentUser();
     if (!user || user.role !== 'admin') {
-      window.authManager.quickDemoLogin('admin');
+      window.location.href = 'login.html';
       return;
     }
 

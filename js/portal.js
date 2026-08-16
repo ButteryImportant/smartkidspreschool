@@ -12,7 +12,7 @@ class PortalController {
   init() {
     const user = window.authManager.getCurrentUser();
     if (!user) {
-      window.authManager.quickDemoLogin('parent');
+      window.location.href = 'login.html';
       return;
     }
 
