@@ -25,14 +25,22 @@ class AuthManager {
     }, 500);
   }
 
-  login(email, password) {
+  login(identifier, password) {
     const users = window.schoolStore.getUsers();
+    const cleanId = String(identifier).toLowerCase().trim();
     const user = users.find(
-      u => u.email.toLowerCase() === email.toLowerCase().trim() && u.password === password
+      u => ((u.username && u.username.toLowerCase() === cleanId) || 
+            (u.email && u.email.toLowerCase() === cleanId)) && 
+           u.password === password
     );
 
     if (!user) {
-      showToast('Invalid email or password. Please try again.', 'error');
+      showToast('Invalid username/email or password. Please try again.', 'error');
+      return false;
+    }
+
+    if (user.status === 'Inactive') {
+      showToast('This account has been suspended. Please contact school administration.', 'error');
       return false;
     }
 
@@ -40,6 +48,16 @@ class AuthManager {
     showToast(`Welcome back, ${user.name}!`, 'success');
     this.redirectByRole(user.role);
     return true;
+  }
+
+  quickAdminLogin(username) {
+    const users = window.schoolStore.getUsers();
+    const user = users.find(u => u.username && u.username.toLowerCase() === username.toLowerCase());
+    if (user) {
+      this.setCurrentUser(user);
+      showToast(`Logged in as ${user.name} (Admin)`, 'success');
+      this.redirectByRole(user.role);
+    }
   }
 
   quickDemoLogin(role) {

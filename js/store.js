@@ -32,36 +32,29 @@ function showToast(message, type = 'info', duration = 3500) {
   }, duration);
 }
 
-// Initial Mock Datasets
+// Initial Datasets - Clean Admin Accounts
 const DEFAULT_USERS = [
   {
-    id: 'usr_admin',
-    name: 'Manisha Biradar (Principal)',
-    email: 'admin@smartkids.edu',
-    password: 'password123',
+    id: 'usr_admin_1',
+    name: 'Mrs. Manisha (Principal & Director)',
+    username: 'Manisha',
+    email: 'manisha@smartkids.edu',
+    password: 'Manisha123',
     role: 'admin',
     phone: '+91 98200 12345',
-    avatar: '👩‍🏫'
+    avatar: '👩‍🏫',
+    status: 'Active'
   },
   {
-    id: 'usr_parent_1',
-    name: 'Rajesh Sharma',
-    email: 'parent@smartkids.edu',
-    password: 'password123',
-    role: 'parent',
-    phone: '+91 98765 43210',
-    studentId: 'STU-2026-001',
-    avatar: '👨‍💼'
-  },
-  {
-    id: 'usr_teacher_1',
-    name: 'Pooja Deshmukh',
-    email: 'teacher@smartkids.edu',
-    password: 'password123',
-    role: 'teacher',
-    phone: '+91 98199 88776',
-    assignedClass: 'Junior KG',
-    avatar: '👩‍🏫'
+    id: 'usr_admin_2',
+    name: 'Hardik Biradar (System Admin)',
+    username: 'Hardik',
+    email: 'hardik@smartkids.edu',
+    password: 'hardik',
+    role: 'admin',
+    phone: '+91 98200 12345',
+    avatar: '👨‍💼',
+    status: 'Active'
   }
 ];
 
@@ -319,7 +312,11 @@ class SchoolStore {
   }
 
   initLocalStorage() {
-    if (!localStorage.getItem('sk_users')) {
+    const SCHEMA_V3 = 'sk_schema_v3_clean_admins';
+    if (!localStorage.getItem(SCHEMA_V3)) {
+      localStorage.setItem('sk_users', JSON.stringify(DEFAULT_USERS));
+      localStorage.setItem(SCHEMA_V3, 'true');
+    } else if (!localStorage.getItem('sk_users')) {
       localStorage.setItem('sk_users', JSON.stringify(DEFAULT_USERS));
     }
     if (!localStorage.getItem('sk_students')) {

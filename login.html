@@ -31,23 +31,20 @@
 
   <!-- Login Container -->
   <main class="container" style="max-width: 520px; margin: 2.5rem auto 4.5rem; padding: 0 1rem;">
-    <!-- 1-Click Quick Demo Login Switcher -->
+    <!-- 1-Click Quick Admin Switcher -->
     <div class="card" style="margin-bottom: 1.5rem; background: #EFF6FF; border-color: #BFDBFE; text-align: center;">
       <h4 style="color: #1E3A8A; font-size: 1.1rem; font-weight:800; margin-bottom: 0.5rem;">
-        <i class="fas fa-bolt text-warning"></i> Instant 1-Click Demo Evaluation
+        <i class="fas fa-user-shield text-warning"></i> Quick Administrator Sign In
       </h4>
       <p style="font-size: 0.9rem; color: #000000; font-weight:700; margin-bottom: 0.85rem;">
-        Test different roles instantly without manual passwords:
+        Click below to login directly as school administrator:
       </p>
-      <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
-        <button class="btn btn-primary btn-sm" onclick="window.authManager.quickDemoLogin('parent')">
-          <i class="fas fa-user-friends"></i> Parent Demo
+      <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+        <button class="btn btn-primary btn-sm" onclick="window.authManager.quickAdminLogin('Manisha')">
+          👩‍🏫 Login as Manisha
         </button>
-        <button class="btn btn-yellow btn-sm" onclick="window.authManager.quickDemoLogin('admin')">
-          <i class="fas fa-user-shield"></i> Admin Demo
-        </button>
-        <button class="btn btn-green btn-sm" onclick="window.authManager.quickDemoLogin('teacher')">
-          <i class="fas fa-chalkboard-teacher"></i> Teacher Demo
+        <button class="btn btn-yellow btn-sm" onclick="window.authManager.quickAdminLogin('Hardik')">
+          👨‍💼 Login as Hardik
         </button>
       </div>
     </div>
@@ -68,15 +65,15 @@
       <div id="auth-pane-login">
         <div style="text-align: center; margin-bottom: 1.5rem;">
           <h2 style="font-size: 1.6rem; color: #000000; font-weight:800;">Welcome Back!</h2>
-          <p style="font-size: 0.95rem; color: #000000; font-weight:700;">Sign in to access student progress & fees</p>
+          <p style="font-size: 0.95rem; color: #000000; font-weight:700;">Sign in to access admin command center or student portal</p>
         </div>
 
         <form onsubmit="handleLoginSubmit(event)">
           <div class="form-group">
-            <label class="form-label">Email Address</label>
+            <label class="form-label">Username or Email Address</label>
             <div style="position: relative;">
-              <input type="email" id="login-email" class="form-control" placeholder="parent@smartkids.edu" required value="parent@smartkids.edu" style="padding-left: 2.5rem;">
-              <i class="fas fa-envelope" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #000000;"></i>
+              <input type="text" id="login-email" class="form-control" placeholder="Username (e.g. Manisha or Hardik) or Email" required value="Manisha" style="padding-left: 2.5rem;">
+              <i class="fas fa-user" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #000000;"></i>
             </div>
           </div>
 
@@ -88,13 +85,13 @@
               </a>
             </div>
             <div style="position: relative;">
-              <input type="password" id="login-password" class="form-control" placeholder="••••••••" required value="password123" style="padding-left: 2.5rem;">
+              <input type="password" id="login-password" class="form-control" placeholder="••••••••" required value="Manisha123" style="padding-left: 2.5rem;">
               <i class="fas fa-lock" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #000000;"></i>
             </div>
           </div>
 
           <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 1.5rem;">
-            <i class="fas fa-arrow-right"></i> Sign In to Portal
+            <i class="fas fa-arrow-right"></i> Sign In
           </button>
         </form>
       </div>

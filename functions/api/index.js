@@ -6,9 +6,8 @@
 // In-memory / Edge KV cache
 let memoryStore = {
   users: [
-    { id: 'usr-admin-01', name: 'Manisha Sharma (Principal)', email: 'admin@smartkids.edu', passwordHash: 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', role: 'admin', avatar: '👩‍🏫', status: 'Active' },
-    { id: 'usr-parent-01', name: 'Rajesh Kulkarni', email: 'parent@smartkids.edu', passwordHash: 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', role: 'parent', studentId: 'SK-2026-001', avatar: '👨‍💼', status: 'Active' },
-    { id: 'usr-teacher-01', name: 'Pooja Patil (Nursery Head)', email: 'teacher@smartkids.edu', passwordHash: 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', role: 'teacher', avatar: '👩‍🏫', status: 'Active' }
+    { id: 'usr-admin-01', name: 'Mrs. Manisha (Principal)', username: 'Manisha', email: 'manisha@smartkids.edu', password: 'Manisha123', role: 'admin', avatar: '👩‍🏫', status: 'Active' },
+    { id: 'usr-admin-02', name: 'Hardik Biradar', username: 'Hardik', email: 'hardik@smartkids.edu', password: 'hardik', role: 'admin', avatar: '👨‍💼', status: 'Active' }
   ],
   students: [
     {
@@ -146,13 +145,17 @@ export async function onRequest(context) {
   if (path === '/auth/login' && request.method === 'POST') {
     try {
       const body = await request.json();
-      const user = memoryStore.users.find(u => u.email.toLowerCase() === body.email.toLowerCase().trim());
-      if (!user) {
-        return new Response(JSON.stringify({ success: false, message: 'User account not found' }), { status: 401, headers: corsHeaders() });
+      const identifier = String(body.email || body.username || '').toLowerCase().trim();
+      const user = memoryStore.users.find(u => 
+        (u.username && u.username.toLowerCase() === identifier) || 
+        (u.email && u.email.toLowerCase() === identifier)
+      );
+      if (!user || user.password !== body.password) {
+        return new Response(JSON.stringify({ success: false, message: 'Invalid username/email or password' }), { status: 401, headers: corsHeaders() });
       }
       return new Response(JSON.stringify({
         success: true,
-        user: { id: user.id, name: user.name, email: user.email, role: user.role, studentId: user.studentId, avatar: user.avatar }
+        user: { id: user.id, name: user.name, username: user.username, email: user.email, role: user.role, studentId: user.studentId, avatar: user.avatar }
       }), { headers: corsHeaders() });
     } catch (e) {
       return new Response(JSON.stringify({ success: false, error: e.message }), { status: 400, headers: corsHeaders() });

@@ -7,35 +7,27 @@
 const DEFAULT_STATE = {
   users: [
     {
-      id: 'usr_admin',
-      name: 'Manisha Biradar (Principal)',
-      email: 'admin@smartkids.edu',
-      password: 'password123',
+      id: 'usr_admin_1',
+      name: 'Mrs. Manisha (Principal & Director)',
+      username: 'Manisha',
+      email: 'manisha@smartkids.edu',
+      password: 'Manisha123',
       role: 'admin',
       phone: '+91 98200 12345',
       avatar: '👩‍🏫',
+      status: 'Active',
       createdAt: '2026-01-01T00:00:00.000Z'
     },
     {
-      id: 'usr_parent_1',
-      name: 'Rajesh Sharma',
-      email: 'parent@smartkids.edu',
-      password: 'password123',
-      role: 'parent',
-      phone: '+91 98765 43210',
-      studentId: 'STU-2026-001',
+      id: 'usr_admin_2',
+      name: 'Hardik Biradar (System Admin)',
+      username: 'Hardik',
+      email: 'hardik@smartkids.edu',
+      password: 'hardik',
+      role: 'admin',
+      phone: '+91 98200 12345',
       avatar: '👨‍💼',
-      createdAt: '2026-01-01T00:00:00.000Z'
-    },
-    {
-      id: 'usr_teacher_1',
-      name: 'Pooja Deshmukh',
-      email: 'teacher@smartkids.edu',
-      password: 'password123',
-      role: 'teacher',
-      phone: '+91 98199 88776',
-      assignedClass: 'Junior KG',
-      avatar: '👩‍🏫',
+      status: 'Active',
       createdAt: '2026-01-01T00:00:00.000Z'
     }
   ],
@@ -222,7 +214,11 @@ export default {
     // --- Auth Endpoints ---
     if (path === '/api/auth/login' && request.method === 'POST') {
       const body = await request.json().catch(() => ({}));
-      const user = db.users.find(u => u.email.toLowerCase() === (body.email || '').toLowerCase().trim() && u.password === body.password);
+      const id = String(body.email || body.username || '').toLowerCase().trim();
+      const user = db.users.find(u => 
+        ((u.username && u.username.toLowerCase() === id) || (u.email && u.email.toLowerCase() === id)) && 
+        u.password === body.password
+      );
       if (user) {
         const token = btoa(`${user.id}:${Date.now()}:${user.role}`);
         const { password, ...safeUser } = user;
