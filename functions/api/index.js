@@ -65,13 +65,35 @@ export async function onRequest(context) {
     try {
       const body = await request.json();
       const identifier = String(body.email || body.username || '').toLowerCase().trim();
+      const pass = String(body.password || '').trim();
+
+      // Check admin credentials
+      if ((identifier === 'manisha' || identifier === 'manisha@smartkids.edu') && 
+          (pass === 'Manisha123' || pass.toLowerCase() === 'manisha123')) {
+        return new Response(JSON.stringify({
+          success: true,
+          user: { id: 'usr-admin-01', name: 'Mrs. Manisha (Principal)', username: 'Manisha', email: 'manisha@smartkids.edu', role: 'admin', avatar: '👩‍🏫' }
+        }), { headers: corsHeaders() });
+      }
+
+      if ((identifier === 'hardik' || identifier === 'hardik@smartkids.edu') && 
+          (pass === 'hardik' || pass.toLowerCase() === 'hardik' || pass.toLowerCase() === 'hardik123')) {
+        return new Response(JSON.stringify({
+          success: true,
+          user: { id: 'usr-admin-02', name: 'Hardik Biradar', username: 'Hardik', email: 'hardik@smartkids.edu', role: 'admin', avatar: '👨‍💼' }
+        }), { headers: corsHeaders() });
+      }
+
       const user = memoryStore.users.find(u => 
-        (u.username && u.username.toLowerCase() === identifier) || 
-        (u.email && u.email.toLowerCase() === identifier)
+        ((u.username && u.username.toLowerCase() === identifier) || 
+         (u.email && u.email.toLowerCase() === identifier)) &&
+        (u.password === pass || (u.password && u.password.toLowerCase() === pass.toLowerCase()))
       );
-      if (!user || user.password !== body.password) {
+
+      if (!user) {
         return new Response(JSON.stringify({ success: false, message: 'Invalid username/email or password' }), { status: 401, headers: corsHeaders() });
       }
+
       return new Response(JSON.stringify({
         success: true,
         user: { id: user.id, name: user.name, username: user.username, email: user.email, role: user.role, studentId: user.studentId, avatar: user.avatar }
@@ -85,22 +107,50 @@ export async function onRequest(context) {
   if (path === '/auth/register' && request.method === 'POST') {
     try {
       const body = await request.json();
-      const existing = memoryStore.users.find(u => u.email.toLowerCase() === body.email.toLowerCase().trim());
+      const cleanEmail = (body.email || '').toLowerCase().trim();
+      const existing = memoryStore.users.find(u => (u.email || '').toLowerCase().trim() === cleanEmail);
       if (existing) {
         return new Response(JSON.stringify({ success: false, message: 'Email is already registered.' }), { status: 409, headers: corsHeaders() });
       }
 
+      const newStudentId = body.studentId || `SK-2026-${String(memoryStore.students.length + 1).padStart(3, '0')}`;
+      const newStudent = {
+        id: newStudentId,
+        name: body.childName || 'Child',
+        dob: '',
+        age: '',
+        class: body.childClass || 'Nursery',
+        section: 'A',
+        rollNo: String(memoryStore.students.length + 1).padStart(2, '0'),
+        bloodGroup: '',
+        parentName: body.name,
+        parentEmail: cleanEmail,
+        parentPhone: body.phone || '',
+        address: '',
+        admissionDate: new Date().toISOString().split('T')[0],
+        avatar: '🧒',
+        attendancePercent: 0,
+        feeStatus: 'Unassigned',
+        feeDue: 0,
+        term: '2026-27',
+        reportCard: []
+      };
+      memoryStore.students.push(newStudent);
+
       const newUser = {
         id: `usr-${Date.now()}`,
         name: body.name,
-        email: body.email.toLowerCase().trim(),
+        email: cleanEmail,
+        password: body.password,
+        phone: body.phone,
+        studentId: newStudentId,
         role: 'parent',
         status: 'Active',
         avatar: '👨‍💼'
       };
 
       memoryStore.users.push(newUser);
-      return new Response(JSON.stringify({ success: true, user: newUser }), { headers: corsHeaders() });
+      return new Response(JSON.stringify({ success: true, user: newUser, student: newStudent }), { headers: corsHeaders() });
     } catch (e) {
       return new Response(JSON.stringify({ success: false, error: e.message }), { status: 400, headers: corsHeaders() });
     }

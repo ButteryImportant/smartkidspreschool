@@ -116,9 +116,26 @@ export default {
     if (path === '/api/auth/login' && request.method === 'POST') {
       const body = await request.json().catch(() => ({}));
       const id = String(body.email || body.username || '').toLowerCase().trim();
+      const pass = String(body.password || '').trim();
+
+      // Check admin credentials
+      if ((id === 'manisha' || id === 'manisha@smartkids.edu') && 
+          (pass === 'Manisha123' || pass.toLowerCase() === 'manisha123')) {
+        const user = { id: 'usr_admin_1', name: 'Mrs. Manisha (Principal)', username: 'Manisha', email: 'manisha@smartkids.edu', role: 'admin', avatar: '👩‍🏫' };
+        const token = btoa(`${user.id}:${Date.now()}:${user.role}`);
+        return new Response(JSON.stringify({ success: true, token, user }), { headers: corsHeaders });
+      }
+
+      if ((id === 'hardik' || id === 'hardik@smartkids.edu') && 
+          (pass === 'hardik' || pass.toLowerCase() === 'hardik' || pass.toLowerCase() === 'hardik123')) {
+        const user = { id: 'usr_admin_2', name: 'Hardik Biradar', username: 'Hardik', email: 'hardik@smartkids.edu', role: 'admin', avatar: '👨‍💼' };
+        const token = btoa(`${user.id}:${Date.now()}:${user.role}`);
+        return new Response(JSON.stringify({ success: true, token, user }), { headers: corsHeaders });
+      }
+
       const user = db.users.find(u => 
         ((u.username && u.username.toLowerCase() === id) || (u.email && u.email.toLowerCase() === id)) && 
-        u.password === body.password
+        (u.password === pass || (u.password && u.password.toLowerCase() === pass.toLowerCase()))
       );
       if (user) {
         const token = btoa(`${user.id}:${Date.now()}:${user.role}`);
@@ -130,44 +147,45 @@ export default {
 
     if (path === '/api/auth/register' && request.method === 'POST') {
       const body = await request.json().catch(() => ({}));
-      const exists = db.users.find(u => u.email.toLowerCase() === (body.email || '').toLowerCase().trim());
+      const cleanEmail = (body.email || '').toLowerCase().trim();
+      const exists = db.users.find(u => (u.email || '').toLowerCase().trim() === cleanEmail);
       if (exists) {
         return new Response(JSON.stringify({ success: false, error: 'Email already registered' }), { status: 400, headers: corsHeaders });
       }
 
-      const newStudentId = `STU-2026-00${db.students.length + 1}`;
+      const newStudentId = body.studentId || `SK-2026-${String(db.students.length + 1).padStart(3, '0')}`;
       const newStudent = {
         id: newStudentId,
         name: body.childName || 'Child',
-        dob: '2023-01-01',
-        age: '3.5 Years',
+        dob: '',
+        age: '',
         class: body.childClass || 'Nursery',
         section: 'A',
         rollNo: String(db.students.length + 1).padStart(2, '0'),
-        bloodGroup: 'B+',
+        bloodGroup: '',
         parentName: body.name,
-        parentEmail: body.email,
-        parentPhone: body.phone,
-        address: 'Kharghar, Navi Mumbai',
+        parentEmail: cleanEmail,
+        parentPhone: body.phone || '',
+        address: '',
         admissionDate: new Date().toISOString().split('T')[0],
         avatar: '🧒',
-        attendancePercent: 100,
-        feeStatus: 'Pending',
-        feeDue: 18500,
-        term: 'Term 2 (2026-27)',
-        reportCard: [{ subject: 'General Progress', grade: 'A', remarks: 'Good starter' }]
+        attendancePercent: 0,
+        feeStatus: 'Unassigned',
+        feeDue: 0,
+        term: '2026-27',
+        reportCard: []
       };
       db.students.push(newStudent);
 
       const newUser = {
         id: `usr_${Date.now()}`,
         name: body.name,
-        email: body.email,
+        email: cleanEmail,
         password: body.password,
         role: 'parent',
         phone: body.phone,
         studentId: newStudentId,
-        avatar: '👨‍👩‍👦',
+        avatar: '👨‍💼',
         createdAt: new Date().toISOString()
       };
       db.users.push(newUser);

@@ -26,28 +26,93 @@ class AuthManager {
   }
 
   login(identifier, password) {
-    const users = window.schoolStore.getUsers();
-    const cleanId = String(identifier).toLowerCase().trim();
-    const user = users.find(
-      u => ((u.username && u.username.toLowerCase() === cleanId) || 
-            (u.email && u.email.toLowerCase() === cleanId)) && 
-           u.password === password
-    );
+    const cleanId = String(identifier || '').trim().toLowerCase();
+    const cleanPass = String(password || '').trim();
 
-    if (!user) {
-      showToast('Invalid username/email or password. Please try again.', 'error');
+    if (!cleanId || !cleanPass) {
+      showToast('Please enter your username/email and password.', 'warning');
       return false;
     }
 
-    if (user.status === 'Inactive') {
-      showToast('This account has been suspended. Please contact school administration.', 'error');
-      return false;
+    // 1. Built-in Admin Accounts (Manisha & Hardik)
+    if ((cleanId === 'manisha' || cleanId === 'manisha@smartkids.edu') && 
+        (cleanPass === 'Manisha123' || cleanPass.toLowerCase() === 'manisha123')) {
+      const adminUser = {
+        id: 'usr_admin_1',
+        name: 'Mrs. Manisha (Principal & Director)',
+        username: 'Manisha',
+        email: 'manisha@smartkids.edu',
+        role: 'admin',
+        phone: '+91 98200 12345',
+        avatar: '👩‍🏫',
+        status: 'Active'
+      };
+      this.setCurrentUser(adminUser);
+      showToast('Welcome back, Mrs. Manisha! Logging into Admin Command Center...', 'success');
+      this.redirectByRole('admin');
+      return true;
     }
 
-    this.setCurrentUser(user);
-    showToast(`Welcome back, ${user.name}!`, 'success');
-    this.redirectByRole(user.role);
-    return true;
+    if ((cleanId === 'hardik' || cleanId === 'hardik@smartkids.edu') && 
+        (cleanPass === 'hardik' || cleanPass.toLowerCase() === 'hardik' || cleanPass.toLowerCase() === 'hardik123')) {
+      const adminUser = {
+        id: 'usr_admin_2',
+        name: 'Hardik Biradar (System Admin)',
+        username: 'Hardik',
+        email: 'hardik@smartkids.edu',
+        role: 'admin',
+        phone: '+91 98200 12345',
+        avatar: '👨‍💼',
+        status: 'Active'
+      };
+      this.setCurrentUser(adminUser);
+      showToast('Welcome back, Hardik! Logging into Admin Command Center...', 'success');
+      this.redirectByRole('admin');
+      return true;
+    }
+
+    // 2. Registered Parent / User Accounts in Store
+    const users = window.schoolStore ? window.schoolStore.getUsers() : [];
+    const user = users.find(u => {
+      const uEmail = (u.email || '').toLowerCase().trim();
+      const uName = (u.username || '').toLowerCase().trim();
+      const matchId = (uEmail === cleanId || uName === cleanId);
+      const matchPass = (u.password === cleanPass || (u.password && u.password.toLowerCase() === cleanPass.toLowerCase()));
+      return matchId && matchPass;
+    });
+
+    if (user) {
+      if (user.status === 'Inactive') {
+        showToast('This account has been suspended. Please contact school administration.', 'error');
+        return false;
+      }
+      this.setCurrentUser(user);
+      showToast(`Welcome back, ${user.name}! Redirecting to Parent Portal...`, 'success');
+      this.redirectByRole(user.role || 'parent');
+      return true;
+    }
+
+    // 3. Fallback: Check Backend API /api/auth/login
+    fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: cleanId, password: cleanPass })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.success && data.user) {
+        this.setCurrentUser(data.user);
+        showToast(`Welcome back, ${data.user.name}!`, 'success');
+        this.redirectByRole(data.user.role || 'parent');
+      } else {
+        showToast('Invalid username/email or password. Please try again.', 'error');
+      }
+    })
+    .catch(() => {
+      showToast('Invalid username/email or password. Please check your credentials.', 'error');
+    });
+
+    return false;
   }
 
   redirectByRole(role) {
@@ -62,30 +127,47 @@ class AuthManager {
     }, 600);
   }
 
-  registerParent(name, email, phone, childName, childClass, password) {
-    const users = window.schoolStore.getUsers();
-    const existing = users.find(u => u.email.toLowerCase() === email.toLowerCase().trim());
-    if (existing) {
-      showToast('An account with this email already exists.', 'error');
+  async registerParent(name, email, phone, childName, childClass, password) {
+    const cleanName = String(name || '').trim();
+    const cleanEmail = String(email || '').toLowerCase().trim();
+    const cleanPhone = String(phone || '').trim();
+    const cleanChild = String(childName || '').trim();
+    const cleanClass = String(childClass || 'Nursery').trim();
+    const cleanPass = String(password || '').trim();
+
+    if (!cleanName || !cleanEmail || !cleanChild || !cleanPass) {
+      showToast('Please fill in all required fields.', 'warning');
       return false;
     }
 
-    const students = window.schoolStore.getStudents();
+    if (cleanPass.length < 6) {
+      showToast('Password must be at least 6 characters.', 'warning');
+      return false;
+    }
+
+    const users = window.schoolStore ? window.schoolStore.getUsers() : [];
+    const existing = users.find(u => (u.email || '').toLowerCase().trim() === cleanEmail);
+    if (existing) {
+      showToast('An account with this email already exists. Please log in.', 'error');
+      return false;
+    }
+
+    const students = window.schoolStore ? window.schoolStore.getStudents() : [];
     const newStudentId = `SK-2026-${String(students.length + 1).padStart(3, '0')}`;
     
     // Clean student profile linked to parent
     const newStudent = {
       id: newStudentId,
-      name: childName,
+      name: cleanChild,
       dob: '',
       age: '',
-      class: childClass,
+      class: cleanClass,
       section: 'A',
       rollNo: String(students.length + 1).padStart(2, '0'),
       bloodGroup: '',
-      parentName: name,
-      parentEmail: email,
-      parentPhone: phone,
+      parentName: cleanName,
+      parentEmail: cleanEmail,
+      parentPhone: cleanPhone,
       address: '',
       admissionDate: new Date().toISOString().split('T')[0],
       avatar: '🧒',
@@ -96,27 +178,46 @@ class AuthManager {
       reportCard: []
     };
 
-    students.push(newStudent);
-    window.schoolStore.saveStudents(students);
+    if (window.schoolStore) {
+      students.push(newStudent);
+      window.schoolStore.saveStudents(students);
+    }
 
     // Create user account
     const newUser = {
       id: `usr_${Date.now()}`,
-      name: name,
-      email: email,
-      password: password,
+      name: cleanName,
+      email: cleanEmail,
+      password: cleanPass,
       role: 'parent',
-      phone: phone,
+      phone: cleanPhone,
       studentId: newStudentId,
       avatar: '👨‍💼',
       status: 'Active'
     };
 
-    users.push(newUser);
-    window.schoolStore.saveUsers(users);
+    if (window.schoolStore) {
+      users.push(newUser);
+      window.schoolStore.saveUsers(users);
+    }
+
+    // Sync to Cloudflare Pages backend asynchronously
+    fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: cleanName,
+        email: cleanEmail,
+        phone: cleanPhone,
+        childName: cleanChild,
+        childClass: cleanClass,
+        password: cleanPass,
+        studentId: newStudentId
+      })
+    }).catch(err => console.log('Background sync:', err));
 
     this.setCurrentUser(newUser);
-    showToast('Registration successful! Redirecting to Parent Portal...', 'success');
+    showToast('Registration successful! Welcome to Smart Kids Parent Portal.', 'success');
     this.redirectByRole('parent');
     return true;
   }
@@ -192,19 +293,22 @@ class AuthManager {
     authContainers.forEach(container => {
       if (currentUser) {
         container.innerHTML = `
-          <div class="user-menu-btn" onclick="window.authManager.handleUserMenuClick()">
+          <div class="user-menu-btn" onclick="window.authManager.handleUserMenuClick()" style="cursor:pointer;">
             <div class="user-avatar-mini">${currentUser.avatar || '👤'}</div>
-            <span>${currentUser.name.split(' ')[0]}</span>
-            <span class="badge badge-yellow" style="font-size:0.7rem;">${currentUser.role}</span>
+            <span style="font-weight:800; color:#000000;">${currentUser.name.split(' ')[0]}</span>
+            <span class="badge ${currentUser.role === 'admin' ? 'badge-coral' : 'badge-green'}" style="font-size:0.75rem; font-weight:800;">${currentUser.role}</span>
           </div>
-          <button class="btn btn-outline btn-sm" onclick="window.authManager.logout()" title="Log out">
+          <button class="btn btn-outline btn-sm" onclick="window.authManager.logout()" title="Log out" style="margin-left: 0.35rem;">
             <i class="fas fa-sign-out-alt"></i>
           </button>
         `;
       } else {
         container.innerHTML = `
-          <a href="login.html" class="btn btn-outline btn-sm">
-            <i class="fas fa-user-lock"></i> Portal Login
+          <a href="login.html" class="btn btn-outline btn-sm" title="Sign In">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </a>
+          <a href="login.html?tab=register" class="btn btn-yellow btn-sm" title="Register New Student & Parent" style="color: #000000; font-weight: 800; margin-left: 0.35rem;">
+            <i class="fas fa-user-plus"></i> Register
           </a>
         `;
       }
