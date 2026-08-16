@@ -11,8 +11,3 @@ binding = "DB"
 database_name = "smartkids-db"
 database_id = "smartkids-db-binding"
 migrations_dir = "migrations"
-
-# Cloudflare R2 Object Storage (Documents, PDFs, Images)
-[[r2_buckets]]
-binding = "BUCKET"
-bucket_name = "smartkids-storage"
